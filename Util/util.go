@@ -26,11 +26,11 @@ func GetIp(body string) (string, error) {
 }
 
 func GetToken(body string) (string, error) {
-	return Search(body, "\"challenge\":\"(.*?)\"")
+	return Search("\"challenge\":\"(.*?)\"",body)
 }
 
 func GetResult(body string)(string,error){
-	return Search(body,"\"error_msg\":\"(.+)\"")
+	return Search("\"error\":\"(.+?)\"",body)
 }
 
 func Md5(content string) string {

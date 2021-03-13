@@ -3,7 +3,6 @@ package main
 import (
 	"Mmx/Request"
 	"Mmx/Util"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -52,15 +51,16 @@ func Generate(Domain string, Username string, Password string) *LoginInfo {
 func ErrHandler(err error) {
 	if err != nil {
 		defer os.Exit(3)
+		fmt.Println("Error")
 		panic(err)
 	}
 }
 
 func main() {
 	G := Generate(
-		"",
-		"",
-		"",
+		"", //登录地址域名或ip
+		"", //账号
+		"", //密码
 	)
 	fmt.Println("Step1: Get local ip returned from srun server.")
 	{
@@ -90,7 +90,7 @@ func main() {
 			"enc_ver":  G.Enc,
 		})
 		ErrHandler(err)
-		G.EncryptedInfo = "{SRBX1}" + base64.StdEncoding.EncodeToString(Util.XEncode(string(info), G.Token))
+		G.EncryptedInfo = "{SRBX1}" + Util.Base64(Util.XEncode(string(info), G.Token))
 		G.Md5=Util.Md5(G.Token)
 		G.EncryptedMd5 = "{MD5}"+G.Md5
 
@@ -115,7 +115,7 @@ func main() {
 			"chksum": G.EncryptedChkstr,
 			"n": G.N,
 			"type": G.VType,
-			"os": "Windows+10",
+			"os": "Windows 10",
 			"name": "windows",
 			"double_stack": "0",
 			"_": "1602812428675",
@@ -124,6 +124,5 @@ func main() {
 		G.LoginResult,err=Util.GetResult(res)
 		ErrHandler(err)
 	}
-
 	fmt.Println("The loggin result is: " + G.LoginResult)
 }
