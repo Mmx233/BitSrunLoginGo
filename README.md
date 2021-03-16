@@ -1,4 +1,5 @@
 # BitSrunLoginGo
+
 NCU移动深澜校园网登录脚本Go语言版
 
 在main函数中填入账号密码和登录地址ip即可

@@ -38,7 +38,7 @@ func lenCode(msg []uint32, key bool) []byte {
 	}
 	var t []byte
 	for i := range msg {
-		t = append(t, byte(msg[i]&0xff),byte(msg[i]>>8&0xff),byte(msg[i]>>16&0xff),byte(msg[i]>>24&0xff))
+		t = append(t, byte(msg[i]&0xff), byte(msg[i]>>8&0xff), byte(msg[i]>>16&0xff), byte(msg[i]>>24&0xff))
 	}
 	if key {
 		return t[0:ll]

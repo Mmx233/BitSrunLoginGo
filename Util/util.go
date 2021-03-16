@@ -26,11 +26,11 @@ func GetIp(body string) (string, error) {
 }
 
 func GetToken(body string) (string, error) {
-	return Search("\"challenge\":\"(.*?)\"",body)
+	return Search("\"challenge\":\"(.*?)\"", body)
 }
 
-func GetResult(body string)(string,error){
-	return Search("\"error\":\"(.+?)\"",body)
+func GetResult(body string) (string, error) {
+	return Search("\"error\":\"(.+?)\"", body)
 }
 
 func Md5(content string) string {
@@ -39,7 +39,7 @@ func Md5(content string) string {
 	return fmt.Sprintf("%x", w.Sum(nil)) //w.Sum(nil)将w的hash转成[]byte格式
 }
 
-func Sha1(content string)string{
+func Sha1(content string) string {
 	h := sha1.New()
 	h.Write([]byte(content))
 	bs := h.Sum(nil)
