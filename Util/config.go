@@ -20,6 +20,7 @@ func (*config) Generate(Form *Modles.LoginForm, Meta *Modles.LoginMeta) *Modles.
 		UrlLoginPage:       "http://" + Form.Domain + "/srun_portal_success",
 		UrlGetChallengeApi: "http://" + Form.Domain + "/cgi-bin/get_challenge",
 		UrlLoginApi:        "http://" + Form.Domain + "/cgi-bin/srun_portal",
+		UrlCheckApi:        "http://" + Form.Domain + "/cgi-bin/rad_user_info",
 		Meta:               Meta,
 		Form: &Modles.LoginForm{
 			UserName: Form.UserName + "@cmcc",

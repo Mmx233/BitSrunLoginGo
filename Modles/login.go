@@ -17,6 +17,7 @@ type LoginInfo struct {
 	UrlLoginPage       string
 	UrlGetChallengeApi string
 	UrlLoginApi        string
+	UrlCheckApi        string
 
 	Ip              string
 	Token           string

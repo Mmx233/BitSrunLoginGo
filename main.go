@@ -6,13 +6,14 @@ import (
 	"Mmx/Util"
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 func main() {
 	fmt.Println("Step0: 检查状态…")
 	G := Util.Config.Init()
 
-	if Global.Config.Settings.QuitIfNetOk && Util.Checker.NetOk() {
+	if Global.Config.Settings.QuitIfNetOk && Util.Checker.NetOk(G.UrlCheckApi) {
 		fmt.Println("网络正常，程序退出")
 		return
 	}
@@ -56,7 +57,7 @@ func main() {
 		G.EncryptedChkstr = Util.Sha1(chkstr)
 
 		res, err := Request.Get(G.UrlLoginApi, map[string]string{
-			"callback":     "jQuery1124011576657442209481_1602812074032",
+			"callback":     "jQuery112401157665",
 			"action":       "login",
 			"username":     G.Form.UserName,
 			"password":     G.EncryptedMd5,
@@ -69,7 +70,7 @@ func main() {
 			"os":           "Windows 10",
 			"name":         "windows",
 			"double_stack": "0",
-			"_":            "1602812428675",
+			"_":            fmt.Sprint(time.Now().UnixNano()),
 		})
 		Util.ErrHandler(err)
 		G.LoginResult, err = Util.GetResult(res)

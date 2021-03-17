@@ -37,8 +37,8 @@ func GetResult(body string) (string, error) {
 
 func Md5(content string) string {
 	w := md5.New()
-	_, _ = io.WriteString(w, content)    //将str写入到w中
-	return fmt.Sprintf("%x", w.Sum(nil)) //w.Sum(nil)将w的hash转成[]byte格式
+	_, _ = io.WriteString(w, content)
+	return fmt.Sprintf("%x", w.Sum(nil))
 }
 
 func Sha1(content string) string {
