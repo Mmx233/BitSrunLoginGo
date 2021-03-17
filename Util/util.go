@@ -1,11 +1,13 @@
 package Util
 
 import (
+	"Mmx/Global"
 	"crypto/md5"
 	"crypto/sha1"
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"regexp"
 )
 
@@ -44,4 +46,15 @@ func Sha1(content string) string {
 	h.Write([]byte(content))
 	bs := h.Sum(nil)
 	return fmt.Sprintf("%x\n", bs)
+}
+
+func ErrHandler(err error) {
+	if err != nil {
+		fmt.Println("Error occurred")
+		if Global.Config.Settings.DemoMode {
+			panic(err)
+		}
+		fmt.Println(err)
+		os.Exit(3)
+	}
 }

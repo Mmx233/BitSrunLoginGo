@@ -1,6 +1,7 @@
 package Util
 
 import (
+	"Mmx/Global"
 	"Mmx/Modles"
 	"fmt"
 	"os"
@@ -54,6 +55,8 @@ func (a *config) Init() *Modles.LoginInfo {
 		fmt.Println("Read config failed:\n", err.Error())
 		os.Exit(3)
 	}
+
+	Global.Config = &c
 
 	return a.Generate(
 		&c.From,

@@ -1,33 +1,27 @@
 package main
 
 import (
+	"Mmx/Global"
 	"Mmx/Request"
 	"Mmx/Util"
 	"encoding/json"
 	"fmt"
 )
 
-func ErrHandler(err error) {
-	if err != nil {
-		fmt.Println("Error occurred")
-		panic(err)
-	}
-}
-
 func main() {
-	if Util.Checker.NetOk() {
+	G := Util.Config.Init()
+
+	if Global.Config.Settings.QuitIfNetOk && Util.Checker.NetOk() {
 		fmt.Println("There's no need to login")
 		return
 	}
 
-	G := Util.Config.Init()
-
 	fmt.Println("Step1: Get local ip returned from srun server.")
 	{
 		body, err := Request.Get(G.UrlLoginPage, nil)
-		ErrHandler(err)
+		Util.ErrHandler(err)
 		G.Ip, err = Util.GetIp(body)
-		ErrHandler(err)
+		Util.ErrHandler(err)
 	}
 	fmt.Println("Step2: Get token by resolving challenge result.")
 	{
@@ -36,11 +30,11 @@ func main() {
 			"username": G.Form.UserName,
 			"ip":       G.Ip,
 		})
-		ErrHandler(err)
+		Util.ErrHandler(err)
 		G.Token, err = Util.GetToken(data)
-		ErrHandler(err)
+		Util.ErrHandler(err)
 	}
-	fmt.Println("Step3: Loggin and resolve response.")
+	fmt.Println("Step3: Login and resolve response.")
 	{
 		info, err := json.Marshal(map[string]string{
 			"username": G.Form.UserName,
@@ -49,7 +43,7 @@ func main() {
 			"acid":     G.Meta.Acid,
 			"enc_ver":  G.Meta.Enc,
 		})
-		ErrHandler(err)
+		Util.ErrHandler(err)
 		G.EncryptedInfo = "{SRBX1}" + Util.Base64(Util.XEncode(string(info), G.Token))
 		G.Md5 = Util.Md5(G.Token)
 		G.EncryptedMd5 = "{MD5}" + G.Md5
@@ -80,9 +74,9 @@ func main() {
 			"double_stack": "0",
 			"_":            "1602812428675",
 		})
-		ErrHandler(err)
+		Util.ErrHandler(err)
 		G.LoginResult, err = Util.GetResult(res)
-		ErrHandler(err)
+		Util.ErrHandler(err)
 	}
-	fmt.Println("The loggin result is: " + G.LoginResult)
+	fmt.Println("The login result is: " + G.LoginResult)
 }
