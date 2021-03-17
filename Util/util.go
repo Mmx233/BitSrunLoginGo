@@ -50,7 +50,7 @@ func Sha1(content string) string {
 
 func ErrHandler(err error) {
 	if err != nil {
-		fmt.Println("Error occurred")
+		fmt.Println("运行出错，状态异常")
 		if Global.Config.Settings.DemoMode {
 			panic(err)
 		}

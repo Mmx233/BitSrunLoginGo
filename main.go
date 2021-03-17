@@ -9,21 +9,22 @@ import (
 )
 
 func main() {
+	fmt.Println("Step0: 检查状态…")
 	G := Util.Config.Init()
 
 	if Global.Config.Settings.QuitIfNetOk && Util.Checker.NetOk() {
-		fmt.Println("There's no need to login")
+		fmt.Println("网络正常，程序退出")
 		return
 	}
 
-	fmt.Println("Step1: Get local ip returned from srun server.")
+	fmt.Println("Step1: 正在获取客户端ip")
 	{
 		body, err := Request.Get(G.UrlLoginPage, nil)
 		Util.ErrHandler(err)
 		G.Ip, err = Util.GetIp(body)
 		Util.ErrHandler(err)
 	}
-	fmt.Println("Step2: Get token by resolving challenge result.")
+	fmt.Println("Step2: 正在获取Token")
 	{
 		data, err := Request.Get(G.UrlGetChallengeApi, map[string]string{
 			"callback": "jsonp1583251661367",
@@ -34,7 +35,7 @@ func main() {
 		G.Token, err = Util.GetToken(data)
 		Util.ErrHandler(err)
 	}
-	fmt.Println("Step3: Login and resolve response.")
+	fmt.Println("Step3: 执行登录…")
 	{
 		info, err := json.Marshal(map[string]string{
 			"username": G.Form.UserName,
@@ -48,13 +49,9 @@ func main() {
 		G.Md5 = Util.Md5(G.Token)
 		G.EncryptedMd5 = "{MD5}" + G.Md5
 
-		var chkstr string
-		chkstr = G.Token + G.Form.UserName
-		chkstr += G.Token + G.Md5
-		chkstr += G.Token + G.Meta.Acid
-		chkstr += G.Token + G.Ip
-		chkstr += G.Token + G.Meta.N
-		chkstr += G.Token + G.Meta.VType
+		var chkstr = G.Token + G.Form.UserName + G.Token + G.Md5
+		chkstr += G.Token + G.Meta.Acid + G.Token + G.Ip
+		chkstr += G.Token + G.Meta.N + G.Token + G.Meta.VType
 		chkstr += G.Token + G.EncryptedInfo
 		G.EncryptedChkstr = Util.Sha1(chkstr)
 
@@ -77,6 +74,9 @@ func main() {
 		Util.ErrHandler(err)
 		G.LoginResult, err = Util.GetResult(res)
 		Util.ErrHandler(err)
+		fmt.Println("登录结果: " + G.LoginResult)
+		if Global.Config.Settings.DemoMode {
+			fmt.Println(res)
+		}
 	}
-	fmt.Println("The login result is: " + G.LoginResult)
 }

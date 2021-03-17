@@ -43,16 +43,16 @@ func (a *config) Init() *Modles.LoginInfo {
 				Enc:   "srun_bx1",
 			},
 		}); err != nil {
-			fmt.Println("Create 'Config.json' error:\n", err.Error())
+			fmt.Println("创建配置文件失败:\n", err.Error())
 			os.Exit(3)
 		}
-		fmt.Println("Please edit 'Config.json' and try again.")
+		fmt.Println("已生成配置文件，请编辑 'Config.json' 然后重试")
 		os.Exit(1)
 	}
 
 	var c Modles.Config
 	if err := File.Read(a.Path, &c); err != nil {
-		fmt.Println("Read config failed:\n", err.Error())
+		fmt.Println("读取配置文件失败:\n", err.Error())
 		os.Exit(3)
 	}
 
