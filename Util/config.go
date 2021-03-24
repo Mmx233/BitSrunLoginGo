@@ -5,6 +5,7 @@ import (
 	"Mmx/Modles"
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 type config struct {
@@ -30,6 +31,11 @@ func (*config) Generate(Form *Modles.LoginForm, Meta *Modles.LoginMeta) *Modles.
 }
 
 func (a *config) Init() *Modles.LoginInfo {
+	if t, err := os.Executable(); err != nil {
+		ErrHandler(err)
+	} else {
+		a.Path = filepath.Dir(t) + "/" + a.Path
+	}
 	if !File.Exists(a.Path) {
 		if err := File.Write(a.Path, &Modles.Config{ //默认值
 			From: Modles.LoginForm{
