@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 )
 
 type file struct {
@@ -35,5 +36,13 @@ func (*file) Write(path string, receiver interface{}) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(path, data, 777)
+	return ioutil.WriteFile(path, data, 700)
+}
+
+func (*file) GetRootPath() string {
+	t, err := os.Executable()
+	if err != nil {
+		ErrHandler(err)
+	}
+	return filepath.Dir(t)
 }

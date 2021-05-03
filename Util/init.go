@@ -3,19 +3,13 @@ package Util
 import (
 	"Mmx/Global"
 	"Mmx/Modles"
-	"fmt"
+	"log"
 	"os"
-	"path/filepath"
 )
 
 func init() {
 	//配置文件初始化
-	Path := "Config.json"
-	if t, err := os.Executable(); err != nil {
-		ErrHandler(err)
-	} else {
-		Path = filepath.Dir(t) + "/" + Path
-	}
+	Path := File.GetRootPath() + "/Config.json"
 	if !File.Exists(Path) {
 		if err := File.Write(Path, &Modles.Config{ //默认值
 			From: Modles.LoginForm{
@@ -30,17 +24,17 @@ func init() {
 				Enc:   "srun_bx1",
 			},
 		}); err != nil {
-			fmt.Println("创建配置文件失败:\n", err.Error())
-			os.Exit(3)
+			log.Println("创建配置文件失败:\n", err.Error())
+			os.Exit(1)
 		}
-		fmt.Println("已生成配置文件，请编辑 'Config.json' 然后重试")
-		os.Exit(1)
+		log.Println("已生成配置文件，请编辑 'Config.json' 然后重试")
+		os.Exit(0)
 	}
 
 	var c Modles.Config
 	if err := File.Read(Path, &c); err != nil {
-		fmt.Println("读取配置文件失败:\n", err.Error())
-		os.Exit(3)
+		log.Println("读取配置文件失败:\n", err.Error())
+		os.Exit(1)
 	}
 
 	Global.Config = &c

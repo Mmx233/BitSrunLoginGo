@@ -1,15 +1,15 @@
 package Request
 
 import (
-	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
 func Get(Url string, Query map[string]string) (string, error) {
 	req, err := http.NewRequest("GET", Url, nil)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return "", err
 	}
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.26 Safari/537.36")
@@ -22,7 +22,7 @@ func Get(Url string, Query map[string]string) (string, error) {
 	}
 	resp, err := (&http.Client{}).Do(req)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return "", err
 	}
 	defer resp.Body.Close()
