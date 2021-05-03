@@ -11,7 +11,7 @@ import (
 
 func main() {
 	fmt.Println("Step0: 检查状态…")
-	G := Util.Config.Init()
+	G := Global.Config.Generate()
 
 	if Global.Config.Settings.QuitIfNetOk && Util.Checker.NetOk(G.UrlCheckApi) {
 		fmt.Println("网络正常，程序退出")
