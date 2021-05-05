@@ -9,9 +9,9 @@ import (
 
 func init() {
 	//配置文件初始化
-	Path := File.GetRootPath() + "/Config.json"
+	Path := "Config.json"
 	if !File.Exists(Path) {
-		if err := File.Write(Path, &Modles.Config{ //默认值
+		if err := File.WriteJson(Path, &Modles.Config{ //默认值
 			From: Modles.LoginForm{
 				Domain:   "www.msftconnecttest.com",
 				UserName: "",
@@ -32,7 +32,7 @@ func init() {
 	}
 
 	var c Modles.Config
-	if err := File.Read(Path, &c); err != nil {
+	if err := File.ReadJson(Path, &c); err != nil {
 		log.Println("读取配置文件失败:\n", err.Error())
 		os.Exit(1)
 	}

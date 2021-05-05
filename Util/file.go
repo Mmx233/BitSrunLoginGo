@@ -23,7 +23,11 @@ func (*file) Exists(path string) bool {
 	return true
 }
 
-func (*file) Read(path string, receiver interface{}) error {
+func (a *file) Read(path string) ([]byte, error) {
+	return ioutil.ReadFile(a.GetRootPath() + "/" + path)
+}
+
+func (*file) ReadJson(path string, receiver interface{}) error {
 	file, err := ioutil.ReadFile(path)
 	if err != nil {
 		return err
@@ -31,12 +35,16 @@ func (*file) Read(path string, receiver interface{}) error {
 	return json.Unmarshal(file, receiver)
 }
 
-func (*file) Write(path string, receiver interface{}) error {
+func (a *file) Write(path string, data []byte) error {
+	return ioutil.WriteFile(a.GetRootPath()+"/"+path, data, 700)
+}
+
+func (a *file) WriteJson(path string, receiver interface{}) error {
 	data, err := json.MarshalIndent(receiver, "", " ")
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(path, data, 700)
+	return a.Write(path, data)
 }
 
 func (*file) GetRootPath() string {
