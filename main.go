@@ -6,27 +6,26 @@ import (
 	"Mmx/Util"
 	"encoding/json"
 	"fmt"
-	"log"
 	"time"
 )
 
 func main() {
-	log.Println("Step0: 检查状态…")
+	Util.Log.Println("Step0: 检查状态…")
 	G := Global.Config.Generate()
 
 	if Global.Config.Settings.QuitIfNetOk && Util.Checker.NetOk(G.UrlCheckApi) {
-		log.Println("网络正常，程序退出")
+		Util.Log.Println("网络正常，程序退出")
 		return
 	}
 
-	log.Println("Step1: 正在获取客户端ip")
+	Util.Log.Println("Step1: 正在获取客户端ip")
 	{
 		body, err := Request.Get(G.UrlLoginPage, nil)
 		Util.ErrHandler(err)
 		G.Ip, err = Util.GetIp(body)
 		Util.ErrHandler(err)
 	}
-	log.Println("Step2: 正在获取Token")
+	Util.Log.Println("Step2: 正在获取Token")
 	{
 		data, err := Request.Get(G.UrlGetChallengeApi, map[string]string{
 			"callback": "jsonp1583251661367",
@@ -37,7 +36,7 @@ func main() {
 		G.Token, err = Util.GetToken(data)
 		Util.ErrHandler(err)
 	}
-	log.Println("Step3: 执行登录…")
+	Util.Log.Println("Step3: 执行登录…")
 	{
 		info, err := json.Marshal(map[string]string{
 			"username": G.Form.UserName,
@@ -76,9 +75,9 @@ func main() {
 		Util.ErrHandler(err)
 		G.LoginResult, err = Util.GetResult(res)
 		Util.ErrHandler(err)
-		log.Println("登录结果: " + G.LoginResult)
+		Util.Log.Println("登录结果: " + G.LoginResult)
 		if Global.Config.Settings.DemoMode {
-			log.Println(res)
+			Util.Log.Println(res)
 		}
 	}
 }

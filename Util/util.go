@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"regexp"
 )
@@ -51,9 +50,9 @@ func Sha1(content string) string {
 
 func ErrHandler(err error) {
 	if err != nil {
-		log.Println("运行出错，状态异常")
+		Log.Println("运行出错，状态异常")
 		if Global.Config.Settings.DemoMode {
-			log.Fatalln(err)
+			Log.Fatalln(err)
 		}
 		os.Exit(1)
 	}

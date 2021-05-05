@@ -1,6 +1,7 @@
 package Util
 
 import (
+	"bufio"
 	"encoding/json"
 	"io/ioutil"
 	"os"
@@ -24,7 +25,7 @@ func (*file) Exists(path string) bool {
 }
 
 func (a *file) Read(path string) ([]byte, error) {
-	return ioutil.ReadFile(a.GetRootPath() + "/" + path)
+	return ioutil.ReadFile(a.GetRootPath() + path)
 }
 
 func (*file) ReadJson(path string, receiver interface{}) error {
@@ -36,7 +37,7 @@ func (*file) ReadJson(path string, receiver interface{}) error {
 }
 
 func (a *file) Write(path string, data []byte) error {
-	return ioutil.WriteFile(a.GetRootPath()+"/"+path, data, 700)
+	return ioutil.WriteFile(a.GetRootPath()+path, data, 700)
 }
 
 func (a *file) WriteJson(path string, receiver interface{}) error {
@@ -52,5 +53,15 @@ func (*file) GetRootPath() string {
 	if err != nil {
 		ErrHandler(err)
 	}
-	return filepath.Dir(t)
+	return filepath.Dir(t) + "/"
+}
+
+func (a *file) Add(path string, c string) error {
+	file, err := os.OpenFile(a.GetRootPath()+path, os.O_WRONLY|os.O_CREATE, 700)
+	defer file.Close()
+	if err != nil {
+		return err
+	}
+	_, err = bufio.NewWriter(file).WriteString(c + "\n")
+	return err
 }

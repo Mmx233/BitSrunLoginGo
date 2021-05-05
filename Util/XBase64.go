@@ -1,15 +1,9 @@
 package Util
 
-import (
-	"log"
-	"os"
-)
-
 func getbyte(a byte) int {
 	x := int(a)
 	if x > 255 {
-		log.Println("INVALID_CHARACTER_ERR: DOM Exception 5")
-		os.Exit(1)
+		Log.Fatalln("INVALID_CHARACTER_ERR: DOM Exception 5")
 	}
 	return x
 }
