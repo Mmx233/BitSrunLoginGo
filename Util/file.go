@@ -8,8 +8,7 @@ import (
 	"path/filepath"
 )
 
-type file struct {
-}
+type file struct{}
 
 var File file
 
@@ -28,12 +27,12 @@ func (a *file) Read(path string) ([]byte, error) {
 	return ioutil.ReadFile(a.GetRootPath() + path)
 }
 
-func (*file) ReadJson(path string, receiver interface{}) error {
-	file, err := ioutil.ReadFile(path)
+func (a *file) ReadJson(path string, receiver interface{}) error {
+	data, err := a.Read(path)
 	if err != nil {
 		return err
 	}
-	return json.Unmarshal(file, receiver)
+	return json.Unmarshal(data, receiver)
 }
 
 func (a *file) Write(path string, data []byte) error {
@@ -57,11 +56,14 @@ func (*file) GetRootPath() string {
 }
 
 func (a *file) Add(path string, c string) error {
-	file, err := os.OpenFile(a.GetRootPath()+path, os.O_WRONLY|os.O_CREATE, 700)
+	file, err := os.OpenFile(a.GetRootPath()+path, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 700)
 	defer file.Close()
 	if err != nil {
 		return err
 	}
-	_, err = bufio.NewWriter(file).WriteString(c + "\n")
-	return err
+	w := bufio.NewWriter(file)
+	if _, err = w.WriteString(c + "\n"); err != nil {
+		return err
+	}
+	return w.Flush()
 }

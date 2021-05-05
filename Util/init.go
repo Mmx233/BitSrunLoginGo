@@ -3,6 +3,7 @@ package Util
 import (
 	"Mmx/Global"
 	"Mmx/Modles"
+	"log"
 	"os"
 )
 
@@ -23,16 +24,16 @@ func init() {
 				Enc:   "srun_bx1",
 			},
 		}); err != nil {
-			Log.Println("创建配置文件失败:\n", err.Error())
+			log.Println("创建配置文件失败:\n", err.Error())
 			os.Exit(1)
 		}
-		Log.Println("已生成配置文件，请编辑 'Config.json' 然后重试")
+		log.Println("已生成配置文件，请编辑 'Config.json' 然后重试")
 		os.Exit(0)
 	}
 
 	var c Modles.Config
 	if err := File.ReadJson(Path, &c); err != nil {
-		Log.Println("读取配置文件失败:\n", err.Error())
+		log.Println("读取配置文件失败:\n", err.Error())
 		os.Exit(1)
 	}
 

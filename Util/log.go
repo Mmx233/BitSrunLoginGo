@@ -5,13 +5,16 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"time"
 )
 
-type loG struct{}
+type loG struct {
+	timeStamp string
+}
 
 var Log loG
 
-func (loG) WriteLog(name string, a ...interface{}) {
+func (*loG) WriteLog(name string, a ...interface{}) {
 	for _, v := range a {
 		var t string
 		switch reflect.TypeOf(v).Kind() {
@@ -26,14 +29,22 @@ func (loG) WriteLog(name string, a ...interface{}) {
 	}
 }
 
-func (c loG) Println(a ...interface{}) {
+func (c *loG) genTimeStamp() {
+	if c.timeStamp == "" {
+		c.timeStamp = time.Now().Format("2006.01.02-15:04:05")
+	}
+}
+
+func (c *loG) Println(a ...interface{}) {
+	c.genTimeStamp()
 	if Global.Config.Settings.DemoMode {
-		c.WriteLog("Login.loG", a...)
+		c.WriteLog("Login-"+c.timeStamp+".log", a...)
 	}
 	log.Println(a...)
 }
 
-func (c loG) Fatalln(a ...interface{}) {
-	c.WriteLog("LoginError.loG", a...)
+func (c *loG) Fatalln(a ...interface{}) {
+	c.genTimeStamp()
+	c.WriteLog("LoginError-"+c.timeStamp+".log", a...)
 	log.Fatalln(a...)
 }
