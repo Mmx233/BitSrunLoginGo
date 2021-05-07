@@ -12,8 +12,8 @@ type file struct{}
 
 var File file
 
-func (*file) Exists(path string) bool {
-	_, err := os.Stat(path)
+func (a *file) Exists(path string) bool {
+	_, err := os.Stat(a.GetRootPath() + path)
 	if err != nil {
 		if os.IsExist(err) {
 			return true
