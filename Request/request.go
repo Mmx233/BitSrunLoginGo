@@ -1,9 +1,12 @@
 package Request
 
 import (
+	"Mmx/Util"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
+	"time"
 )
 
 func Get(Url string, Query map[string]string) (string, error) {
@@ -20,7 +23,17 @@ func Get(Url string, Query map[string]string) (string, error) {
 		}
 		req.URL.RawQuery = q.Encode()
 	}
-	resp, err := (&http.Client{}).Do(req)
+	resp, err := (&http.Client{
+		Transport: &http.Transport{
+			DialContext: (&net.Dialer{
+				Timeout: 30 * time.Second,
+				Resolver: &net.Resolver{
+					PreferGo: true,
+					Dial:     Util.NetDailEr(),
+				},
+			}).DialContext,
+		},
+	}).Do(req)
 	if err != nil {
 		log.Println(err)
 		return "", err

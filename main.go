@@ -13,7 +13,7 @@ func main() {
 	Util.Log.Println("Step0: 检查状态…")
 	G := Global.Config.Generate()
 
-	if Global.Config.Settings.QuitIfNetOk && Util.Checker.NetOk(G.UrlCheckApi) {
+	if Global.Config.Settings.QuitIfNetOk && Util.Checker.NetOk() {
 		Util.Log.Println("网络正常，程序退出")
 		return
 	}

@@ -2,13 +2,16 @@ package Util
 
 import (
 	"Mmx/Global"
+	"context"
 	"crypto/md5"
 	"crypto/sha1"
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"os"
 	"regexp"
+	"time"
 )
 
 func Search(reg string, content string) (string, error) {
@@ -55,5 +58,14 @@ func ErrHandler(err error) {
 			Log.Fatalln(err)
 		}
 		os.Exit(1)
+	}
+}
+
+func NetDailEr() func(ctx context.Context, network, address string) (net.Conn, error) {
+	return func(ctx context.Context, network, address string) (net.Conn, error) {
+		d := net.Dialer{
+			Timeout: 20 * time.Second,
+		}
+		return d.DialContext(ctx, "udp", "1.2.4.8:53")
 	}
 }
