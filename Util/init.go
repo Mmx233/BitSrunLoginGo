@@ -23,6 +23,9 @@ func init() {
 				Acid:  "5",
 				Enc:   "srun_bx1",
 			},
+			Settings: Modles.Settings{
+				Dns: "1.2.4.8",
+			},
 		}); err != nil {
 			log.Println("创建配置文件失败:\n", err.Error())
 			os.Exit(1)

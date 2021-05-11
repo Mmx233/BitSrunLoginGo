@@ -66,6 +66,6 @@ func NetDailEr() func(ctx context.Context, network, address string) (net.Conn, e
 		d := net.Dialer{
 			Timeout: 20 * time.Second,
 		}
-		return d.DialContext(ctx, "udp", "1.2.4.8:53")
+		return d.DialContext(ctx, "udp", Global.Config.Settings.Dns+":53")
 	}
 }
