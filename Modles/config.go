@@ -1,5 +1,10 @@
 package Modles
 
+import (
+	"Mmx/Modles/util"
+	"reflect"
+)
+
 type Settings struct {
 	QuitIfNetOk bool   `json:"quit_if_net_ok"`
 	DemoMode    bool   `json:"demo_mode"`
@@ -24,4 +29,33 @@ func (a *Config) Generate() *LoginInfo {
 			PassWord: a.From.PassWord,
 		},
 	}
+}
+
+func (a *Config) FillDefault() *Config {
+	var m = map[interface{}]map[string]interface{}{
+		&a.From: {
+			"Domain": "www.msftconnecttest.com",
+		},
+		&a.Meta: {
+			"N":     "200",
+			"VType": "1",
+			"Acid":  "5",
+			"Enc":   "srun_bx1",
+		},
+		&a.Settings: {
+			"Dns": "1.2.4.8",
+		},
+	}
+
+	for q, w := range m {
+		t := reflect.ValueOf(q).Elem()
+		for k, v := range w {
+			tt := t.FieldByName(k)
+			if util.Reflect.IsEmpty(tt) {
+				tt.Set(reflect.ValueOf(v))
+			}
+		}
+	}
+
+	return a
 }

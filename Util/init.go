@@ -10,23 +10,12 @@ import (
 func init() {
 	//配置文件初始化
 	Path := "Config.json"
+	var c Modles.Config
 	if !File.Exists(Path) {
-		if err := File.WriteJson(Path, &Modles.Config{ //默认值
-			From: Modles.LoginForm{
-				Domain:   "www.msftconnecttest.com",
-				UserName: "",
-				PassWord: "",
-			},
-			Meta: Modles.LoginMeta{
-				N:     "200",
-				VType: "1",
-				Acid:  "5",
-				Enc:   "srun_bx1",
-			},
-			Settings: Modles.Settings{
-				Dns: "1.2.4.8",
-			},
-		}); err != nil {
+		if err := File.WriteJson(
+			Path,
+			c.FillDefault(),
+		); err != nil {
 			log.Println("创建配置文件失败:\n", err.Error())
 			os.Exit(1)
 		}
@@ -34,11 +23,12 @@ func init() {
 		os.Exit(0)
 	}
 
-	var c Modles.Config
 	if err := File.ReadJson(Path, &c); err != nil {
 		log.Println("读取配置文件失败:\n", err.Error())
 		os.Exit(1)
 	}
+
+	_ = File.WriteJson(Path, c.FillDefault())
 
 	Global.Config = &c
 }
