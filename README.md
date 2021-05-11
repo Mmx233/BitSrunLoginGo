@@ -23,7 +23,8 @@ Config.json说明：
  },
  "settings": {
   "quit_if_net_ok": false, //登陆前是否检查网络
-  "demo_mode": false //测试模式，报错更详细，且生成运行日志与错误日志
+  "demo_mode": false, //测试模式，报错更详细，且生成运行日志与错误日志
+  "dns": "1.2.4.8" //检查网络用的DNS地址，建议设为网关分发的内网DNS地址
  }
 }
 ```
