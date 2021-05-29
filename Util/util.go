@@ -64,7 +64,7 @@ func ErrHandler(err error) {
 func NetDailEr() func(ctx context.Context, network, address string) (net.Conn, error) {
 	return func(ctx context.Context, network, address string) (net.Conn, error) {
 		d := net.Dialer{
-			Timeout: 20 * time.Second,
+			Timeout: 5 * time.Second,
 		}
 		return d.DialContext(ctx, "udp", Global.Config.Settings.Dns+":53")
 	}
