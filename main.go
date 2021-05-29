@@ -6,10 +6,20 @@ import (
 	"Mmx/Util"
 	"encoding/json"
 	"fmt"
+	"os"
+	"runtime"
 	"time"
 )
 
 func main() {
+	defer func() {
+		if e := recover(); e != nil {
+			Util.Log.Println(e)
+			var buf [4096]byte
+			Util.Log.Println(string(buf[:runtime.Stack(buf[:], false)]))
+			os.Exit(1)
+		}
+	}()
 	Util.Log.Println("Step0: 检查状态…")
 	G := Global.Config.Generate()
 

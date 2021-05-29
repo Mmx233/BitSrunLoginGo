@@ -25,13 +25,16 @@ func (*loG) WriteLog(name string, a ...interface{}) {
 		default:
 			t = fmt.Sprint(v)
 		}
-		_ = File.Add(name, t)
+		err := File.Add(name, fmt.Sprintf(time.Now().Format("2006/01/02 15:04:05 "))+t)
+		if err != nil {
+			log.Println("Log error: ", err)
+		}
 	}
 }
 
 func (c *loG) genTimeStamp() {
 	if c.timeStamp == "" {
-		c.timeStamp = time.Now().Format("2006.01.02-15:04:05")
+		c.timeStamp = time.Now().Format("2006.01.02-15.04.05")
 	}
 }
 
