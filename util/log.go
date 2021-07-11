@@ -4,7 +4,9 @@ import (
 	"Mmx/Global"
 	"fmt"
 	"log"
+	"os"
 	"reflect"
+	"runtime"
 	"time"
 )
 
@@ -56,4 +58,13 @@ func (c *loG) Fatalln(a ...interface{}) {
 	c.genTimeStamp()
 	c.WriteLog("LoginError-"+c.timeStamp+".log", a...)
 	log.Fatalln(a...)
+}
+
+func (c *loG) CatchRecover() {
+	if e := recover(); e != nil {
+		c.Println(e)
+		var buf [4096]byte
+		c.Println(string(buf[:runtime.Stack(buf[:], false)]))
+		os.Exit(1)
+	}
 }

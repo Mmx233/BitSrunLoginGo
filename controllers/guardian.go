@@ -3,6 +3,8 @@ package controllers
 import (
 	"Mmx/global"
 	"Mmx/util"
+	"os"
+	"os/exec"
 	"time"
 )
 
@@ -17,5 +19,21 @@ func Guardian() {
 				_ = Login(false)
 			}
 		}()
+	}
+}
+
+func EnterGuardian() {
+	if global.Config.Settings.Guardian != 0 {
+		global.Status.Daemon = true
+		util.Log.Println("[Guardian mode]")
+		if global.Config.Settings.Daemon {
+			if err := exec.Command(os.Args[0], "-daemon").Start(); err != nil {
+				util.ErrHandler(err)
+				return
+			}
+			util.Log.Println("[Daemon mode entered]")
+			return
+		}
+		Guardian()
 	}
 }
