@@ -13,7 +13,11 @@ type file struct{}
 var File file
 
 func (a *file) Exists(path string) bool {
-	_, err := os.Stat(a.GetRootPath() + path)
+	root, err := a.GetRootPath()
+	if err != nil {
+		return false
+	}
+	_, err = os.Stat(root + path)
 	if err != nil {
 		if os.IsExist(err) {
 			return true
@@ -24,7 +28,11 @@ func (a *file) Exists(path string) bool {
 }
 
 func (a *file) Read(path string) ([]byte, error) {
-	return ioutil.ReadFile(a.GetRootPath() + path)
+	root, err := a.GetRootPath()
+	if err != nil {
+		return nil, err
+	}
+	return ioutil.ReadFile(root + path)
 }
 
 func (a *file) ReadJson(path string, receiver interface{}) error {
@@ -36,7 +44,11 @@ func (a *file) ReadJson(path string, receiver interface{}) error {
 }
 
 func (a *file) Write(path string, data []byte) error {
-	return ioutil.WriteFile(a.GetRootPath()+path, data, 700)
+	root, err := a.GetRootPath()
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(root+path, data, 700)
 }
 
 func (a *file) WriteJson(path string, receiver interface{}) error {
@@ -47,16 +59,21 @@ func (a *file) WriteJson(path string, receiver interface{}) error {
 	return a.Write(path, data)
 }
 
-func (*file) GetRootPath() string {
+func (*file) GetRootPath() (string, error) {
 	t, err := os.Executable()
 	if err != nil {
 		ErrHandler(err)
+		return "", err
 	}
-	return filepath.Dir(t) + "/"
+	return filepath.Dir(t) + "/", nil
 }
 
 func (a *file) Add(path string, c string) error {
-	file, err := os.OpenFile(a.GetRootPath()+path, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 700)
+	root, err := a.GetRootPath()
+	if err != nil {
+		return err
+	}
+	file, err := os.OpenFile(root+path, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 700)
 	defer file.Close()
 	if err != nil {
 		return err

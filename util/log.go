@@ -39,6 +39,9 @@ func (c *loG) genTimeStamp() {
 }
 
 func (c *loG) Println(a ...interface{}) {
+	if !global.Status.Output {
+		return
+	}
 	c.genTimeStamp()
 	if global.Config.Settings.DemoMode {
 		c.WriteLog("Login-"+c.timeStamp+".log", a...)
@@ -47,6 +50,9 @@ func (c *loG) Println(a ...interface{}) {
 }
 
 func (c *loG) Fatalln(a ...interface{}) {
+	if !global.Status.Output {
+		return
+	}
 	c.genTimeStamp()
 	c.WriteLog("LoginError-"+c.timeStamp+".log", a...)
 	log.Fatalln(a...)

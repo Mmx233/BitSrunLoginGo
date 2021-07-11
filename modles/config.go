@@ -1,7 +1,7 @@
 package modles
 
 import (
-	"Mmx/Modles/util"
+	"Mmx/modles/util"
 	"reflect"
 )
 
@@ -9,7 +9,8 @@ type Settings struct {
 	QuitIfNetOk bool   `json:"quit_if_net_ok"`
 	DemoMode    bool   `json:"demo_mode"`
 	Dns         string `json:"dns"`
-	Daemon      uint   `json:"daemon"`
+	Guardian    uint   `json:"guardian"`
+	Daemon      bool   `json:"daemon"`
 }
 
 type Config struct {
