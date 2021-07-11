@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"Mmx/global"
-	"Mmx/util"
+	"autoLogin/global"
+	"autoLogin/util"
 	"os"
 	"os/exec"
 	"time"

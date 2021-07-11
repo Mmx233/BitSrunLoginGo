@@ -1,6 +1,6 @@
 package global
 
-import "Mmx/modles"
+import "autoLogin/modles"
 
 var Config *modles.Config
 

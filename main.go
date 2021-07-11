@@ -1,8 +1,8 @@
 package main
 
 import (
-	"Mmx/controllers"
-	"Mmx/util"
+	"autoLogin/controllers"
+	"autoLogin/util"
 )
 
 func main() {

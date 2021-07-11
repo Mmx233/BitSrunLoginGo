@@ -1,3 +1,3 @@
-module Mmx
+module autoLogin
 
 go 1.16

@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"Mmx/global"
-	"Mmx/request"
-	"Mmx/util"
+	"autoLogin/global"
+	"autoLogin/request"
+	"autoLogin/util"
 	"encoding/json"
 	"errors"
 	"fmt"

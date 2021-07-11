@@ -1,7 +1,7 @@
 package util
 
 import (
-	"Mmx/global"
+	"autoLogin/global"
 	"fmt"
 	"log"
 	"os"

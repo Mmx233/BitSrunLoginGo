@@ -1,7 +1,7 @@
 package modles
 
 import (
-	"Mmx/modles/util"
+	"autoLogin/modles/util"
 	"reflect"
 )
 

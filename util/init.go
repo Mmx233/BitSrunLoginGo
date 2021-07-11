@@ -1,8 +1,8 @@
 package util
 
 import (
-	"Mmx/global"
-	"Mmx/modles"
+	"autoLogin/global"
+	"autoLogin/modles"
 	"log"
 	"os"
 )

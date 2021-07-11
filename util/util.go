@@ -1,7 +1,7 @@
 package util
 
 import (
-	"Mmx/global"
+	"autoLogin/global"
 	"context"
 	"crypto/md5"
 	"crypto/sha1"

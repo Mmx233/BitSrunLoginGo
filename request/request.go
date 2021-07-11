@@ -1,7 +1,7 @@
 package request
 
 import (
-	"Mmx/util"
+	"autoLogin/util"
 	"io/ioutil"
 	"log"
 	"net"
