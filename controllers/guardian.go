@@ -9,6 +9,7 @@ import (
 )
 
 func Guardian(output bool) {
+	var c = make(chan bool)
 	for {
 		global.Status.Output = output
 		time.Sleep(time.Duration(global.Config.Settings.Guardian) * time.Second)
@@ -19,8 +20,14 @@ func Guardian(output bool) {
 			if !util.Checker.NetOk() {
 				util.Log.Println("Network down, trying to login")
 				_ = Login(false)
+			} else {
+				if global.Config.Settings.DemoMode {
+					util.Log.Println("Network ok")
+				}
 			}
+			c <- false
 		}()
+		<-c
 	}
 }
 
