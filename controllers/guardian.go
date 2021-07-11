@@ -14,7 +14,7 @@ func Guardian() {
 				_ = recover()
 			}()
 			if !util.Checker.NetOk() {
-				Login(false)
+				_ = Login(false)
 			}
 		}()
 	}

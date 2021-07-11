@@ -25,7 +25,10 @@ func main() {
 			os.Exit(1)
 		}
 	}()
-	controllers.Login(true)
+	if err := controllers.Login(true); err != nil {
+		util.ErrHandler(err)
+		return
+	}
 
 	if global.Config.Settings.Guardian != 0 {
 		global.Status.Daemon = true

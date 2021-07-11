@@ -5,31 +5,31 @@ import (
 	"Mmx/request"
 	"Mmx/util"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 )
 
-func Login(output bool) {
+func Login(output bool) error {
 	global.Status.Output = output
 	util.Log.Println("Step0: 检查状态…")
 	G := global.Config.Generate()
 
 	if !global.Status.Daemon && global.Config.Settings.QuitIfNetOk && util.Checker.NetOk() {
 		util.Log.Println("网络正常，程序退出")
-		return
+		return nil
 	}
 
 	util.Log.Println("Step1: 正在获取客户端ip")
 	{
 		body, err := request.Get(G.UrlLoginPage, nil)
 		if err != nil {
-			util.ErrHandler(err)
-			return
+			return err
 		}
 		G.Ip, err = util.GetIp(body)
 		if err != nil {
 			util.ErrHandler(err)
-			return
+			return err
 		}
 	}
 	util.Log.Println("Step2: 正在获取Token")
@@ -40,13 +40,11 @@ func Login(output bool) {
 			"ip":       G.Ip,
 		})
 		if err != nil {
-			util.ErrHandler(err)
-			return
+			return err
 		}
 		G.Token, err = util.GetToken(data)
 		if err != nil {
-			util.ErrHandler(err)
-			return
+			return err
 		}
 	}
 	util.Log.Println("Step3: 执行登录…")
@@ -59,8 +57,7 @@ func Login(output bool) {
 			"enc_ver":  G.Meta.Enc,
 		})
 		if err != nil {
-			util.ErrHandler(err)
-			return
+			return err
 		}
 		G.EncryptedInfo = "{SRBX1}" + util.Base64(util.XEncode(string(info), G.Token))
 		G.Md5 = util.Md5(G.Token)
@@ -89,17 +86,20 @@ func Login(output bool) {
 			"_":            fmt.Sprint(time.Now().UnixNano()),
 		})
 		if err != nil {
-			util.ErrHandler(err)
-			return
+			return err
 		}
 		G.LoginResult, err = util.GetResult(res)
 		if err != nil {
-			util.ErrHandler(err)
-			return
+			return err
 		}
 		util.Log.Println("登录结果: " + G.LoginResult)
 		if global.Config.Settings.DemoMode {
 			util.Log.Println(res)
 		}
+		if G.LoginResult != "ok" {
+			return errors.New(G.LoginResult)
+		}
 	}
+
+	return nil
 }
