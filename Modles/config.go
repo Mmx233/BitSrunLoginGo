@@ -25,7 +25,7 @@ func (a *Config) Generate() *LoginInfo {
 		UrlCheckApi:        "http://" + a.From.Domain + "/cgi-bin/rad_user_info",
 		Meta:               &a.Meta,
 		Form: &LoginForm{
-			UserName: a.From.UserName + "@cmcc",
+			UserName: a.From.UserName + "@" + a.From.UserType,
 			PassWord: a.From.PassWord,
 		},
 	}

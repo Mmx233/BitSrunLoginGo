@@ -3,6 +3,7 @@ package Modles
 type LoginForm struct {
 	Domain   string `json:"domain"`
 	UserName string `json:"username"`
+	UserType string `json:"user_type"`
 	PassWord string `json:"password"`
 }
 
