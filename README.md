@@ -13,11 +13,12 @@ Config.json说明：
  "from": {
   "domain": "www.msftconnecttest.com", //登录地址ip或域名
   "username": "", //账号
+  "user_type": "", //运营商类型，详情看下方
   "password": "" //密码
  },
  "meta": { //登录参数
   "n": "200",
-  "v_type": "1",
+  "type": "1",
   "acid": "5",
   "enc": "srun_bx1"
  },
@@ -28,3 +29,7 @@ Config.json说明：
  }
 }
 ```
+
+登录参数从原网页登陆时对`/srun_portal`的请求抓取
+
+运营商类型在原网页会被自动附加在账号后，请把`@`后面的部分填入`user_type`
