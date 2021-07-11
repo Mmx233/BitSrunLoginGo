@@ -34,13 +34,14 @@ func (a *Config) Generate() *LoginInfo {
 func (a *Config) FillDefault() *Config {
 	var m = map[interface{}]map[string]interface{}{
 		&a.From: {
-			"Domain": "www.msftconnecttest.com",
+			"Domain":   "www.msftconnecttest.com",
+			"UserType": "cmcc",
 		},
 		&a.Meta: {
-			"N":     "200",
-			"VType": "1",
-			"Acid":  "5",
-			"Enc":   "srun_bx1",
+			"N":    "200",
+			"Type": "1",
+			"Acid": "5",
+			"Enc":  "srun_bx1",
 		},
 		&a.Settings: {
 			"Dns": "1.2.4.8",
