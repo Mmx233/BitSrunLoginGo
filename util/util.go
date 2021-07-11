@@ -1,4 +1,4 @@
-package Util
+package util
 
 import (
 	"Mmx/Global"
@@ -54,7 +54,7 @@ func Sha1(content string) string {
 func ErrHandler(err error) {
 	if err != nil {
 		Log.Println("运行出错，状态异常")
-		if Global.Config.Settings.DemoMode {
+		if global.Config.Settings.DemoMode {
 			Log.Fatalln(err)
 		}
 		os.Exit(1)
@@ -66,6 +66,6 @@ func NetDailEr() func(ctx context.Context, network, address string) (net.Conn, e
 		d := net.Dialer{
 			Timeout: 5 * time.Second,
 		}
-		return d.DialContext(ctx, "udp", Global.Config.Settings.Dns+":53")
+		return d.DialContext(ctx, "udp", global.Config.Settings.Dns+":53")
 	}
 }

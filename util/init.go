@@ -1,4 +1,4 @@
-package Util
+package util
 
 import (
 	"Mmx/Global"
@@ -10,7 +10,7 @@ import (
 func init() {
 	//配置文件初始化
 	Path := "Config.json"
-	var c Modles.Config
+	var c modles.Config
 	if !File.Exists(Path) {
 		if err := File.WriteJson(
 			Path,
@@ -30,5 +30,5 @@ func init() {
 
 	_ = File.WriteJson(Path, c.FillDefault())
 
-	Global.Config = &c
+	global.Config = &c
 }

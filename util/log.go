@@ -1,4 +1,4 @@
-package Util
+package util
 
 import (
 	"Mmx/Global"
@@ -40,7 +40,7 @@ func (c *loG) genTimeStamp() {
 
 func (c *loG) Println(a ...interface{}) {
 	c.genTimeStamp()
-	if Global.Config.Settings.DemoMode {
+	if global.Config.Settings.DemoMode {
 		c.WriteLog("Login-"+c.timeStamp+".log", a...)
 	}
 	log.Println(a...)

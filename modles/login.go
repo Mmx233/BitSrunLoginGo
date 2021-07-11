@@ -1,4 +1,4 @@
-package Modles
+package modles
 
 type LoginForm struct {
 	Domain   string `json:"domain"`

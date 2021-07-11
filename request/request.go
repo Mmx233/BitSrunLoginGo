@@ -1,4 +1,4 @@
-package Request
+package request
 
 import (
 	"Mmx/Util"
@@ -26,10 +26,10 @@ func Get(Url string, Query map[string]string) (string, error) {
 	resp, err := (&http.Client{
 		Transport: &http.Transport{
 			DialContext: (&net.Dialer{
-				Timeout: 10 * time.Second,
+				Timeout: 5 * time.Second,
 				Resolver: &net.Resolver{
 					PreferGo: true,
-					Dial:     Util.NetDailEr(),
+					Dial:     util.NetDailEr(),
 				},
 			}).DialContext,
 		},

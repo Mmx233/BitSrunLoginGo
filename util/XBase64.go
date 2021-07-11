@@ -1,4 +1,4 @@
-package Util
+package util
 
 func getbyte(a byte) int {
 	x := int(a)
