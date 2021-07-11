@@ -8,6 +8,6 @@ func init() {
 	goDaemon := flag.Bool("daemon", false, "")
 	flag.Parse()
 	if *goDaemon {
-		Guardian()
+		Guardian(false)
 	}
 }

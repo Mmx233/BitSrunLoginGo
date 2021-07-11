@@ -8,14 +8,16 @@ import (
 	"time"
 )
 
-func Guardian() {
+func Guardian(output bool) {
 	for {
+		global.Status.Output = output
 		time.Sleep(time.Duration(global.Config.Settings.Guardian) * time.Second)
 		go func() {
 			defer func() {
 				_ = recover()
 			}()
 			if !util.Checker.NetOk() {
+				util.Log.Println("Network down, trying to login")
 				_ = Login(false)
 			}
 		}()
@@ -34,6 +36,6 @@ func EnterGuardian() {
 			util.Log.Println("[Daemon mode entered]")
 			return
 		}
-		Guardian()
+		Guardian(true)
 	}
 }
