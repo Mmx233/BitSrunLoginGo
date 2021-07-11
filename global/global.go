@@ -1,6 +1,6 @@
 package global
 
-import "Mmx/Modles"
+import "Mmx/modles"
 
 var Config *modles.Config
 

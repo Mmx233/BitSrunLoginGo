@@ -1,7 +1,7 @@
 package util
 
 import (
-	"Mmx/Global"
+	"Mmx/global"
 	"fmt"
 	"log"
 	"os"

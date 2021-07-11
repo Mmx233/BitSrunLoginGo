@@ -1,8 +1,8 @@
 package main
 
 import (
-	"Mmx/Util"
 	"Mmx/controllers"
+	"Mmx/util"
 )
 
 func main() {

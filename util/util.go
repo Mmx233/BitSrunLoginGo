@@ -1,7 +1,7 @@
 package util
 
 import (
-	"Mmx/Global"
+	"Mmx/global"
 	"context"
 	"crypto/md5"
 	"crypto/sha1"

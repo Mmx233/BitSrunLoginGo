@@ -1,7 +1,7 @@
 package request
 
 import (
-	"Mmx/Util"
+	"Mmx/util"
 	"io/ioutil"
 	"log"
 	"net"
