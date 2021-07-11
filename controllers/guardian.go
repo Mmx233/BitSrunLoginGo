@@ -26,7 +26,7 @@ func Guardian(output bool) {
 
 func EnterGuardian() {
 	if global.Config.Settings.Guardian != 0 {
-		global.Status.Daemon = true
+		global.Status.Guardian = true
 		util.Log.Println("[Guardian mode]")
 		if global.Config.Settings.Daemon {
 			if err := exec.Command(os.Args[0], "-daemon").Start(); err != nil {

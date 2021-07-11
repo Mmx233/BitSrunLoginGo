@@ -5,6 +5,6 @@ import "autoLogin/modles"
 var Config *modles.Config
 
 var Status struct {
-	Output bool
-	Daemon bool
+	Output   bool
+	Guardian bool
 }
