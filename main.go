@@ -62,7 +62,7 @@ func main() {
 
 		var chkstr = G.Token + G.Form.UserName + G.Token + G.Md5
 		chkstr += G.Token + G.Meta.Acid + G.Token + G.Ip
-		chkstr += G.Token + G.Meta.N + G.Token + G.Meta.VType
+		chkstr += G.Token + G.Meta.N + G.Token + G.Meta.Type
 		chkstr += G.Token + G.EncryptedInfo
 		G.EncryptedChkstr = Util.Sha1(chkstr)
 
@@ -76,7 +76,7 @@ func main() {
 			"info":         G.EncryptedInfo,
 			"chksum":       G.EncryptedChkstr,
 			"n":            G.Meta.N,
-			"type":         G.Meta.VType,
+			"type":         G.Meta.Type,
 			"os":           "Windows 10",
 			"name":         "windows",
 			"double_stack": "0",

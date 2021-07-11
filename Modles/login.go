@@ -8,10 +8,10 @@ type LoginForm struct {
 }
 
 type LoginMeta struct {
-	N     string `json:"n"`
-	VType string `json:"v_type"`
-	Acid  string `json:"acid"`
-	Enc   string `json:"enc"`
+	N    string `json:"n"`
+	Type string `json:"type"`
+	Acid string `json:"acid"`
+	Enc  string `json:"enc"`
 }
 
 type LoginInfo struct {
