@@ -37,8 +37,7 @@ func EnterGuardian() {
 		util.Log.Println("[Guardian mode]")
 		if global.Config.Settings.Daemon {
 			if err := exec.Command(os.Args[0], "-daemon").Start(); err != nil {
-				util.ErrHandler(err)
-				return
+				util.Log.Fatalln(err)
 			}
 			util.Log.Println("[Daemon mode entered]")
 			return
