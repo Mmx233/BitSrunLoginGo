@@ -18,13 +18,7 @@ func (a *file) Exists(path string) bool {
 		return false
 	}
 	_, err = os.Stat(root + path)
-	if err != nil {
-		if os.IsExist(err) {
-			return true
-		}
-		return false
-	}
-	return true
+	return err == nil || os.IsExist(err)
 }
 
 func (a *file) Read(path string) ([]byte, error) {
