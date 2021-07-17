@@ -17,6 +17,9 @@ type loG struct {
 var Log loG
 
 func (*loG) WriteLog(name string, a ...interface{}) {
+	if !global.Config.Settings.DemoMode {
+		return
+	}
 	for _, v := range a {
 		var t string
 		switch reflect.TypeOf(v).Kind() {
@@ -41,22 +44,20 @@ func (c *loG) genTimeStamp() {
 }
 
 func (c *loG) Println(a ...interface{}) {
+	c.genTimeStamp()
+	c.WriteLog("Login-"+c.timeStamp+".log", a...)
 	if !global.Status.Output {
 		return
-	}
-	c.genTimeStamp()
-	if global.Config.Settings.DemoMode {
-		c.WriteLog("Login-"+c.timeStamp+".log", a...)
 	}
 	log.Println(a...)
 }
 
 func (c *loG) Fatalln(a ...interface{}) {
+	c.genTimeStamp()
+	c.WriteLog("LoginError-"+c.timeStamp+".log", a...)
 	if !global.Status.Output {
 		return
 	}
-	c.genTimeStamp()
-	c.WriteLog("LoginError-"+c.timeStamp+".log", a...)
 	log.Fatalln(a...)
 }
 
