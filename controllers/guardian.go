@@ -9,8 +9,17 @@ import (
 )
 
 func Guardian(output bool) {
+	global.Status.Output = output
+
+	if e := Daemon.MarkDaemon(); e != nil {
+		util.Log.Fatalln(e)
+	}
+
 	var c = make(chan bool)
 	for {
+		if !Daemon.CheckDaemon() {
+			os.Exit(1)
+		}
 		global.Status.Output = output
 		time.Sleep(time.Duration(global.Config.Settings.Guardian) * time.Second)
 		go func() {
