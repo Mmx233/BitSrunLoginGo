@@ -2,7 +2,7 @@ package util
 
 import (
 	"autoLogin/global"
-	"autoLogin/modles"
+	"autoLogin/models"
 	"log"
 	"os"
 )
@@ -10,7 +10,7 @@ import (
 func init() {
 	//配置文件初始化
 	Path := "Config.json"
-	var c modles.Config
+	var c models.Config
 	if !File.Exists(Path) {
 		if err := File.WriteJson(
 			Path,

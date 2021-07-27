@@ -1,7 +1,7 @@
-package modles
+package models
 
 import (
-	"autoLogin/modles/util"
+	"autoLogin/models/util"
 	"reflect"
 )
 

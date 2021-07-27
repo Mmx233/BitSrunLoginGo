@@ -1,8 +1,8 @@
 package global
 
-import "autoLogin/modles"
+import "autoLogin/models"
 
-var Config *modles.Config
+var Config *models.Config
 
 var Status struct {
 	Output   bool
