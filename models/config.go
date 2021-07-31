@@ -6,11 +6,12 @@ import (
 )
 
 type Settings struct {
-	QuitIfNetOk bool   `json:"quit_if_net_ok"`
-	DemoMode    bool   `json:"demo_mode"`
-	Dns         string `json:"dns"`
-	Guardian    uint   `json:"guardian"`
-	Daemon      bool   `json:"daemon"`
+	QuitIfNetOk             bool   `json:"quit_if_net_ok"`
+	DemoMode                bool   `json:"demo_mode"`
+	Dns                     string `json:"dns"`
+	Guardian                uint   `json:"guardian"`
+	Daemon                  bool   `json:"daemon"`
+	ForceGuardianEvenFailed bool   `json:"force_guardian_even_failed"`
 }
 
 type Config struct {

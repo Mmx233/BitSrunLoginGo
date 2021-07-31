@@ -56,7 +56,6 @@ func (a *file) WriteJson(path string, receiver interface{}) error {
 func (*file) GetRootPath() (string, error) {
 	t, err := os.Executable()
 	if err != nil {
-		ErrHandler(err)
 		return "", err
 	}
 	return filepath.Dir(t) + "/", nil

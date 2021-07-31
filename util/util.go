@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"os"
 	"regexp"
 	"time"
 )
@@ -49,17 +48,6 @@ func Sha1(content string) string {
 	h.Write([]byte(content))
 	bs := h.Sum(nil)
 	return fmt.Sprintf("%x\n", bs)
-}
-
-func ErrHandler(err error) {
-	if !global.Status.Output {
-		return
-	}
-	Log.Println("运行出错，状态异常")
-	if global.Config.Settings.DemoMode {
-		Log.Fatalln(err)
-	}
-	os.Exit(1)
 }
 
 func NetDailEr() func(ctx context.Context, network, address string) (net.Conn, error) {

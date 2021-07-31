@@ -28,7 +28,6 @@ func Login(output bool) error {
 		}
 		G.Ip, err = util.GetIp(body)
 		if err != nil {
-			util.ErrHandler(err)
 			return err
 		}
 	}
