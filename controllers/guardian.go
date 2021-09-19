@@ -27,7 +27,7 @@ func Guardian(output bool) {
 			}()
 			if !util.Checker.NetOk() {
 				util.Log.Println("Network down, trying to login")
-				_ = Login(false)
+				_ = Login(output)
 			} else {
 				if global.Config.Settings.DemoMode {
 					util.Log.Println("Network ok")
