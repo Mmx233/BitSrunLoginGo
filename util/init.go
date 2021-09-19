@@ -1,11 +1,13 @@
 package util
 
 import (
+	"autoLogin/global"
 	"github.com/Mmx233/tool"
 	"time"
 )
 
 func init() {
-	//http工具设定
-	tool.HTTP.Options.Timeout = 3 * time.Second
+	//tool设定
+	tool.HTTP.Options.Timeout = time.Duration(global.Config.Settings.Timeout) * time.Second
+	tool.File.Options.ForceRoot = true
 }

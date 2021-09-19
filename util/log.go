@@ -3,6 +3,7 @@ package util
 import (
 	"autoLogin/global"
 	"fmt"
+	"github.com/Mmx233/tool"
 	"log"
 	"os"
 	"reflect"
@@ -30,7 +31,7 @@ func (*loG) WriteLog(name string, a ...interface{}) {
 		default:
 			t = fmt.Sprint(v)
 		}
-		err := File.Add(name, fmt.Sprintf(time.Now().Format("2006/01/02 15:04:05 "))+t)
+		err := tool.File.Add(name, fmt.Sprintf(time.Now().Format("2006/01/02 15:04:05 "))+t, 700)
 		if err != nil {
 			log.Println("Log error: ", err)
 		}

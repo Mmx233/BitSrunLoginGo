@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"autoLogin/util"
 	"flag"
 	"fmt"
+	"github.com/Mmx233/tool"
 	"time"
 )
 
@@ -26,11 +26,11 @@ func init() {
 }
 
 func (a *daemon) MarkDaemon() error {
-	return util.File.Write(a.Path, []byte(a.Mark))
+	return tool.File.Write(a.Path, []byte(a.Mark))
 }
 
 func (a *daemon) CheckDaemon() bool {
-	if data, err := util.File.Read(a.Path); err != nil {
+	if data, err := tool.File.Read(a.Path); err != nil {
 		return true
 	} else {
 		return string(data) == a.Mark

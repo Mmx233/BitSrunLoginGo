@@ -27,8 +27,8 @@ Config.json说明：
     "enc": "srun_bx1"
   },
   "settings": {
+    "timeout": 3, //检查网络超时时间（秒）
     "demo_mode": false, //测试模式，报错更详细，且生成运行日志与错误日志
-    "dns": "1.2.4.8", //检查网络用的DNS地址，建议设为网关分发的内网DNS地址
     "guardian": 0, //守护模式，值为网络检查周期（秒），设为0关闭守护模式
     "daemon": false, //将守护挂入后台
   }
