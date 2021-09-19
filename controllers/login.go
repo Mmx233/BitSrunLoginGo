@@ -2,11 +2,10 @@ package controllers
 
 import (
 	"autoLogin/global"
-	"autoLogin/request"
 	"autoLogin/util"
 	"encoding/json"
 	"errors"
-	"fmt"
+	"github.com/Mmx233/tool"
 	"time"
 )
 
@@ -22,41 +21,42 @@ func Login(output bool) error {
 
 	util.Log.Println("Step1: 正在获取客户端ip")
 	{
-		body, err := request.Get(G.UrlLoginPage, nil)
-		if err != nil {
-			return err
-		}
-		G.Ip, err = util.GetIp(body)
-		if err != nil {
-			return err
+		if _, body, e := tool.HTTP.GetString(&tool.GetRequest{
+			Url:      G.UrlLoginPage,
+			Redirect: true,
+		}); e != nil {
+			return e
+		} else if G.Ip, e = util.GetIp(body); e != nil {
+			return e
 		}
 	}
 	util.Log.Println("Step2: 正在获取Token")
 	{
-		data, err := request.Get(G.UrlGetChallengeApi, map[string]string{
-			"callback": "jsonp1583251661367",
-			"username": G.Form.UserName,
-			"ip":       G.Ip,
-		})
-		if err != nil {
-			return err
-		}
-		G.Token, err = util.GetToken(data)
-		if err != nil {
-			return err
+		if _, data, e := tool.HTTP.GetString(&tool.GetRequest{
+			Url: G.UrlGetChallengeApi,
+			Query: map[string]interface{}{
+				"callback": "jsonp1583251661367",
+				"username": G.Form.UserName,
+				"ip":       G.Ip,
+			},
+			Redirect: true,
+		}); e != nil {
+			return e
+		} else if G.Token, e = util.GetToken(data); e != nil {
+			return e
 		}
 	}
 	util.Log.Println("Step3: 执行登录…")
 	{
-		info, err := json.Marshal(map[string]string{
+		info, e := json.Marshal(map[string]string{
 			"username": G.Form.UserName,
 			"password": G.Form.PassWord,
 			"ip":       G.Ip,
 			"acid":     G.Meta.Acid,
 			"enc_ver":  G.Meta.Enc,
 		})
-		if err != nil {
-			return err
+		if e != nil {
+			return e
 		}
 		G.EncryptedInfo = "{SRBX1}" + util.Base64(util.XEncode(string(info), G.Token))
 		G.Md5 = util.Md5(G.Token)
@@ -68,33 +68,36 @@ func Login(output bool) error {
 		chkstr += G.Token + G.EncryptedInfo
 		G.EncryptedChkstr = util.Sha1(chkstr)
 
-		res, err := request.Get(G.UrlLoginApi, map[string]string{
-			"callback":     "jQuery112401157665",
-			"action":       "login",
-			"username":     G.Form.UserName,
-			"password":     G.EncryptedMd5,
-			"ac_id":        G.Meta.Acid,
-			"ip":           G.Ip,
-			"info":         G.EncryptedInfo,
-			"chksum":       G.EncryptedChkstr,
-			"n":            G.Meta.N,
-			"type":         G.Meta.Type,
-			"os":           "Windows 10",
-			"name":         "windows",
-			"double_stack": "0",
-			"_":            fmt.Sprint(time.Now().UnixNano()),
-		})
-		if err != nil {
-			return err
+		if _, res, e := tool.HTTP.GetString(&tool.GetRequest{
+			Url: G.UrlLoginApi,
+			Query: map[string]interface{}{
+				"callback":     "jQuery112401157665",
+				"action":       "login",
+				"username":     G.Form.UserName,
+				"password":     G.EncryptedMd5,
+				"ac_id":        G.Meta.Acid,
+				"ip":           G.Ip,
+				"info":         G.EncryptedInfo,
+				"chksum":       G.EncryptedChkstr,
+				"n":            G.Meta.N,
+				"type":         G.Meta.Type,
+				"os":           "Windows 10",
+				"name":         "windows",
+				"double_stack": 0,
+				"_":            time.Now().UnixNano(),
+			},
+			Redirect: true,
+		}); e != nil {
+			return e
+		} else if G.LoginResult, e = util.GetResult(res); e != nil {
+			return e
+		} else {
+			util.Log.Println("登录结果: " + G.LoginResult)
+			if global.Config.Settings.DemoMode {
+				util.Log.Println(res)
+			}
 		}
-		G.LoginResult, err = util.GetResult(res)
-		if err != nil {
-			return err
-		}
-		util.Log.Println("登录结果: " + G.LoginResult)
-		if global.Config.Settings.DemoMode {
-			util.Log.Println(res)
-		}
+
 		if G.LoginResult != "ok" {
 			return errors.New(G.LoginResult)
 		}
