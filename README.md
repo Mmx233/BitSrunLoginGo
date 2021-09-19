@@ -27,7 +27,7 @@ Config.json说明：
     "enc": "srun_bx1"
   },
   "settings": {
-    "timeout": 3, //检查网络超时时间（秒）
+    "timeout": 1, //检查网络超时时间（秒）
     "demo_mode": false, //测试模式，报错更详细，且生成运行日志与错误日志
     "guardian": 0, //守护模式，值为网络检查周期（秒），设为0关闭守护模式
     "daemon": false, //将守护挂入后台
