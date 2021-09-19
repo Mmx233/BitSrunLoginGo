@@ -9,14 +9,15 @@ import (
 	"time"
 )
 
-func Login(output bool) error {
+func Login(output bool, skipCheck bool) error {
 	global.Status.Output = output
-	util.Log.Println("Step0: 检查状态…")
 	G := global.Config.Generate()
-
-	if util.Checker.NetOk() {
-		util.Log.Println("网络 ok")
-		return nil
+	if !skipCheck {
+		util.Log.Println("Step0: 检查状态…")
+		if util.Checker.NetOk() {
+			util.Log.Println("网络 ok")
+			return nil
+		}
 	}
 
 	util.Log.Println("Step1: 正在获取客户端ip")
