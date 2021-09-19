@@ -15,8 +15,8 @@ func Login(output bool) error {
 	util.Log.Println("Step0: 检查状态…")
 	G := global.Config.Generate()
 
-	if !global.Status.Guardian && global.Config.Settings.QuitIfNetOk && util.Checker.NetOk() {
-		util.Log.Println("网络正常，程序退出")
+	if util.Checker.NetOk() {
+		util.Log.Println("网络 ok")
 		return nil
 	}
 

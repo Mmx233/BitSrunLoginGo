@@ -21,7 +21,6 @@ func Guardian(output bool) {
 			os.Exit(1)
 		}
 		global.Status.Output = output
-		time.Sleep(time.Duration(global.Config.Settings.Guardian) * time.Second)
 		go func() {
 			defer func() {
 				_ = recover()
@@ -37,6 +36,7 @@ func Guardian(output bool) {
 			c <- false
 		}()
 		<-c
+		time.Sleep(time.Duration(global.Config.Settings.Guardian) * time.Second)
 	}
 }
 
