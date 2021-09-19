@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-var Config *models.Config
+var Config models.Config
 
 func init() {
 	//配置文件初始化
