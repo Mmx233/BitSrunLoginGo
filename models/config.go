@@ -1,15 +1,10 @@
 package models
 
-import (
-	"autoLogin/models/util"
-	"reflect"
-)
-
 type Settings struct {
-	DemoMode bool   `json:"demo_mode"`
-	Dns      string `json:"dns"`
-	Guardian uint   `json:"guardian"`
-	Daemon   bool   `json:"daemon"`
+	Timeout  uint `json:"timeout"`
+	DemoMode bool `json:"demo_mode"`
+	Guardian uint `json:"guardian"`
+	Daemon   bool `json:"daemon"`
 }
 
 type Config struct {
@@ -30,34 +25,4 @@ func (a *Config) Generate() *LoginInfo {
 			PassWord: a.From.PassWord,
 		},
 	}
-}
-
-func (a *Config) FillDefault() *Config {
-	var m = map[interface{}]map[string]interface{}{
-		&a.From: {
-			"Domain":   "www.msftconnecttest.com",
-			"UserType": "cmcc",
-		},
-		&a.Meta: {
-			"N":    "200",
-			"Type": "1",
-			"Acid": "5",
-			"Enc":  "srun_bx1",
-		},
-		&a.Settings: {
-			"Dns": "1.2.4.8",
-		},
-	}
-
-	for q, w := range m {
-		t := reflect.ValueOf(q).Elem()
-		for k, v := range w {
-			tt := t.FieldByName(k)
-			if util.Reflect.IsEmpty(tt) {
-				tt.Set(reflect.ValueOf(v))
-			}
-		}
-	}
-
-	return a
 }
