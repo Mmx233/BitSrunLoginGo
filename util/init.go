@@ -3,8 +3,10 @@ package util
 import (
 	"autoLogin/global"
 	"autoLogin/models"
+	"github.com/Mmx233/tool"
 	"log"
 	"os"
+	"time"
 )
 
 func init() {
@@ -31,4 +33,7 @@ func init() {
 	_ = File.WriteJson(Path, c.FillDefault())
 
 	global.Config = &c
+
+	//http工具设定
+	tool.HTTP.Options.Timeout = 3 * time.Second
 }

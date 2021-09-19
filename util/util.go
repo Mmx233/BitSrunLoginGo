@@ -1,16 +1,12 @@
 package util
 
 import (
-	"autoLogin/global"
-	"context"
 	"crypto/md5"
 	"crypto/sha1"
 	"errors"
 	"fmt"
 	"io"
-	"net"
 	"regexp"
-	"time"
 )
 
 func Search(reg string, content string) (string, error) {
@@ -48,13 +44,4 @@ func Sha1(content string) string {
 	h.Write([]byte(content))
 	bs := h.Sum(nil)
 	return fmt.Sprintf("%x\n", bs)
-}
-
-func NetDailEr() func(ctx context.Context, network, address string) (net.Conn, error) {
-	return func(ctx context.Context, network, address string) (net.Conn, error) {
-		d := net.Dialer{
-			Deadline: time.Now().Add(5 * time.Second),
-		}
-		return d.DialContext(ctx, "udp", global.Config.Settings.Dns+":53")
-	}
 }
