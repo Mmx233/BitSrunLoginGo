@@ -29,7 +29,7 @@ go build
 
 golang支持的系统与架构请自行查询
 
-## :hammer_and_wrench:运行
+## :gear:运行
 
 编译结果为可执行文件，直接启动即可
 
