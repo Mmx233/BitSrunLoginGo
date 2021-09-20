@@ -8,7 +8,38 @@
 
 登录逻辑来自 https://github.com/coffeehat/BIT-srun-login-script
 
-首次运行将生成Config.json文件
+## :hammer_and_wrench:构建
+
+建议安装使用最新版golang
+
+直接编译本系统可执行程序：
+
+```shell
+go build
+```
+
+交叉编译(Linux)：
+
+```shell
+export GOGGC=0
+export GOOS=windows #系统
+export GOARCH=amd64 #架构
+go build
+```
+
+golang支持的系统与架构请自行查询
+
+## :hammer_and_wrench:运行
+
+编译结果为可执行文件，直接启动即可
+
+可以通过添加启动参数`--config`指定配置文件路径，默认为当前目录
+
+```shell
+./autoLogin --config=/demo/i.json
+```
+
+首次运行将自动生成配置文件
 
 Config.json说明：
 
