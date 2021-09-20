@@ -3,7 +3,6 @@ package global
 import (
 	"autoLogin/models"
 	"github.com/Mmx233/config"
-	"github.com/Mmx233/tool"
 	"log"
 	"os"
 )
@@ -11,7 +10,7 @@ import (
 var Config models.Config
 
 func init() {
-	tool.File.Options.ForceRoot = true
+	initFlags()
 
 	//配置文件初始化
 	if e := config.Load(config.Options{
@@ -31,7 +30,7 @@ func init() {
 				Timeout: 1,
 			},
 		},
-		Path:        "Config.json",
+		Path:        Flags.Path,
 		FillDefault: true,
 		Overwrite:   true,
 	}); e != nil {
