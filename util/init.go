@@ -9,5 +9,4 @@ import (
 func init() {
 	//tool设定
 	tool.HTTP.Options.Timeout = time.Duration(global.Config.Settings.Timeout) * time.Second
-	tool.File.Options.ForceRoot = true
 }
