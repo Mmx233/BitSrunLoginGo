@@ -35,7 +35,7 @@ func init() {
 		Overwrite:   true,
 	}); e != nil {
 		if config.IsNew(e) {
-			log.Println("已生成配置文件，请编辑 'Config.json' 然后重试")
+			log.Println("已生成配置文件，请编辑 '" + Flags.Path + "' 然后重试")
 			os.Exit(0)
 		}
 		log.Println("读取配置文件失败:\n", e.Error())
