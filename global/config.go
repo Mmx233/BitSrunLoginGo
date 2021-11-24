@@ -1,7 +1,7 @@
 package global
 
 import (
-	"autoLogin/models"
+	"github.com/Mmx233/BitSrunLoginGo/models"
 	"github.com/Mmx233/config"
 	"log"
 	"os"

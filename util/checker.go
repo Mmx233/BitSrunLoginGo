@@ -1,7 +1,7 @@
 package util
 
 import (
-	"autoLogin/global"
+	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/tool"
 	"time"
 )

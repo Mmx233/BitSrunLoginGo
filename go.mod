@@ -1,4 +1,4 @@
-module autoLogin
+module github.com/Mmx233/BitSrunLoginGo
 
 go 1.17
 

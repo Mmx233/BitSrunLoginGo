@@ -1,9 +1,9 @@
 package main
 
 import (
-	"autoLogin/controllers"
-	"autoLogin/global"
-	"autoLogin/util"
+	"github.com/Mmx233/BitSrunLoginGo/controllers"
+	"github.com/Mmx233/BitSrunLoginGo/global"
+	"github.com/Mmx233/BitSrunLoginGo/util"
 )
 
 func main() {

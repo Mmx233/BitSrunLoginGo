@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"autoLogin/global"
-	"autoLogin/util"
+	"github.com/Mmx233/BitSrunLoginGo/global"
+	"github.com/Mmx233/BitSrunLoginGo/util"
 	"os"
 	"os/exec"
 	"time"

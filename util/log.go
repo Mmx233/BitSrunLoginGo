@@ -1,8 +1,8 @@
 package util
 
 import (
-	"autoLogin/global"
 	"fmt"
+	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/tool"
 	"log"
 	"os"

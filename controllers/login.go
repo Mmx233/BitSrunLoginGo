@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"autoLogin/global"
-	"autoLogin/util"
 	"encoding/json"
 	"errors"
+	"github.com/Mmx233/BitSrunLoginGo/global"
+	"github.com/Mmx233/BitSrunLoginGo/util"
 	"github.com/Mmx233/tool"
 	"time"
 )
