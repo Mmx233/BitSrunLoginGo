@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"flag"
 	"fmt"
+	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/tool"
 	"time"
 )
@@ -18,9 +18,7 @@ var Daemon = daemon{
 }
 
 func init() {
-	goDaemon := flag.Bool("daemon", false, "")
-	flag.Parse()
-	if *goDaemon {
+	if global.Flags.Daemon {
 		Guardian(false)
 	}
 }
