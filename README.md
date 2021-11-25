@@ -82,7 +82,6 @@ Config.json说明：
 package main
 
 import (
-	"github.com/Mmx233/BitSrunLoginGo/models"
 	"github.com/Mmx233/BitSrunLoginGo/v1"
 	"github.com/Mmx233/BitSrunLoginGo/v1/transfer"
 )
@@ -95,10 +94,10 @@ func main() {
 		CheckNet:  false,
 		Timeout:   0,
 		LoginInfo: srunTransfer.LoginInfo{
-			Form: &srunModels.LoginForm{
+			Form: &srunTransfer.LoginForm{
 				
             },
-			Meta: &srunModels.LoginMeta{
+			Meta: &srunTransfer.LoginMeta{
 				
             },
 		},
