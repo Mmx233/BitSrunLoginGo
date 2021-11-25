@@ -9,7 +9,7 @@ import (
 func main() {
 	defer util.Log.CatchRecover()
 
-	if global.Config.Settings.Guardian != 0 {
+	if global.Config.Settings.Guardian.Enable {
 		controllers.EnterGuardian()
 	} else if err := controllers.Login(true, false); err != nil {
 		util.Log.Println("运行出错，状态异常")

@@ -35,7 +35,7 @@ func Guardian(output bool) {
 			c <- false
 		}()
 		<-c
-		time.Sleep(time.Duration(global.Config.Settings.Guardian) * time.Second)
+		time.Sleep(time.Duration(global.Config.Settings.Guardian.Duration) * time.Second)
 	}
 }
 
@@ -43,7 +43,7 @@ func EnterGuardian() {
 	global.Status.Output = true
 	global.Status.Guardian = true
 	util.Log.Println("[Guardian mode]")
-	if global.Config.Settings.Daemon {
+	if global.Config.Settings.Daemon.Enable {
 		if err := exec.Command(os.Args[0], "-daemon").Start(); err != nil {
 			util.Log.Fatalln(err)
 		}

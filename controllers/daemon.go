@@ -16,7 +16,7 @@ type daemon struct {
 
 var Daemon = daemon{
 	Mark: fmt.Sprint(time.Now().UnixNano()),
-	Path: ".autoLoginDaemon",
+	Path: global.Config.Settings.Daemon.Path,
 }
 
 func init() {

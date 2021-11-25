@@ -16,7 +16,7 @@ func init() {
 	if e := config.Load(config.Options{
 		Config: &Config,
 		Default: &models.Config{
-			From: models.LoginForm{
+			Form: models.LoginForm{
 				Domain:   "www.msftconnecttest.com",
 				UserType: "cmcc",
 			},
@@ -28,6 +28,12 @@ func init() {
 			},
 			Settings: models.Settings{
 				Timeout: 1,
+				Daemon: models.Daemon{
+					Path: ".autoLogin",
+				},
+				Guardian: models.Guardian{
+					Duration: 300,
+				},
 			},
 		},
 		Path:        Flags.Path,
