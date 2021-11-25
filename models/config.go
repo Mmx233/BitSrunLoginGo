@@ -8,21 +8,21 @@ type Settings struct {
 }
 
 type Config struct {
-	From     LoginForm `json:"from"`
+	Form     LoginForm `json:"form"`
 	Meta     LoginMeta `json:"meta"`
 	Settings Settings  `json:"settings"`
 }
 
 func (a *Config) Generate() *LoginInfo {
 	return &LoginInfo{
-		UrlLoginPage:       "http://" + a.From.Domain + "/srun_portal_success",
-		UrlGetChallengeApi: "http://" + a.From.Domain + "/cgi-bin/get_challenge",
-		UrlLoginApi:        "http://" + a.From.Domain + "/cgi-bin/srun_portal",
-		UrlCheckApi:        "http://" + a.From.Domain + "/cgi-bin/rad_user_info",
+		UrlLoginPage:       "http://" + a.Form.Domain + "/srun_portal_success",
+		UrlGetChallengeApi: "http://" + a.Form.Domain + "/cgi-bin/get_challenge",
+		UrlLoginApi:        "http://" + a.Form.Domain + "/cgi-bin/srun_portal",
+		UrlCheckApi:        "http://" + a.Form.Domain + "/cgi-bin/rad_user_info",
 		Meta:               &a.Meta,
 		Form: &LoginForm{
-			UserName: a.From.UserName + "@" + a.From.UserType,
-			PassWord: a.From.PassWord,
+			UserName: a.Form.UserName + "@" + a.Form.UserType,
+			PassWord: a.Form.PassWord,
 		},
 	}
 }
