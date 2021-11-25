@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/tool"
+	"github.com/howeyc/fsnotify"
+	"os"
 	"time"
 )
 
@@ -29,8 +31,32 @@ func (a *daemon) MarkDaemon() error {
 
 func (a *daemon) CheckDaemon() bool {
 	if data, err := tool.File.Read(a.Path); err != nil {
-		return true
+		return false
 	} else {
 		return string(data) == a.Mark
+	}
+}
+
+func (a *daemon) DaemonChan() bool {
+	f, err := fsnotify.NewWatcher()
+	if err != nil {
+		panic(err)
+	}
+
+	err = f.Watch(Daemon.Path)
+	if err != nil {
+		panic(err)
+	}
+
+	for {
+		select {
+		case event := <-f.Event:
+			if event.IsModify() && !a.CheckDaemon() {
+				continue
+			}
+			os.Exit(0)
+		case e := <-f.Error:
+			panic(e)
+		}
 	}
 }
