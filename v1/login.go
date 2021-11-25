@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func Login(c *transfer.Login) error {
+func Login(c *srunTransfer.Login) error {
 	util.Log.Demo = c.Demo
 	util.Log.OutPut = c.OutPut
 

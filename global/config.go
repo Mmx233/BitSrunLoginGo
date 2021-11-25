@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-var Config models.Config
+var Config srunModels.Config
 
 func init() {
 	initFlags()
@@ -16,23 +16,23 @@ func init() {
 	//配置文件初始化
 	if e := config.Load(config.Options{
 		Config: &Config,
-		Default: &models.Config{
-			Form: models.LoginForm{
+		Default: &srunModels.Config{
+			Form: srunModels.LoginForm{
 				Domain:   "www.msftconnecttest.com",
 				UserType: "cmcc",
 			},
-			Meta: models.LoginMeta{
+			Meta: srunModels.LoginMeta{
 				N:    "200",
 				Type: "1",
 				Acid: "5",
 				Enc:  "srun_bx1",
 			},
-			Settings: models.Settings{
+			Settings: srunModels.Settings{
 				Timeout: 1,
-				Daemon: models.Daemon{
+				Daemon: srunModels.Daemon{
 					Path: ".autoLogin",
 				},
-				Guardian: models.Guardian{
+				Guardian: srunModels.Guardian{
 					Duration: 300,
 				},
 			},

@@ -7,12 +7,12 @@ import (
 )
 
 func Login(output bool, skipCheck bool) error {
-	return BitSrun.Login(&transfer.Login{
+	return BitSrun.Login(&srunTransfer.Login{
 		Demo:     global.Config.Settings.DemoMode,
 		OutPut:   output,
 		CheckNet: !skipCheck,
 		Timeout:  global.Config.Settings.Timeout,
-		LoginInfo: transfer.LoginInfo{
+		LoginInfo: srunTransfer.LoginInfo{
 			Form: &global.Config.Form,
 			Meta: &global.Config.Meta,
 		},

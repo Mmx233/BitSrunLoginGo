@@ -1,4 +1,4 @@
-package models
+package srunModels
 
 type LoginForm struct {
 	Domain   string `json:"domain"`

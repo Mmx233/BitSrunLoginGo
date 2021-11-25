@@ -1,10 +1,10 @@
-package transfer
+package srunTransfer
 
 import "github.com/Mmx233/BitSrunLoginGo/models"
 
 type LoginInfo struct {
-	Form *models.LoginForm
-	Meta *models.LoginMeta
+	Form *srunModels.LoginForm
+	Meta *srunModels.LoginMeta
 }
 
 type Login struct {

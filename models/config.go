@@ -1,4 +1,4 @@
-package models
+package srunModels
 
 type Daemon struct {
 	Enable bool   `json:"enable"`
