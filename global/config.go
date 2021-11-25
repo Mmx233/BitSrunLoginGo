@@ -3,6 +3,7 @@ package global
 import (
 	"github.com/Mmx233/BitSrunLoginGo/models"
 	"github.com/Mmx233/BitSrunLoginGo/util"
+	"github.com/Mmx233/BitSrunLoginGo/v1/transfer"
 	"github.com/Mmx233/config"
 	"log"
 	"os"
@@ -17,11 +18,11 @@ func init() {
 	if e := config.Load(config.Options{
 		Config: &Config,
 		Default: &srunModels.Config{
-			Form: srunModels.LoginForm{
+			Form: srunTransfer.LoginForm{
 				Domain:   "www.msftconnecttest.com",
 				UserType: "cmcc",
 			},
-			Meta: srunModels.LoginMeta{
+			Meta: srunTransfer.LoginMeta{
 				N:    "200",
 				Type: "1",
 				Acid: "5",

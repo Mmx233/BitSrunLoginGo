@@ -1,5 +1,7 @@
 package srunModels
 
+import "github.com/Mmx233/BitSrunLoginGo/v1/transfer"
+
 type Daemon struct {
 	Enable bool   `json:"enable"`
 	Path   string `json:"path"`
@@ -18,7 +20,7 @@ type Settings struct {
 }
 
 type Config struct {
-	Form     LoginForm `json:"form"`
-	Meta     LoginMeta `json:"meta"`
-	Settings Settings  `json:"settings"`
+	Form     srunTransfer.LoginForm `json:"form"`
+	Meta     srunTransfer.LoginMeta `json:"meta"`
+	Settings Settings               `json:"settings"`
 }

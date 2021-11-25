@@ -1,18 +1,6 @@
 package srunModels
 
-type LoginForm struct {
-	Domain   string `json:"domain"`
-	UserName string `json:"username"`
-	UserType string `json:"user_type"`
-	PassWord string `json:"password"`
-}
-
-type LoginMeta struct {
-	N    string `json:"n"`
-	Type string `json:"type"`
-	Acid string `json:"acid"`
-	Enc  string `json:"enc"`
-}
+import "github.com/Mmx233/BitSrunLoginGo/v1/transfer"
 
 type LoginInfo struct {
 	UrlLoginPage       string
@@ -28,6 +16,6 @@ type LoginInfo struct {
 	EncryptedChkstr string
 	LoginResult     string
 
-	Form *LoginForm
-	Meta *LoginMeta
+	Form *srunTransfer.LoginForm
+	Meta *srunTransfer.LoginMeta
 }
