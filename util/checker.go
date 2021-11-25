@@ -1,7 +1,6 @@
 package util
 
 import (
-	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/tool"
 	"time"
 )
@@ -10,11 +9,11 @@ type checker struct{}
 
 var Checker checker
 
-func (checker) NetOk() bool {
+func (checker) NetOk(timeout uint) bool {
 	h, _, e := tool.HTTP.GetBytes(&tool.GetRequest{
 		Url:      "https://www.baidu.com/",
 		Redirect: false,
-		Timeout:  time.Duration(global.Config.Settings.Timeout) * time.Second,
+		Timeout:  time.Duration(timeout) * time.Second,
 	})
 	if e != nil || h.Get("Location") != "" {
 		return false

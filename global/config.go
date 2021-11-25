@@ -2,6 +2,7 @@ package global
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/models"
+	"github.com/Mmx233/BitSrunLoginGo/util"
 	"github.com/Mmx233/config"
 	"log"
 	"os"
@@ -47,4 +48,6 @@ func init() {
 		log.Println("读取配置文件失败:\n", e.Error())
 		os.Exit(1)
 	}
+
+	util.Log.Demo = Config.Settings.DemoMode
 }

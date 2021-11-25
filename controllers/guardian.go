@@ -9,7 +9,7 @@ import (
 )
 
 func Guardian(output bool) {
-	global.Status.Output = output
+	util.Log.OutPut = output
 
 	go Daemon.DaemonChan()
 
@@ -19,12 +19,12 @@ func Guardian(output bool) {
 
 	var c = make(chan bool)
 	for {
-		global.Status.Output = output
+		util.Log.OutPut = output
 		go func() {
 			defer func() {
 				_ = recover()
 			}()
-			if !util.Checker.NetOk() {
+			if !util.Checker.NetOk(global.Config.Settings.Timeout) {
 				util.Log.Println("Network down, trying to login")
 				_ = Login(output, true)
 			} else {
@@ -40,7 +40,7 @@ func Guardian(output bool) {
 }
 
 func EnterGuardian() {
-	global.Status.Output = true
+	util.Log.OutPut = true
 	global.Status.Guardian = true
 	util.Log.Println("[Guardian mode]")
 	if global.Config.Settings.Daemon.Enable {

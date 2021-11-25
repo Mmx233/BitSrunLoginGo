@@ -10,11 +10,11 @@ import (
 )
 
 func Login(output bool, skipCheck bool) error {
-	global.Status.Output = output
+	util.Log.OutPut = output
 	G := global.Config.Generate()
 	if !skipCheck {
 		util.Log.Println("Step0: 检查状态…")
-		if util.Checker.NetOk() {
+		if util.Checker.NetOk(global.Config.Settings.Timeout) {
 			util.Log.Println("网络 ok")
 			return nil
 		}

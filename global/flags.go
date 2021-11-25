@@ -1,6 +1,8 @@
 package global
 
-import "flag"
+import (
+	"flag"
+)
 
 var Flags struct {
 	Path   string

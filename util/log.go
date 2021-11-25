@@ -2,7 +2,6 @@ package util
 
 import (
 	"fmt"
-	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/tool"
 	"log"
 	"os"
@@ -13,12 +12,14 @@ import (
 
 type loG struct {
 	timeStamp string
+	Demo      bool
+	OutPut    bool
 }
 
 var Log loG
 
-func (*loG) WriteLog(name string, a ...interface{}) {
-	if !global.Config.Settings.DemoMode {
+func (c *loG) WriteLog(name string, a ...interface{}) {
+	if !c.Demo {
 		return
 	}
 	for _, v := range a {
@@ -47,7 +48,7 @@ func (c *loG) genTimeStamp() {
 func (c *loG) Println(a ...interface{}) {
 	c.genTimeStamp()
 	c.WriteLog("Login-"+c.timeStamp+".log", a...)
-	if !global.Status.Output {
+	if !c.OutPut {
 		return
 	}
 	log.Println(a...)
@@ -56,7 +57,7 @@ func (c *loG) Println(a ...interface{}) {
 func (c *loG) Fatalln(a ...interface{}) {
 	c.genTimeStamp()
 	c.WriteLog("LoginError-"+c.timeStamp+".log", a...)
-	if !global.Status.Output {
+	if !c.OutPut {
 		return
 	}
 	log.Fatalln(a...)
