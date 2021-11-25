@@ -45,7 +45,7 @@ Config.json说明：
 
 ```json5
 {
-  "from": {
+  "form": {
     "domain": "www.msftconnecttest.com", //登录地址ip或域名
     "username": "", //账号
     "user_type": "cmcc", //运营商类型，详情看下方
@@ -60,8 +60,14 @@ Config.json说明：
   "settings": {
     "timeout": 1, //检查网络超时时间（秒）
     "demo_mode": false, //测试模式，报错更详细，且生成运行日志与错误日志
-    "guardian": 0, //守护模式，值为网络检查周期（秒），设为0关闭守护模式
-    "daemon": false, //将守护挂入后台
+    "guardian": { //守护模式
+      "enable": false,
+      "duration": 300, //网络检查周期（秒）
+    }, 
+    "daemon": { //将守护挂入后台
+      "enable": false,
+      "path": ".BitSrun", //守护监听文件路径，确保只有单守护运行
+    },
   }
 }
 ```
@@ -69,3 +75,35 @@ Config.json说明：
 登录参数从原网页登陆时对`/srun_portal`的请求抓取
 
 运营商类型在原网页会被自动附加在账号后，请把`@`后面的部分填入`user_type`
+
+## :jigsaw: 作为module使用
+
+```go
+package main
+
+import (
+	"github.com/Mmx233/BitSrunLoginGo/models"
+	"github.com/Mmx233/BitSrunLoginGo/v1"
+	"github.com/Mmx233/BitSrunLoginGo/v1/transfer"
+)
+
+func main() {
+	//具体用法请查看struct注释
+	if e:=BitSrun.Login(&srunTransfer.Login{
+		Demo:      false,
+		OutPut:    false,
+		CheckNet:  false,
+		Timeout:   0,
+		LoginInfo: srunTransfer.LoginInfo{
+			Form: &srunModels.LoginForm{
+				
+            },
+			Meta: &srunModels.LoginMeta{
+				
+            },
+		},
+	});e!=nil {
+		panic(e)
+    }
+}
+```
