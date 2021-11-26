@@ -11,10 +11,12 @@ import (
 func Guardian(output bool) {
 	util.Log.OutPut = output
 
-	go Daemon.DaemonChan()
+	if global.Config.Settings.Daemon.Enable {
+		go Daemon.DaemonChan()
 
-	if e := Daemon.MarkDaemon(); e != nil {
-		util.Log.Fatalln(e)
+		if e := Daemon.MarkDaemon(); e != nil {
+			util.Log.Fatalln(e)
+		}
 	}
 
 	var c = make(chan bool)
