@@ -51,7 +51,7 @@ func (a *daemon) DaemonChan() bool {
 	for {
 		select {
 		case event := <-f.Event:
-			if event.IsModify() && !a.CheckDaemon() {
+			if event.IsModify() && a.CheckDaemon() {
 				continue
 			}
 			os.Exit(0)
