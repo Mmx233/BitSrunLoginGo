@@ -10,7 +10,7 @@ var Flags struct {
 }
 
 func initFlags() {
-	flag.StringVar(&Flags.Path, "config", "", "config path")
+	flag.StringVar(&Flags.Path, "config", "Config.json", "config path")
 	flag.BoolVar(&Flags.Daemon, "daemon", false, "")
 	flag.Parse()
 }
