@@ -8,6 +8,8 @@
 
 登录逻辑来自 https://github.com/coffeehat/BIT-srun-login-script
 
+对Openwrt更加友好的ipk编译版 https://github.com/Mmx233/BitSrunLoginGo_Openwrt 该版本压缩了binary文件，节省闪存空间
+
 ## :hammer_and_wrench:构建
 
 建议安装使用最新版golang
