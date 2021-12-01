@@ -22,7 +22,12 @@ func Search(reg string, content string) (string, error) {
 }
 
 func GetIp(body string) (string, error) {
-	return Search("id=\"user_ip\" value=\"(.*?)\"", body)
+	//判断原正则是否有匹配，如果无就使用新正则尝试
+	if ip, err := Search("id=\"user_ip\" value=\"(.*?)\"", body); err == nil {
+		return ip, nil
+	}
+	ip, err := Search("ip     : \"(.*?)\"", body)
+	return ip, err
 }
 
 func GetToken(body string) (string, error) {
