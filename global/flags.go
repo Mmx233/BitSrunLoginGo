@@ -5,12 +5,12 @@ import (
 )
 
 var Flags struct {
-	Path   string
-	Daemon bool
+	Path          string
+	RunningDaemon bool
 }
 
 func initFlags() {
 	flag.StringVar(&Flags.Path, "config", "Config.json", "config path")
-	flag.BoolVar(&Flags.Daemon, "daemon", false, "")
+	flag.BoolVar(&Flags.RunningDaemon, "running-daemon", false, "")
 	flag.Parse()
 }

@@ -20,7 +20,7 @@ var Daemon = daemon{
 }
 
 func init() {
-	if global.Flags.Daemon {
+	if global.Flags.RunningDaemon {
 		Guardian(false)
 	}
 }
