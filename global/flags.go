@@ -5,9 +5,12 @@ import (
 )
 
 var Flags struct {
-	Path          string
+	//配置文件路径
+	Path string
+	//daemon模式内置标记
 	RunningDaemon bool
-	Daemon        bool
+	//强制daemon
+	Daemon bool
 }
 
 func initFlags() {

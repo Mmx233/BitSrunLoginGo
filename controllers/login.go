@@ -6,6 +6,7 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/v1/transfer"
 )
 
+// Login 登录逻辑
 func Login(output bool, skipCheck bool) error {
 	return BitSrun.Login(&srunTransfer.Login{
 		Demo:     global.Config.Settings.DemoMode,

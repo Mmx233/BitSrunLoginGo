@@ -21,6 +21,7 @@ func Search(reg string, content string) (string, error) {
 	}
 }
 
+// GetIp 从响应获取本机分配到的IP
 func GetIp(body string) (string, error) {
 	//判断原正则是否有匹配，如果无就使用新正则尝试
 	if ip, e := Search("id=\"user_ip\" value=\"(.*?)\"", body); e == nil {
@@ -29,20 +30,24 @@ func GetIp(body string) (string, error) {
 	return Search("ip     : \"(.*?)\"", body)
 }
 
+// GetToken 从响应获取token
 func GetToken(body string) (string, error) {
 	return Search("\"challenge\":\"(.*?)\"", body)
 }
 
+// GetResult 从响应获取登录结果
 func GetResult(body string) (string, error) {
 	return Search("\"error\":\"(.+?)\"", body)
 }
 
+// Md5 编码
 func Md5(content string) string {
 	w := md5.New()
 	_, _ = io.WriteString(w, content)
 	return fmt.Sprintf("%x", w.Sum(nil))
 }
 
+// Sha1 编码
 func Sha1(content string) string {
 	h := sha1.New()
 	h.Write([]byte(content))

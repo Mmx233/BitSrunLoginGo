@@ -9,6 +9,7 @@ type checker struct{}
 
 var Checker checker
 
+// NetOk 网络状况检查
 func (checker) NetOk(timeout uint) bool {
 	h, _, e := tool.HTTP.GetBytes(&tool.GetRequest{
 		Url:      "https://www.baidu.com/",

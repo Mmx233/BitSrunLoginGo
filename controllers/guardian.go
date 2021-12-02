@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// Guardian 守护模式逻辑
 func Guardian(output bool) {
 	util.Log.OutPut = output
 
@@ -44,6 +45,7 @@ func Guardian(output bool) {
 	}
 }
 
+// EnterGuardian 守护模式入口，控制是否进入daemon
 func EnterGuardian() {
 	util.Log.OutPut = true
 	util.Log.Println("[Guardian mode]")

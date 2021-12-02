@@ -14,6 +14,7 @@ type daemon struct {
 	Path string
 }
 
+// Daemon 后台模式控制包
 var Daemon = daemon{
 	Mark: fmt.Sprint(time.Now().UnixNano()),
 	Path: global.Config.Settings.Daemon.Path,
@@ -25,10 +26,12 @@ func init() {
 	}
 }
 
+// MarkDaemon 写入后台标记文件
 func (a *daemon) MarkDaemon() error {
 	return tool.File.Write(a.Path, []byte(a.Mark))
 }
 
+// CheckDaemon 检查后台标记文件
 func (a *daemon) CheckDaemon() bool {
 	if data, err := tool.File.Read(a.Path); err != nil {
 		return false
@@ -37,6 +40,7 @@ func (a *daemon) CheckDaemon() bool {
 	}
 }
 
+// DaemonChan 后台标记文件监听
 func (a *daemon) DaemonChan() bool {
 	f, err := fsnotify.NewWatcher()
 	if err != nil {
