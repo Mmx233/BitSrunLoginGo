@@ -20,12 +20,6 @@ var Daemon = daemon{
 	Path: global.Config.Settings.Daemon.Path,
 }
 
-func init() {
-	if global.Flags.RunningDaemon {
-		Guardian(false)
-	}
-}
-
 // MarkDaemon 写入后台标记文件
 func (a *daemon) MarkDaemon() error {
 	return tool.File.Write(a.Path, []byte(a.Mark))
