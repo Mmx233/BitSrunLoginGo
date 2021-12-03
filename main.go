@@ -34,6 +34,8 @@ func main() {
 				return
 			}
 			for _, eth := range interfaces {
+				util.Log.OutPut = true
+				util.Log.Println(eth.Name)
 				if err := controllers.Login(true, false, eth.Addr); err != nil {
 					util.Log.Println(eth.Name + "运行出错，状态异常")
 					util.Log.Println(err)
