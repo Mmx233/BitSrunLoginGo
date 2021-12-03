@@ -30,7 +30,10 @@ func GetInterfaceAddr() ([]srunModels.Eth, error) {
 				if strings.Contains(ip.String(), ".") {
 					result = append(result, srunModels.Eth{
 						Name: eth.Name,
-						Addr: ip,
+						Addr: func() *net.TCPAddr {
+							n, _ := net.ResolveTCPAddr("tcp", ip.String())
+							return n
+						}(),
 					})
 					break
 				}
