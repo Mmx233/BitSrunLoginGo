@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/global"
+	srunModels "github.com/Mmx233/BitSrunLoginGo/models"
 	"github.com/Mmx233/BitSrunLoginGo/util"
 	"os"
 	"os/exec"
@@ -27,17 +28,38 @@ func Guardian(output bool) {
 			defer func() {
 				_ = recover()
 			}()
-			if !util.Checker.NetOk(global.Config.Settings.Timeout) {
-				util.Log.Println("Network down, trying to login")
-				e := Login(output, true)
-				if e != nil {
-					util.Log.Println("Error: ", e)
+			if global.Config.Settings.Interfaces == "" { //单网卡
+				if !util.Checker.NetOk(global.Config.Settings.Timeout, nil) {
+					util.Log.Println("Network down, trying to login")
+					e := Login(output, true, nil)
+					if e != nil {
+						util.Log.Println("Error: ", e)
+					}
+				} else {
+					if global.Config.Settings.DemoMode {
+						util.Log.Println("Network ok")
+					}
 				}
-			} else {
-				if global.Config.Settings.DemoMode {
-					util.Log.Println("Network ok")
+			} else { //多网卡
+				interfaces, e := util.GetInterfaceAddr()
+				if e == nil {
+					var down []srunModels.Eth
+					for _, eth := range interfaces {
+						if !util.Checker.NetOk(global.Config.Settings.Timeout, eth.Addr) {
+							util.Log.Println(eth.Name + " network down")
+							down = append(down, eth)
+						}
+					}
+
+					for _, eth := range down {
+						e := Login(output, true, eth.Addr)
+						if e != nil {
+							util.Log.Println(eth.Name+" login error: ", e)
+						}
+					}
 				}
 			}
+
 			c <- false
 		}()
 		<-c

@@ -1,5 +1,7 @@
 package srunTransfer
 
+import "net"
+
 type LoginForm struct {
 	Domain   string `json:"domain"`
 	UserName string `json:"username"`
@@ -30,4 +32,6 @@ type Login struct {
 	Timeout uint
 	//登录参数，不可缺省
 	LoginInfo LoginInfo
+	//出口地址
+	LocalAddr net.Addr
 }

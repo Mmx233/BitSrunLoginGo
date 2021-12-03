@@ -13,10 +13,11 @@ type Guardian struct {
 }
 
 type Settings struct {
-	Timeout  uint `json:"timeout"`
-	DemoMode bool `json:"demo_mode"`
-	Guardian Guardian
-	Daemon   Daemon
+	Timeout    uint   `json:"timeout"`
+	Interfaces string `json:"interfaces"`
+	DemoMode   bool   `json:"demo_mode"`
+	Guardian   Guardian
+	Daemon     Daemon
 }
 
 type Config struct {

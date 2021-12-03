@@ -16,7 +16,7 @@ func Login(c *srunTransfer.Login) error {
 	G := util.GenerateLoginInfo(c.LoginInfo.Form, c.LoginInfo.Meta)
 	if c.CheckNet {
 		util.Log.Println("Step0: 检查状态…")
-		if util.Checker.NetOk(c.Timeout) {
+		if util.Checker.NetOk(c.Timeout, c.LocalAddr) {
 			util.Log.Println("网络 ok")
 			return nil
 		}
@@ -25,8 +25,9 @@ func Login(c *srunTransfer.Login) error {
 	util.Log.Println("Step1: 正在获取客户端ip")
 	{
 		if _, body, e := tool.HTTP.GetString(&tool.GetRequest{
-			Url:      G.UrlLoginPage,
-			Redirect: true,
+			Url:       G.UrlLoginPage,
+			Redirect:  true,
+			LocalAddr: c.LocalAddr,
 		}); e != nil {
 			return e
 		} else if G.Ip, e = util.GetIp(body); e != nil {
@@ -43,7 +44,8 @@ func Login(c *srunTransfer.Login) error {
 				"username": G.Form.UserName,
 				"ip":       G.Ip,
 			},
-			Redirect: true,
+			Redirect:  true,
+			LocalAddr: c.LocalAddr,
 		}); e != nil {
 			return e
 		} else if G.Token, e = util.GetToken(data); e != nil {
@@ -91,7 +93,8 @@ func Login(c *srunTransfer.Login) error {
 				"double_stack": 0,
 				"_":            time.Now().UnixNano(),
 			},
-			Redirect: true,
+			Redirect:  true,
+			LocalAddr: c.LocalAddr,
 		}); e != nil {
 			return e
 		} else if G.LoginResult, e = util.GetResult(res); e != nil {
