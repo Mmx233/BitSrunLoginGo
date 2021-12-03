@@ -61,7 +61,7 @@ Config.json说明：
   },
   "settings": {
     "timeout": 1, //检查网络超时时间（秒）
-    "interfaces": "",//网卡名称正则，如：eth\.0\.*
+    "interfaces": "",//网卡名称正则，如：eth0\.[2-3]
     "demo_mode": false, //测试模式，报错更详细，且生成运行日志与错误日志
     "guardian": { //守护模式
       "enable": false,
