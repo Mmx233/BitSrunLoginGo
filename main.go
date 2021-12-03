@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	util.Log.Demo = global.Config.Settings.DemoMode
 	defer util.Log.CatchRecover()
 
 	if global.Flags.RunningDaemon {
