@@ -12,6 +12,7 @@ import (
 // Guardian 守护模式逻辑
 func Guardian(output bool) {
 	util.Log.OutPut = output
+	GuardianDuration := time.Duration(global.Config.Settings.Guardian.Duration) * time.Second
 
 	if global.Config.Settings.Daemon.Enable {
 		go Daemon.DaemonChan()
@@ -29,7 +30,7 @@ func Guardian(output bool) {
 				_ = recover()
 			}()
 			if global.Config.Settings.Interfaces == "" { //单网卡
-				if !util.Checker.NetOk(global.Config.Settings.Timeout, nil) {
+				if !util.Checker.NetOk(global.Transports(nil)) {
 					util.Log.Println("Network down, trying to login")
 					e := Login(output, true, nil)
 					if e != nil {
@@ -45,13 +46,14 @@ func Guardian(output bool) {
 				if e == nil {
 					var down []srunModels.Eth
 					for _, eth := range interfaces {
-						if !util.Checker.NetOk(global.Config.Settings.Timeout, eth.Addr) {
+						if !util.Checker.NetOk(global.Transports(eth.Addr)) {
 							util.Log.Println(eth.Name + " network down")
 							down = append(down, eth)
 						}
 					}
 
 					for _, eth := range down {
+						util.Log.Println(eth.Name)
 						e := Login(output, true, eth.Addr)
 						if e != nil {
 							util.Log.Println(eth.Name+" login error: ", e)
@@ -63,13 +65,12 @@ func Guardian(output bool) {
 			c <- false
 		}()
 		<-c
-		time.Sleep(time.Duration(global.Config.Settings.Guardian.Duration) * time.Second)
+		time.Sleep(GuardianDuration)
 	}
 }
 
 // EnterGuardian 守护模式入口，控制是否进入daemon
 func EnterGuardian() {
-	util.Log.OutPut = true
 	util.Log.Println("[Guardian mode]")
 	if global.Config.Settings.Daemon.Enable || global.Flags.Daemon {
 		if err := exec.Command(os.Args[0], append(os.Args[1:], "--running-daemon")...).Start(); err != nil {

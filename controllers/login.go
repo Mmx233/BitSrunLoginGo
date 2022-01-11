@@ -13,11 +13,10 @@ func Login(output bool, skipCheck bool, localAddr net.Addr) error {
 		Demo:     global.Config.Settings.DemoMode,
 		OutPut:   output,
 		CheckNet: !skipCheck,
-		Timeout:  global.Config.Settings.Timeout,
 		LoginInfo: srunTransfer.LoginInfo{
 			Form: &global.Config.Form,
 			Meta: &global.Config.Meta,
 		},
-		LocalAddr: localAddr,
+		Transport: global.Transports(localAddr),
 	})
 }

@@ -16,7 +16,7 @@ func Login(c *srunTransfer.Login) error {
 	G := util.GenerateLoginInfo(c.LoginInfo.Form, c.LoginInfo.Meta)
 	if c.CheckNet {
 		util.Log.Println("Step0: 检查状态…")
-		if util.Checker.NetOk(c.Timeout, c.LocalAddr) {
+		if util.Checker.NetOk(c.Transport) {
 			util.Log.Println("网络 ok")
 			return nil
 		}
@@ -27,7 +27,7 @@ func Login(c *srunTransfer.Login) error {
 		if _, body, e := tool.HTTP.GetString(&tool.GetRequest{
 			Url:       G.UrlLoginPage,
 			Redirect:  true,
-			LocalAddr: c.LocalAddr,
+			Transport: c.Transport,
 		}); e != nil {
 			return e
 		} else if G.Ip, e = util.GetIp(body); e != nil {
@@ -45,7 +45,7 @@ func Login(c *srunTransfer.Login) error {
 				"ip":       G.Ip,
 			},
 			Redirect:  true,
-			LocalAddr: c.LocalAddr,
+			Transport: c.Transport,
 		}); e != nil {
 			return e
 		} else if G.Token, e = util.GetToken(data); e != nil {
@@ -94,7 +94,7 @@ func Login(c *srunTransfer.Login) error {
 				"_":            time.Now().UnixNano(),
 			},
 			Redirect:  true,
-			LocalAddr: c.LocalAddr,
+			Transport: c.Transport,
 		}); e != nil {
 			return e
 		} else if G.LoginResult, e = util.GetResult(res); e != nil {

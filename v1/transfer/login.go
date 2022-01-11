@@ -1,6 +1,6 @@
 package srunTransfer
 
-import "net"
+import "net/http"
 
 type LoginForm struct {
 	Domain   string `json:"domain"`
@@ -28,10 +28,7 @@ type Login struct {
 	OutPut bool
 	//登陆前是否检查网络，只在离线时登录
 	CheckNet bool
-	//网络检查超时时间
-	Timeout uint
 	//登录参数，不可缺省
 	LoginInfo LoginInfo
-	//出口地址
-	LocalAddr net.Addr
+	Transport *http.Transport
 }

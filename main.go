@@ -8,6 +8,7 @@ import (
 
 func main() {
 	util.Log.Demo = global.Config.Settings.DemoMode
+	util.Log.OutPut = true
 	defer util.Log.CatchRecover()
 
 	if global.Flags.RunningDaemon {
@@ -34,7 +35,6 @@ func main() {
 				return
 			}
 			for _, eth := range interfaces {
-				util.Log.OutPut = true
 				util.Log.Println(eth.Name)
 				if err := controllers.Login(true, false, eth.Addr); err != nil {
 					util.Log.Println(eth.Name + "运行出错，状态异常")

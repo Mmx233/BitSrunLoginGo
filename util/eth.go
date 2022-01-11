@@ -26,14 +26,17 @@ func GetInterfaceAddr() ([]srunModels.Eth, error) {
 			if e != nil {
 				Log.Println(eth.Name + " 地址获取失败")
 			}
-			for _, ip := range addrs {
-				if strings.Contains(ip.String(), ".") {
+			for _, addr := range addrs {
+				if strings.Contains(addr.String(), ".") {
+					var ip *net.TCPAddr
+					ip, e = net.ResolveTCPAddr("tcp", strings.Split(addr.String(), "/")[0]+":0")
+					if e != nil {
+						Log.Println(eth.Name+" ip解析失败：", e)
+						continue
+					}
 					result = append(result, srunModels.Eth{
 						Name: eth.Name,
-						Addr: func() *net.TCPAddr {
-							n, _ := net.ResolveTCPAddr("tcp", ip.String())
-							return n
-						}(),
+						Addr: ip,
 					})
 					break
 				}

@@ -6,9 +6,12 @@ import (
 	"github.com/Mmx233/config"
 	"log"
 	"os"
+	"time"
 )
 
 var Config srunModels.Config
+
+var Timeout time.Duration
 
 func init() {
 	initFlags()
@@ -48,4 +51,7 @@ func init() {
 		log.Println("读取配置文件失败:\n", e.Error())
 		os.Exit(1)
 	}
+
+	Timeout = time.Duration(Config.Settings.Timeout) * time.Second
+	initTransport()
 }
