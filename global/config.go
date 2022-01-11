@@ -31,7 +31,7 @@ func init() {
 				Enc:  "srun_bx1",
 			},
 			Settings: srunModels.Settings{
-				Timeout: 1,
+				Timeout: 5,
 				Daemon: srunModels.Daemon{
 					Path: ".autoLogin",
 				},
