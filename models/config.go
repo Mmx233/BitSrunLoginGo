@@ -20,9 +20,9 @@ type Basic struct {
 }
 
 type Settings struct {
-	Basic    Basic
-	Guardian Guardian
-	Daemon   Daemon
+	Basic    Basic    `json:"basic"`
+	Guardian Guardian `json:"guardian"`
+	Daemon   Daemon   `json:"daemon"`
 }
 
 type Config struct {
