@@ -11,7 +11,6 @@ var Checker checker
 
 // NetOk 网络状况检查
 func (a *checker) NetOk(transport *http.Transport) bool {
-
 	h, i, e := tool.HTTP.GetReader(&tool.GetRequest{
 		Url:       "https://www.baidu.com/",
 		Redirect:  false,
