@@ -15,7 +15,7 @@ func GetInterfaceAddr() ([]srunModels.Eth, error) {
 	if e != nil {
 		return nil, e
 	}
-	reg, e := regexp.Compile(global.Config.Settings.Interfaces)
+	reg, e := regexp.Compile(global.Config.Settings.Basic.Interfaces)
 	if e != nil {
 		Log.Println("interfaces设置异常，无法解析")
 		return nil, e

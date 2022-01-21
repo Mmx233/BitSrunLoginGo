@@ -12,12 +12,16 @@ type Guardian struct {
 	Duration uint `json:"duration"`
 }
 
-type Settings struct {
+type Basic struct {
 	Timeout    uint   `json:"timeout"`
 	Interfaces string `json:"interfaces"`
 	DemoMode   bool   `json:"demo_mode"`
-	Guardian   Guardian
-	Daemon     Daemon
+}
+
+type Settings struct {
+	Basic    Basic
+	Guardian Guardian
+	Daemon   Daemon
 }
 
 type Config struct {

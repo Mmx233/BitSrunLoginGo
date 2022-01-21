@@ -29,7 +29,7 @@ func Guardian(output bool) {
 			defer func() {
 				_ = recover()
 			}()
-			if global.Config.Settings.Interfaces == "" { //单网卡
+			if global.Config.Settings.Basic.Interfaces == "" { //单网卡
 				if !util.Checker.NetOk(global.Transports(nil)) {
 					util.Log.Println("Network down, trying to login")
 					e := Login(output, true, nil)
@@ -37,7 +37,7 @@ func Guardian(output bool) {
 						util.Log.Println("Error: ", e)
 					}
 				} else {
-					if global.Config.Settings.DemoMode {
+					if global.Config.Settings.Basic.DemoMode {
 						util.Log.Println("Network ok")
 					}
 				}

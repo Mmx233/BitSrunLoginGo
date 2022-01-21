@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	util.Log.Demo = global.Config.Settings.DemoMode
+	util.Log.Demo = global.Config.Settings.Basic.DemoMode
 	util.Log.OutPut = true
 	defer util.Log.CatchRecover()
 
@@ -19,10 +19,10 @@ func main() {
 		controllers.EnterGuardian()
 	} else {
 		//单次登录模式
-		if global.Config.Settings.Interfaces == "" { //单网卡
+		if global.Config.Settings.Basic.Interfaces == "" { //单网卡
 			if err := controllers.Login(true, false, nil); err != nil {
 				util.Log.Println("运行出错，状态异常")
-				if global.Config.Settings.DemoMode {
+				if global.Config.Settings.Basic.DemoMode {
 					util.Log.Fatalln(err)
 				} else {
 					util.Log.Println(err)

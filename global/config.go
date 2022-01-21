@@ -27,7 +27,9 @@ func readConfig() error {
 		Enc:  "srun_bx1",
 	})
 	viper.SetDefault("settings", srunModels.Settings{
-		Timeout: 5,
+		Basic: srunModels.Basic{
+			Timeout: 5,
+		},
 		Daemon: srunModels.Daemon{
 			Path: ".autoLogin",
 		},
@@ -70,6 +72,6 @@ func init() {
 		os.Exit(1)
 	}
 
-	Timeout = time.Duration(Config.Settings.Timeout) * time.Second
+	Timeout = time.Duration(Config.Settings.Basic.Timeout) * time.Second
 	initTransport()
 }
