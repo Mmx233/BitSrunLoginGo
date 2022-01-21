@@ -27,7 +27,7 @@ func Transports(addr net.Addr) *http.Transport {
 }
 
 func initTransport() {
-	if Config.Settings.Interfaces == "" {
+	if Config.Settings.Basic.Interfaces == "" {
 		transport = tool.HTTP.GenTransport(&tool.GenTransport{
 			Timeout: Timeout,
 		})
