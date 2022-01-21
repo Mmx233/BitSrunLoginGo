@@ -35,13 +35,15 @@ golang支持的系统与架构请自行查询
 
 编译结果为可执行文件，直接启动即可
 
-可以通过添加启动参数`--config`指定配置文件路径，默认为当前目录
+可以通过添加启动参数`--config`指定配置文件路径，默认为当前目录的`Config.json`
+
+支持`json`、`yaml`、`yml`、`toml`、`hcl`、`tfvars`等，仅对`json`和`yaml`进行了优化与测试
 
 ```shell
 ./autoLogin --config=/demo/i.json
 ```
 
-首次运行将自动生成配置文件
+首次运行将自动生成配置文件，以json为例
 
 Config.json说明：
 
@@ -60,14 +62,17 @@ Config.json说明：
     "enc": "srun_bx1"
   },
   "settings": {
-    "timeout": 1, //网络请求超时时间（秒）
-    "interfaces": "",//网卡名称正则（注意JSON转义），如：eth0\\.[2-3]
-    "demo_mode": false, //测试模式，报错更详细，且生成运行日志与错误日志
+    "basic": { //基础设置
+      "demo_mode": false, //测试模式，报错更详细，且生成运行日志与错误日志
+      "interfaces": "", //网卡名称正则（注意JSON转义），如：eth0\\.[2-3]
+      "skip_net_check": false, //是否跳过网络检查（仅非守护模式）
+      "timeout": 5 //网络请求超时时间（秒）
+    },
     "guardian": { //守护模式
       "enable": false,
       "duration": 300, //网络检查周期（秒）
     }, 
-    "daemon": { //将守护挂入后台
+    "daemon": { //后台模式
       "enable": false,
       "path": ".BitSrun", //守护监听文件路径，确保只有单守护运行
     },
