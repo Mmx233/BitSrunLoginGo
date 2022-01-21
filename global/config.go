@@ -41,7 +41,7 @@ func init() {
 			},
 		},
 		Path:        Flags.Path,
-		FillDefault: true,
+		FillDefault: false,
 		Overwrite:   true,
 	}); e != nil {
 		if config.IsNew(e) {
