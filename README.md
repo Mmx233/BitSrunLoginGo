@@ -6,11 +6,13 @@
 
 深澜校园网登录脚本Go语言版。GO语言可以直接交叉编译出mips架构可执行程序（路由器）（主流平台更不用说了），从而免除安装环境。
 
-登录逻辑来自 https://github.com/coffeehat/BIT-srun-login-script
+> 登录逻辑来自 https://github.com/coffeehat/BIT-srun-login-script
 
-对Openwrt更加友好的ipk编译版 https://github.com/Mmx233/BitSrunLoginGo_Openwrt 该版本压缩了binary文件，节省闪存空间
+> 对Openwrt更加友好的ipk编译版 [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx233/BitSrunLoginGo_Openwrt) 该版本压缩了binary文件，节省闪存空间
 
 ## :hammer_and_wrench:构建
+
+**\*运行程序不需要golang环境**
 
 建议安装使用最新版golang
 
@@ -20,12 +22,21 @@
 go build
 ```
 
-交叉编译(Linux)：
+交叉编译（Linux）：
 
 ```shell
 export GOGGC=0
 export GOOS=windows #系统
 export GOARCH=amd64 #架构
+go build
+```
+
+交叉编译（Powershell）：
+
+```shell
+$env:GOGGC=0
+$env:GOOS='linux' #系统
+$env:GOARCH='amd64' #架构
 go build
 ```
 
@@ -64,7 +75,7 @@ Config.json说明：
   "settings": {
     "basic": { //基础设置
       "demo_mode": false, //测试模式，报错更详细，且生成运行日志与错误日志
-      "interfaces": "", //网卡名称正则（注意JSON转义），如：eth0\\.[2-3]
+      "interfaces": "", //网卡名称正则（注意JSON转义），如：eth0\\.[2-3]，不为空时为多网卡模式
       "skip_net_check": false, //是否跳过网络检查（仅非守护模式）
       "timeout": 5 //网络请求超时时间（秒）
     },
@@ -72,7 +83,7 @@ Config.json说明：
       "enable": false,
       "duration": 300, //网络检查周期（秒）
     }, 
-    "daemon": { //后台模式
+    "daemon": { //后台模式（不建议windows使用）
       "enable": false,
       "path": ".BitSrun", //守护监听文件路径，确保只有单守护运行
     },
@@ -80,7 +91,7 @@ Config.json说明：
 }
 ```
 
-登录参数从原网页登陆时对`/srun_portal`的请求抓取
+登录参数从原网页登陆时对`/srun_portal`的请求抓取，抓取时请把浏览器控制台的`preserve log`（保留日志）启用。
 
 运营商类型在原网页会被自动附加在账号后，请把`@`后面的部分填入`user_type`，没有则留空（删掉默认的）
 
@@ -103,11 +114,17 @@ func main() {
 		Timeout:   0,
 		LoginInfo: srunTransfer.LoginInfo{
 			Form: &srunTransfer.LoginForm{
-				
-            },
+				Domain:   "",
+				UserName: "",
+				UserType: "",
+				PassWord: "",
+			},
 			Meta: &srunTransfer.LoginMeta{
-				
-            },
+				N:    "",
+				Type: "",
+				Acid: "",
+				Enc:  "",
+			},
 		},
 		LocalAddr: nil, //出口地址
 	});e!=nil {
