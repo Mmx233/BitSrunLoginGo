@@ -6,9 +6,9 @@
 
 深澜校园网登录脚本Go语言版。GO语言可以直接交叉编译出mips架构可执行程序（路由器）（主流平台更不用说了），从而免除安装环境。
 
-> 登录逻辑来自 https://github.com/coffeehat/BIT-srun-login-script
+> 登录逻辑来自： https://github.com/coffeehat/BIT-srun-login-script
 
-> 对Openwrt更加友好的ipk编译版 [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx233/BitSrunLoginGo_Openwrt) 该版本压缩了binary文件，节省闪存空间
+> 对Openwrt更加友好的ipk编译版： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx233/BitSrunLoginGo_Openwrt) ，该版本压缩了binary文件，节省闪存空间
 
 ## :hammer_and_wrench:构建
 
@@ -96,6 +96,10 @@ Config.json说明：
 运营商类型在原网页会被自动附加在账号后，请把`@`后面的部分填入`user_type`，没有则留空（删掉默认的）
 
 ## :jigsaw: 作为module使用
+
+**\*本项目使用了AGPL V3 License，请酌情引用**
+
+示例：
 
 ```go
 package main
