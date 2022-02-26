@@ -22,12 +22,12 @@ var Daemon = daemon{
 
 // MarkDaemon 写入后台标记文件
 func (a *daemon) MarkDaemon() error {
-	return tool.File.Write(a.Path, []byte(a.Mark))
+	return tool.File.WriteAll(a.Path, []byte(a.Mark))
 }
 
 // CheckDaemon 检查后台标记文件
 func (a *daemon) CheckDaemon() bool {
-	if data, err := tool.File.Read(a.Path); err != nil {
+	if data, err := tool.File.ReadAll(a.Path); err != nil {
 		return false
 	} else {
 		return string(data) == a.Mark

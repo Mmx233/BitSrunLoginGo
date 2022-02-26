@@ -3,8 +3,7 @@ module github.com/Mmx233/BitSrunLoginGo
 go 1.17
 
 require (
-	github.com/Mmx233/config v0.0.3
-	github.com/Mmx233/tool v0.5.7
+	github.com/Mmx233/tool v0.5.9
 	github.com/howeyc/fsnotify v0.9.0
 	github.com/spf13/viper v1.10.1
 )
