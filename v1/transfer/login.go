@@ -22,8 +22,10 @@ type LoginInfo struct {
 }
 
 type Login struct {
-	//文件日志输出开关
-	Demo bool
+	//Debug模式
+	Debug bool
+	//输出日志文件
+	WriteLog bool
 	//控制台日志打印开关
 	OutPut bool
 	//登陆前是否检查网络，只在离线时登录

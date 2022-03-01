@@ -36,6 +36,9 @@ func readConfig() error {
 		Guardian: srunModels.Guardian{
 			Duration: 300,
 		},
+		Debug: srunModels.Debug{
+			Path: "./",
+		},
 	})
 
 	//生成配置文件

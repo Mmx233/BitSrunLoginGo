@@ -10,7 +10,8 @@ import (
 )
 
 func Login(c *srunTransfer.Login) error {
-	util.Log.Demo = c.Demo
+	util.Log.Debug = c.Debug
+	util.Log.WriteFile = c.WriteLog
 	util.Log.OutPut = c.OutPut
 
 	G := util.GenerateLoginInfo(c.LoginInfo.Form, c.LoginInfo.Meta)
@@ -101,7 +102,7 @@ func Login(c *srunTransfer.Login) error {
 			return e
 		} else {
 			util.Log.Println("登录结果: " + G.LoginResult)
-			if c.Demo {
+			if c.Debug {
 				util.Log.Println(res)
 			}
 		}

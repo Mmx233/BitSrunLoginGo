@@ -15,7 +15,6 @@ type Guardian struct {
 type Basic struct {
 	Timeout      uint   `json:"timeout"`
 	Interfaces   string `json:"interfaces"`
-	DemoMode     bool   `json:"demo_mode" yaml:"demo_mode"`
 	SkipNetCheck bool   `json:"skip_net_check" yaml:"skip_net_check"`
 }
 
@@ -23,6 +22,12 @@ type Settings struct {
 	Basic    Basic    `json:"basic"`
 	Guardian Guardian `json:"guardian"`
 	Daemon   Daemon   `json:"daemon"`
+	Debug    Debug
+}
+
+type Debug struct {
+	Enable bool   `json:"enable"`
+	Path   string `json:"path"`
 }
 
 type Config struct {

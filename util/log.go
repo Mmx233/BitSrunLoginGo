@@ -2,40 +2,37 @@ package util
 
 import (
 	"fmt"
+	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/tool"
 	"log"
 	"os"
-	"reflect"
 	"runtime"
 	"time"
 )
 
 type loG struct {
 	timeStamp string
-	Demo      bool
+	WriteFile bool
+	Debug     bool
 	OutPut    bool
 }
 
 var Log loG
 
 func (c *loG) WriteLog(name string, a ...interface{}) {
-	if !c.Demo {
+	if !(c.Debug && c.WriteFile) {
 		return
 	}
-	for _, v := range a {
-		var t string
-		switch reflect.TypeOf(v).Kind() {
-		case reflect.String:
-			t = v.(string)
-		case reflect.Interface:
-			t = v.(error).Error()
-		default:
-			t = fmt.Sprint(v)
+	var t string
+	for i, v := range a {
+		t += fmt.Sprint(v)
+		if i != len(a)-1 {
+			t += " "
 		}
-		err := tool.File.Add(name, fmt.Sprintf(time.Now().Format("2006/01/02 15:04:05 "))+t, 700)
-		if err != nil {
-			log.Println("Log error: ", err)
-		}
+	}
+	err := tool.File.Add(global.Config.Settings.Debug.Path+name, fmt.Sprintf(time.Now().Format("2006/01/02 15:04:05 "))+t, 700)
+	if err != nil {
+		log.Println("Write log error: ", err)
 	}
 }
 
@@ -48,19 +45,17 @@ func (c *loG) genTimeStamp() {
 func (c *loG) Println(a ...interface{}) {
 	c.genTimeStamp()
 	c.WriteLog("Login-"+c.timeStamp+".log", a...)
-	if !c.OutPut {
-		return
+	if c.OutPut {
+		log.Println(a...)
 	}
-	log.Println(a...)
 }
 
 func (c *loG) Fatalln(a ...interface{}) {
 	c.genTimeStamp()
 	c.WriteLog("LoginError-"+c.timeStamp+".log", a...)
-	if !c.OutPut {
-		return
+	if c.OutPut {
+		log.Fatalln(a...)
 	}
-	log.Fatalln(a...)
 }
 
 func (c *loG) CatchRecover() {
