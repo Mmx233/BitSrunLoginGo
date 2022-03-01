@@ -14,7 +14,7 @@ func Login(c *srunTransfer.Login) error {
 	util.Log.WriteFile = c.WriteLog
 	util.Log.OutPut = c.OutPut
 
-	G := util.GenerateLoginInfo(c.LoginInfo.Form, c.LoginInfo.Meta)
+	G := util.GenerateLoginInfo(c.Https, c.LoginInfo.Form, c.LoginInfo.Meta)
 	if c.CheckNet {
 		util.Log.Println("Step0: 检查状态…")
 		if util.Checker.NetOk(c.Transport) {

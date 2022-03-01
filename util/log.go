@@ -2,7 +2,6 @@ package util
 
 import (
 	"fmt"
-	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/tool"
 	"log"
 	"os"
@@ -13,11 +12,23 @@ import (
 type loG struct {
 	timeStamp string
 	WriteFile bool
+	Path      string
 	Debug     bool
 	OutPut    bool
 }
 
 var Log loG
+
+func (c *loG) Init(debug, logFile, outPut bool, path string) {
+	c.Debug = debug
+	c.WriteFile = logFile
+	c.OutPut = outPut
+	c.Path = path
+}
+
+func (c *loG) time() string {
+	return time.Now().Format("2006/01/02 15:04:05")
+}
 
 func (c *loG) WriteLog(name string, a ...interface{}) {
 	if !(c.Debug && c.WriteFile) {
@@ -30,7 +41,7 @@ func (c *loG) WriteLog(name string, a ...interface{}) {
 			t += " "
 		}
 	}
-	err := tool.File.Add(global.Config.Settings.Debug.Path+name, fmt.Sprintf(time.Now().Format("2006/01/02 15:04:05 "))+t, 700)
+	err := tool.File.Add(c.Path+name, c.time()+" "+t, 700)
 	if err != nil {
 		log.Println("Write log error: ", err)
 	}
@@ -38,7 +49,7 @@ func (c *loG) WriteLog(name string, a ...interface{}) {
 
 func (c *loG) genTimeStamp() {
 	if c.timeStamp == "" {
-		c.timeStamp = time.Now().Format("2006.01.02-15.04.05")
+		c.timeStamp = c.time()
 	}
 }
 

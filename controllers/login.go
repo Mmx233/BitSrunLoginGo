@@ -10,7 +10,9 @@ import (
 // Login 登录逻辑
 func Login(output bool, skipCheck bool, localAddr net.Addr) error {
 	return BitSrun.Login(&srunTransfer.Login{
-		Demo:     global.Config.Settings.Basic.DemoMode,
+		Https:    global.Config.Settings.Basic.Https,
+		Debug:    global.Config.Settings.Debug.Enable,
+		WriteLog: global.Config.Settings.Debug.WriteLog,
 		OutPut:   output,
 		CheckNet: !skipCheck,
 		LoginInfo: srunTransfer.LoginInfo{

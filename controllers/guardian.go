@@ -37,7 +37,7 @@ func Guardian(output bool) {
 						util.Log.Println("Error: ", e)
 					}
 				} else {
-					if global.Config.Settings.Basic.DemoMode {
+					if global.Config.Settings.Debug.Enable {
 						util.Log.Println("Network ok")
 					}
 				}

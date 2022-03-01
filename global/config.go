@@ -37,7 +37,7 @@ func readConfig() error {
 			Duration: 300,
 		},
 		Debug: srunModels.Debug{
-			Path: "./",
+			LogPath: "./",
 		},
 	})
 

@@ -13,6 +13,7 @@ type Guardian struct {
 }
 
 type Basic struct {
+	Https        bool   `json:"https"`
 	Timeout      uint   `json:"timeout"`
 	Interfaces   string `json:"interfaces"`
 	SkipNetCheck bool   `json:"skip_net_check" yaml:"skip_net_check"`
@@ -26,8 +27,9 @@ type Settings struct {
 }
 
 type Debug struct {
-	Enable bool   `json:"enable"`
-	Path   string `json:"path"`
+	Enable   bool   `json:"enable"`
+	WriteLog bool   `json:"write_log" yaml:"write_log"`
+	LogPath  string `json:"log_path" yaml:"log_path"`
 }
 
 type Config struct {

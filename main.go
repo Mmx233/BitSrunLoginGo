@@ -7,8 +7,12 @@ import (
 )
 
 func main() {
-	util.Log.Demo = global.Config.Settings.Basic.DemoMode
-	util.Log.OutPut = true
+	util.Log.Init(
+		global.Config.Settings.Debug.Enable,
+		global.Config.Settings.Debug.WriteLog,
+		true,
+		global.Config.Settings.Debug.LogPath,
+	)
 	defer util.Log.CatchRecover()
 
 	if global.Flags.RunningDaemon {
@@ -22,7 +26,7 @@ func main() {
 		if global.Config.Settings.Basic.Interfaces == "" { //单网卡
 			if err := controllers.Login(true, global.Config.Settings.Basic.SkipNetCheck, nil); err != nil {
 				util.Log.Println("运行出错，状态异常")
-				if global.Config.Settings.Basic.DemoMode {
+				if global.Config.Settings.Debug.Enable {
 					util.Log.Fatalln(err)
 				} else {
 					util.Log.Println(err)
