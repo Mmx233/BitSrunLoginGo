@@ -46,7 +46,7 @@ golang支持的系统与架构请自行查询
 
 编译结果为可执行文件，直接启动即可
 
-可以通过添加启动参数`--config`指定配置文件路径，默认为当前目录的`Config.json`
+可以通过添加启动参数`--config`指定配置文件路径，默认为当前目录的`Config.yaml`
 
 支持`json`、`yaml`、`yml`、`toml`、`hcl`、`tfvars`等，仅对`json`和`yaml`进行了优化与测试
 
@@ -54,7 +54,7 @@ golang支持的系统与架构请自行查询
 ./autoLogin --config=/demo/i.json
 ```
 
-首次运行将自动生成配置文件，以json为例
+首次运行将自动生成配置文件
 
 Config.json说明：
 
@@ -74,7 +74,7 @@ Config.json说明：
   },
   "settings": {
     "basic": { //基础设置
-      "demo_mode": false, //测试模式，报错更详细，且生成运行日志与错误日志
+      "https": false, //访问校园网API时直接使用http URL
       "interfaces": "", //网卡名称正则（注意JSON转义），如：eth0\\.[2-3]，不为空时为多网卡模式
       "skip_net_check": false, //是否跳过网络检查（仅非守护模式）
       "timeout": 5 //网络请求超时时间（秒）
@@ -87,6 +87,11 @@ Config.json说明：
       "enable": false,
       "path": ".BitSrun", //守护监听文件路径，确保只有单守护运行
     },
+    "debug": {
+      "enable": false, //开启debug模式，报错将更加详细
+      "write_log": false, //写日志文件
+      "log_path": "./" //日志文件存放路径
+    }
   }
 }
 ```
@@ -112,10 +117,12 @@ import (
 func main() {
 	//具体用法请查看struct注释
 	if e:=BitSrun.Login(&srunTransfer.Login{
-		Demo:      false,
+		Https:      false,
 		OutPut:    false,
+		Debug:  false,
+		WriteLog: false,
 		CheckNet:  false,
-		Timeout:   0,
+		Transport: nil,
 		LoginInfo: srunTransfer.LoginInfo{
 			Form: &srunTransfer.LoginForm{
 				Domain:   "",
@@ -130,7 +137,6 @@ func main() {
 				Enc:  "",
 			},
 		},
-		LocalAddr: nil, //出口地址
 	});e!=nil {
 		panic(e)
     }
