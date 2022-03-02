@@ -78,6 +78,7 @@ Config.json说明：
       "skip_cert_verify": false, //是否忽略证书验证
       "interfaces": "", //网卡名称正则（注意JSON转义），如：eth0\\.[2-3]，不为空时为多网卡模式
       "skip_net_check": false, //是否跳过网络检查（仅非守护模式）
+      "net_check_url": "https://www.baidu.com/", //网络检查使用的URL
       "timeout": 5 //网络请求超时时间（秒）
     },
     "guardian": { //守护模式
