@@ -82,6 +82,7 @@ func (c *loG) Fatal(a ...interface{}) {
 
 func (c *loG) CatchRecover() {
 	if e := recover(); e != nil {
+		c.Debug("发生恐慌")
 		var buf [4096]byte
 		c.Fatal(e, "\n", string(buf[:runtime.Stack(buf[:], false)]))
 	}

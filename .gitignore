@@ -1,5 +1,5 @@
-.idea/
-Config.json
+/.idea/
+/Config*
 /GoBuilder.bat
 /autoLogin*
 /BitSrunLoginGo*

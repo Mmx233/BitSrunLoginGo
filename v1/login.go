@@ -25,6 +25,7 @@ func Login(c *srunTransfer.Login) error {
 
 	util.Log.Info("Step1: 正在获取客户端ip")
 	{
+		util.Log.Debug("GET ", G.UrlLoginPage)
 		if _, body, e := tool.HTTP.GetString(&tool.GetRequest{
 			Url:       G.UrlLoginPage,
 			Redirect:  true,
@@ -38,6 +39,7 @@ func Login(c *srunTransfer.Login) error {
 
 	util.Log.Info("Step2: 正在获取Token")
 	{
+		util.Log.Debug("GET ", G.UrlGetChallengeApi)
 		if _, data, e := tool.HTTP.GetString(&tool.GetRequest{
 			Url: G.UrlGetChallengeApi,
 			Query: map[string]interface{}{
@@ -76,6 +78,7 @@ func Login(c *srunTransfer.Login) error {
 		chkstr += G.Token + G.EncryptedInfo
 		G.EncryptedChkstr = util.Sha1(chkstr)
 
+		util.Log.Debug("GET ", G.UrlLoginApi)
 		if _, res, e := tool.HTTP.GetString(&tool.GetRequest{
 			Url: G.UrlLoginApi,
 			Query: map[string]interface{}{
@@ -102,9 +105,7 @@ func Login(c *srunTransfer.Login) error {
 			return e
 		} else {
 			util.Log.Info("登录结果: " + G.LoginResult)
-			if c.Debug {
-				util.Log.Info(res)
-			}
+			util.Log.Debug(res)
 		}
 
 		if G.LoginResult != "ok" {
