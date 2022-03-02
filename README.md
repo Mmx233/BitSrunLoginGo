@@ -75,6 +75,7 @@ Config.json说明：
   "settings": {
     "basic": { //基础设置
       "https": false, //访问校园网API时直接使用http URL
+      "skip_cert_verify": false, //是否忽略证书验证
       "interfaces": "", //网卡名称正则（注意JSON转义），如：eth0\\.[2-3]，不为空时为多网卡模式
       "skip_net_check": false, //是否跳过网络检查（仅非守护模式）
       "timeout": 5 //网络请求超时时间（秒）
