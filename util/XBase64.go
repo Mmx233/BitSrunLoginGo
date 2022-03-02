@@ -3,7 +3,7 @@ package util
 func getbyte(a byte) int {
 	x := int(a)
 	if x > 255 {
-		Log.Fatalln("INVALID_CHARACTER_ERR: DOM Exception 5")
+		Log.Fatal("INVALID_CHARACTER_ERR: DOM Exception 5")
 	}
 	return x
 }

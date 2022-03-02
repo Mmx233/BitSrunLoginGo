@@ -14,16 +14,17 @@ type loG struct {
 	timeStamp string
 	WriteFile bool
 	Path      string
-	Debug     bool
 	OutPut    bool
+	DebugMode bool
 }
 
 var Log loG
 
 func (c *loG) Init(debug, logFile, outPut bool, path string) error {
-	c.Debug = debug
+	c.DebugMode = debug
 	c.WriteFile = logFile
 	c.OutPut = outPut
+	c.timeStamp = time.Now().Format("2006.01.02-15.04.05")
 
 	//日志路径初始化与处理
 	if !strings.HasSuffix(path, "/") {
@@ -38,46 +39,50 @@ func (c *loG) time() string {
 }
 
 func (c *loG) WriteLog(name string, a ...interface{}) {
-	if !(c.Debug && c.WriteFile) {
-		return
-	}
-	var t string
-	for _, v := range a {
-		t += fmt.Sprint(v)
-	}
-	err := tool.File.Add(c.Path+name, c.time()+" "+t, 700)
-	if err != nil {
-		log.Println("Write log error: ", err)
+	err := tool.File.Add(c.Path+name, c.time()+" "+fmt.Sprint(a...), 700)
+	if err != nil && c.OutPut {
+		log.Println(err)
 	}
 }
 
-func (c *loG) genTimeStamp() {
-	if c.timeStamp == "" {
-		c.timeStamp = time.Now().Format("2006.01.02-15.04.05")
+func (c *loG) print(fatal bool, a ...interface{}) {
+	if c.DebugMode && c.WriteFile {
+		c.WriteLog("Login-"+c.timeStamp+".log", a...)
 	}
-}
-
-func (c *loG) Println(a ...interface{}) {
-	c.genTimeStamp()
-	c.WriteLog("Login-"+c.timeStamp+".log", a...)
 	if c.OutPut {
-		log.Println(a...)
+		if fatal {
+			if c.DebugMode {
+				log.Panicln(a...)
+			} else {
+				log.Fatalln(a...)
+			}
+		} else {
+			log.Println(a...)
+		}
 	}
 }
 
-func (c *loG) Fatalln(a ...interface{}) {
-	c.genTimeStamp()
-	c.WriteLog("LoginError-"+c.timeStamp+".log", a...)
-	if c.OutPut {
-		log.Fatalln(a...)
+func (c *loG) Debug(a ...interface{}) {
+	if c.DebugMode {
+		c.print(false, append([]interface{}{"[DEBUG] "}, a...)...)
 	}
+}
+
+func (c *loG) Info(a ...interface{}) {
+	c.print(false, append([]interface{}{"[INFO] "}, a...)...)
+}
+
+func (c *loG) Warn(a ...interface{}) {
+	c.print(false, append([]interface{}{"[WARN] "}, a...)...)
+}
+
+func (c *loG) Fatal(a ...interface{}) {
+	c.print(true, append([]interface{}{"[FATAL] "}, a...)...)
 }
 
 func (c *loG) CatchRecover() {
 	if e := recover(); e != nil {
-		c.Println(e)
 		var buf [4096]byte
-		c.Println(string(buf[:runtime.Stack(buf[:], false)]))
-		os.Exit(1)
+		c.Fatal(e, "\n", string(buf[:runtime.Stack(buf[:], false)]))
 	}
 }

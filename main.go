@@ -28,24 +28,15 @@ func main() {
 		//单次登录模式
 		if global.Config.Settings.Basic.Interfaces == "" { //单网卡
 			if err := controllers.Login(true, global.Config.Settings.Basic.SkipNetCheck, nil); err != nil {
-				util.Log.Println("运行出错，状态异常")
-				if global.Config.Settings.Debug.Enable {
-					util.Log.Fatalln(err)
-				} else {
-					util.Log.Println(err)
-					return
-				}
+				util.Log.Fatal("运行出错，状态异常: ", err)
 			}
 		} else { //多网卡
-			interfaces, e := util.GetInterfaceAddr()
-			if e != nil {
-				return
-			}
+			util.Log.Debug("多网卡模式")
+			interfaces, _ := util.GetInterfaceAddr()
 			for _, eth := range interfaces {
-				util.Log.Println(eth.Name)
+				util.Log.Info("网卡: ", eth.Name)
 				if err := controllers.Login(true, global.Config.Settings.Basic.SkipNetCheck, eth.Addr); err != nil {
-					util.Log.Println(eth.Name + "运行出错，状态异常")
-					util.Log.Println(err)
+					util.Log.Warn("运行出错，状态异常: ", err)
 				}
 			}
 		}

@@ -10,20 +10,20 @@ import (
 )
 
 func Login(c *srunTransfer.Login) error {
-	util.Log.Debug = c.Debug
+	util.Log.DebugMode = c.Debug
 	util.Log.WriteFile = c.WriteLog
 	util.Log.OutPut = c.OutPut
 
 	G := util.GenerateLoginInfo(c.Https, c.LoginInfo.Form, c.LoginInfo.Meta)
 	if c.CheckNet {
-		util.Log.Println("Step0: 检查状态…")
+		util.Log.Info("Step0: 检查状态…")
 		if util.Checker.NetOk(c.Transport) {
-			util.Log.Println("网络 ok")
+			util.Log.Info("网络 ok")
 			return nil
 		}
 	}
 
-	util.Log.Println("Step1: 正在获取客户端ip")
+	util.Log.Info("Step1: 正在获取客户端ip")
 	{
 		if _, body, e := tool.HTTP.GetString(&tool.GetRequest{
 			Url:       G.UrlLoginPage,
@@ -36,7 +36,7 @@ func Login(c *srunTransfer.Login) error {
 		}
 	}
 
-	util.Log.Println("Step2: 正在获取Token")
+	util.Log.Info("Step2: 正在获取Token")
 	{
 		if _, data, e := tool.HTTP.GetString(&tool.GetRequest{
 			Url: G.UrlGetChallengeApi,
@@ -54,7 +54,7 @@ func Login(c *srunTransfer.Login) error {
 		}
 	}
 
-	util.Log.Println("Step3: 执行登录…")
+	util.Log.Info("Step3: 执行登录…")
 	{
 		info, e := json.Marshal(map[string]string{
 			"username": G.Form.UserName,
@@ -101,9 +101,9 @@ func Login(c *srunTransfer.Login) error {
 		} else if G.LoginResult, e = util.GetResult(res); e != nil {
 			return e
 		} else {
-			util.Log.Println("登录结果: " + G.LoginResult)
+			util.Log.Info("登录结果: " + G.LoginResult)
 			if c.Debug {
-				util.Log.Println(res)
+				util.Log.Info(res)
 			}
 		}
 
