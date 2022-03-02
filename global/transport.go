@@ -18,8 +18,9 @@ func Transports(addr net.Addr) *http.Transport {
 		return transport
 	} else {
 		transport = tool.HTTP.GenTransport(&tool.GenTransport{
-			Timeout:   Timeout,
-			LocalAddr: addr,
+			Timeout:           Timeout,
+			LocalAddr:         addr,
+			SkipSslCertVerify: Config.Settings.Basic.SkipCertVerify,
 		})
 		transports[addr] = transport
 		return transport
@@ -29,7 +30,8 @@ func Transports(addr net.Addr) *http.Transport {
 func initTransport() {
 	if Config.Settings.Basic.Interfaces == "" {
 		transport = tool.HTTP.GenTransport(&tool.GenTransport{
-			Timeout: Timeout,
+			Timeout:           Timeout,
+			SkipSslCertVerify: Config.Settings.Basic.SkipCertVerify,
 		})
 	} else {
 		transports = make(map[net.Addr]*http.Transport, 0)

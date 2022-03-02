@@ -13,10 +13,11 @@ type Guardian struct {
 }
 
 type Basic struct {
-	Https        bool   `json:"https" yaml:"https" mapstructure:"https"`
-	Timeout      uint   `json:"timeout" yaml:"timeout" mapstructure:"timeout"`
-	Interfaces   string `json:"interfaces" yaml:"interfaces" mapstructure:"interfaces"`
-	SkipNetCheck bool   `json:"skip_net_check" yaml:"skip_net_check" mapstructure:"skip_net_check"`
+	Https          bool   `json:"https" yaml:"https" mapstructure:"https"`
+	SkipCertVerify bool   `json:"skip_cert_verify" yaml:"skip_cert_verify" mapstructure:"skip_cert_verify"`
+	Timeout        uint   `json:"timeout" yaml:"timeout" mapstructure:"timeout"`
+	Interfaces     string `json:"interfaces" yaml:"interfaces" mapstructure:"interfaces"`
+	SkipNetCheck   bool   `json:"skip_net_check" yaml:"skip_net_check" mapstructure:"skip_net_check"`
 }
 
 type Settings struct {
