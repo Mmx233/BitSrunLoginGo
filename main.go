@@ -16,7 +16,6 @@ func main() {
 	); e != nil {
 		log.Fatalln("初始化日志失败: ", e)
 	}
-	defer util.Log.CatchRecover()
 
 	if global.Flags.RunningDaemon {
 		//后台挂起模式中

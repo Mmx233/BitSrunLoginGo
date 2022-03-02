@@ -27,11 +27,14 @@ func (c *loG) Init(debug, logFile, outPut bool, path string) error {
 	c.timeStamp = time.Now().Format("2006.01.02-15.04.05")
 
 	//日志路径初始化与处理
-	if !strings.HasSuffix(path, "/") {
-		path += "/"
+	if c.DebugMode {
+		if !strings.HasSuffix(path, "/") {
+			path += "/"
+		}
+		c.Path = path
+		return os.MkdirAll(path, os.ModePerm)
 	}
-	c.Path = path
-	return os.MkdirAll(path, os.ModePerm)
+	return nil
 }
 
 func (c *loG) time() string {
