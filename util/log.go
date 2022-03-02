@@ -47,7 +47,8 @@ func (c *loG) WriteLog(name string, a ...interface{}) {
 	}
 }
 
-func (c *loG) print(fatal bool, a ...interface{}) {
+func (c *loG) print(name string, fatal bool, a ...interface{}) {
+	a = append([]interface{}{"[" + name + "] "}, a...)
 	if c.DebugMode && c.WriteFile {
 		c.WriteLog("Login-"+c.timeStamp+".log", a...)
 	}
@@ -66,18 +67,18 @@ func (c *loG) print(fatal bool, a ...interface{}) {
 
 func (c *loG) Debug(a ...interface{}) {
 	if c.DebugMode {
-		c.print(false, append([]interface{}{"[DEBUG] "}, a...)...)
+		c.print("DEBUG", false, a...)
 	}
 }
 
 func (c *loG) Info(a ...interface{}) {
-	c.print(false, append([]interface{}{"[INFO] "}, a...)...)
+	c.print("INFO", false, a...)
 }
 
 func (c *loG) Warn(a ...interface{}) {
-	c.print(false, append([]interface{}{"[WARN] "}, a...)...)
+	c.print("WARN", false, a...)
 }
 
 func (c *loG) Fatal(a ...interface{}) {
-	c.print(true, append([]interface{}{"[FATAL] "}, a...)...)
+	c.print("FATAL", true, a...)
 }
