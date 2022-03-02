@@ -14,7 +14,7 @@ var Flags struct {
 }
 
 func initFlags() {
-	flag.StringVar(&Flags.Path, "config", "Config.json", "config path")
+	flag.StringVar(&Flags.Path, "config", "Config.yaml", "config path")
 	flag.BoolVar(&Flags.RunningDaemon, "running-daemon", false, "")
 	flag.BoolVar(&Flags.Daemon, "daemon", false, "")
 	flag.Parse()
