@@ -35,11 +35,8 @@ func (c *loG) WriteLog(name string, a ...interface{}) {
 		return
 	}
 	var t string
-	for i, v := range a {
+	for _, v := range a {
 		t += fmt.Sprint(v)
-		if i != len(a)-1 {
-			t += " "
-		}
 	}
 	err := tool.File.Add(c.Path+name, c.time()+" "+t, 700)
 	if err != nil {
