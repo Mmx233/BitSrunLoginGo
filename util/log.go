@@ -46,7 +46,7 @@ func (c *loG) WriteLog(name string, a ...interface{}) {
 
 func (c *loG) genTimeStamp() {
 	if c.timeStamp == "" {
-		c.timeStamp = c.time()
+		c.timeStamp = time.Now().Format("2006.01.02-15.04.05")
 	}
 }
 
