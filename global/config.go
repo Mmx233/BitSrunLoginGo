@@ -63,7 +63,6 @@ func readConfig() error {
 		return e
 	}
 
-	_ = viper.WriteConfig()
 	return nil
 }
 
