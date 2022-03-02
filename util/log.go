@@ -26,7 +26,7 @@ func (c *loG) Init(debug, logFile, outPut bool, path string) error {
 	c.timeStamp = time.Now().Format("2006.01.02-15.04.05")
 
 	//日志路径初始化与处理
-	if c.DebugMode {
+	if c.DebugMode && c.WriteFile {
 		if !strings.HasSuffix(path, "/") {
 			path += "/"
 		}

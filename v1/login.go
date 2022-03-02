@@ -16,6 +16,9 @@ func Login(c *srunTransfer.Login) error {
 
 	G := util.GenerateLoginInfo(c.Https, c.LoginInfo.Form, c.LoginInfo.Meta)
 	if c.CheckNet {
+		if c.CheckNetUrl != "" {
+			util.Checker.SetUrl(c.CheckNetUrl)
+		}
 		util.Log.Info("Step0: 检查状态…")
 		if util.Checker.NetOk(c.Transport) {
 			util.Log.Info("网络 ok")
@@ -35,9 +38,10 @@ func Login(c *srunTransfer.Login) error {
 		} else if G.Ip, e = util.GetIp(body); e != nil {
 			return e
 		}
+		util.Log.Debug("ip: ", G.Ip)
 	}
 
-	util.Log.Info("Step2: 正在获取Token")
+	util.Log.Info("Step2: 正在获取token")
 	{
 		util.Log.Debug("GET ", G.UrlGetChallengeApi)
 		if _, data, e := tool.HTTP.GetString(&tool.GetRequest{
@@ -54,6 +58,7 @@ func Login(c *srunTransfer.Login) error {
 		} else if G.Token, e = util.GetToken(data); e != nil {
 			return e
 		}
+		util.Log.Debug("token: ", G.Token)
 	}
 
 	util.Log.Info("Step3: 执行登录…")

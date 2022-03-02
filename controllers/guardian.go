@@ -13,6 +13,7 @@ import (
 func Guardian(output bool) {
 	util.Log.OutPut = output
 	GuardianDuration := time.Duration(global.Config.Settings.Guardian.Duration) * time.Second
+	util.Checker.SetUrl(global.Config.Settings.Basic.NetCheckUrl)
 
 	if global.Config.Settings.Daemon.Enable {
 		go Daemon.DaemonChan()

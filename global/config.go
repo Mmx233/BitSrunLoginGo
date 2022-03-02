@@ -28,7 +28,8 @@ func readConfig() error {
 	})
 	viper.SetDefault("settings", srunModels.Settings{
 		Basic: srunModels.Basic{
-			Timeout: 5,
+			Timeout:     5,
+			NetCheckUrl: "https://www.baidu.com/",
 		},
 		Daemon: srunModels.Daemon{
 			Path: ".autoLogin",
@@ -45,21 +46,21 @@ func readConfig() error {
 	if !tool.File.Exists(Flags.Path) {
 		e := viper.WriteConfigAs(Flags.Path)
 		if e != nil {
-			log.Println("生成配置文件失败：", e)
+			log.Println("[init] 生成配置文件失败：", e)
 			return e
 		}
-		log.Println("已生成配置文件，请编辑 '" + Flags.Path + "' 然后重试")
+		log.Println("[init] 已生成配置文件，请编辑 '" + Flags.Path + "' 然后重试")
 		os.Exit(0)
 	}
 
 	//读取配置文件
 	viper.SetConfigFile(Flags.Path)
 	if e := viper.ReadInConfig(); e != nil {
-		log.Println("读取配置文件失败：", e)
+		log.Println("[init] 读取配置文件失败：", e)
 		return e
 	}
 	if e := viper.Unmarshal(&Config); e != nil {
-		log.Println("解析配置文件失败：", e)
+		log.Println("[init] 解析配置文件失败：", e)
 		return e
 	}
 
@@ -74,6 +75,7 @@ func init() {
 		os.Exit(1)
 	}
 
+	//初始化常变量
 	Timeout = time.Duration(Config.Settings.Basic.Timeout) * time.Second
 	initTransport()
 }

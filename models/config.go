@@ -18,6 +18,7 @@ type Basic struct {
 	Timeout        uint   `json:"timeout" yaml:"timeout" mapstructure:"timeout"`
 	Interfaces     string `json:"interfaces" yaml:"interfaces" mapstructure:"interfaces"`
 	SkipNetCheck   bool   `json:"skip_net_check" yaml:"skip_net_check" mapstructure:"skip_net_check"`
+	NetCheckUrl    string `json:"net_check_url" yaml:"net_check_url" mapstructure:"net_check_url"`
 }
 
 type Settings struct {
