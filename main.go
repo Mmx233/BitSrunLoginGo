@@ -4,15 +4,18 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/controllers"
 	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/BitSrunLoginGo/util"
+	"log"
 )
 
 func main() {
-	util.Log.Init(
+	if e := util.Log.Init(
 		global.Config.Settings.Debug.Enable,
 		global.Config.Settings.Debug.WriteLog,
 		true,
 		global.Config.Settings.Debug.LogPath,
-	)
+	); e != nil {
+		log.Fatalln("初始化日志失败: ", e)
+	}
 	defer util.Log.CatchRecover()
 
 	if global.Flags.RunningDaemon {

@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -19,11 +20,17 @@ type loG struct {
 
 var Log loG
 
-func (c *loG) Init(debug, logFile, outPut bool, path string) {
+func (c *loG) Init(debug, logFile, outPut bool, path string) error {
 	c.Debug = debug
 	c.WriteFile = logFile
 	c.OutPut = outPut
+
+	//日志路径初始化与处理
+	if !strings.HasSuffix(path, "/") {
+		path += "/"
+	}
 	c.Path = path
+	return os.MkdirAll(path, os.ModePerm)
 }
 
 func (c *loG) time() string {
