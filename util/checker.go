@@ -31,6 +31,7 @@ func (a *checker) NetOk(transport *http.Transport) bool {
 		Transport: transport,
 	})
 	if e != nil {
+		Log.Debug(e)
 		return false
 	}
 	_ = res.Body.Close()
