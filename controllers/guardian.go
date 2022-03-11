@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/global"
-	srunModels "github.com/Mmx233/BitSrunLoginGo/models"
 	"github.com/Mmx233/BitSrunLoginGo/util"
 	"os"
 	"os/exec"
@@ -13,7 +12,6 @@ import (
 func Guardian(output bool) {
 	util.Log.OutPut = output
 	GuardianDuration := time.Duration(global.Config.Settings.Guardian.Duration) * time.Second
-	util.Checker.SetUrl(global.Config.Settings.Basic.NetCheckUrl)
 
 	if global.Config.Settings.Daemon.Enable {
 		go Daemon.DaemonChan()
@@ -31,31 +29,16 @@ func Guardian(output bool) {
 				_ = recover()
 			}()
 			if global.Config.Settings.Basic.Interfaces == "" { //单网卡
-				if !util.Checker.NetOk(global.Transports(nil)) {
-					util.Log.Info("检测到掉线, trying to login")
-					e := Login(output, true, nil)
-					if e != nil {
-						util.Log.Warn("登陆失败: ", e)
-					}
-				} else {
-					if global.Config.Settings.Debug.Enable {
-						util.Log.Debug("Network ok")
-					}
+				e := Login(output, nil)
+				if e != nil {
+					util.Log.Warn("登陆失败: ", e)
 				}
 			} else { //多网卡
 				interfaces, e := util.GetInterfaceAddr()
 				if e == nil {
-					var down []srunModels.Eth
 					for _, eth := range interfaces {
-						if !util.Checker.NetOk(global.Transports(eth.Addr)) {
-							util.Log.Info("检测到掉线网口 ", eth.Name)
-							down = append(down, eth)
-						}
-					}
-
-					for _, eth := range down {
 						util.Log.Info(eth.Name)
-						e := Login(output, true, eth.Addr)
+						e := Login(output, eth.Addr)
 						if e != nil {
 							util.Log.Warn("网口 ", eth.Name+" 登录失败: ", e)
 						}

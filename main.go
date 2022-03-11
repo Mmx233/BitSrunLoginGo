@@ -26,7 +26,7 @@ func main() {
 	} else {
 		//单次登录模式
 		if global.Config.Settings.Basic.Interfaces == "" { //单网卡
-			if err := controllers.Login(true, global.Config.Settings.Basic.SkipNetCheck, nil); err != nil {
+			if err := controllers.Login(true, nil); err != nil {
 				util.Log.Fatal("运行出错，状态异常: ", err)
 			}
 		} else { //多网卡
@@ -34,7 +34,7 @@ func main() {
 			interfaces, _ := util.GetInterfaceAddr()
 			for _, eth := range interfaces {
 				util.Log.Info("网卡: ", eth.Name)
-				if err := controllers.Login(true, global.Config.Settings.Basic.SkipNetCheck, eth.Addr); err != nil {
+				if err := controllers.Login(true, eth.Addr); err != nil {
 					util.Log.Warn("运行出错，状态异常: ", err)
 				}
 			}

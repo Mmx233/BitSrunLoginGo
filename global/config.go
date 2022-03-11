@@ -28,8 +28,7 @@ func readConfig() error {
 	})
 	viper.SetDefault("settings", srunModels.Settings{
 		Basic: srunModels.Basic{
-			Timeout:     5,
-			NetCheckUrl: "https://www.baidu.com/",
+			Timeout: 5,
 		},
 		Daemon: srunModels.Daemon{
 			Path: ".autoLogin",

@@ -30,9 +30,6 @@ type Login struct {
 	WriteLog bool
 	//控制台日志打印开关
 	OutPut bool
-	//登陆前是否检查网络，只在离线时登录
-	CheckNet    bool
-	CheckNetUrl string
 	//登录参数，不可缺省
 	LoginInfo LoginInfo
 	Transport *http.Transport

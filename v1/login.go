@@ -5,8 +5,6 @@ import (
 	"errors"
 	"github.com/Mmx233/BitSrunLoginGo/util"
 	"github.com/Mmx233/BitSrunLoginGo/v1/transfer"
-	"github.com/Mmx233/tool"
-	"time"
 )
 
 func Login(c *srunTransfer.Login) error {
@@ -14,54 +12,61 @@ func Login(c *srunTransfer.Login) error {
 	util.Log.WriteFile = c.WriteLog
 	util.Log.OutPut = c.OutPut
 
-	G := util.GenerateLoginInfo(c.Https, c.LoginInfo.Form, c.LoginInfo.Meta)
-	if c.CheckNet {
-		if c.CheckNetUrl != "" {
-			util.Checker.SetUrl(c.CheckNetUrl)
-		}
-		util.Log.Info("Step0: 检查状态…")
-		if util.Checker.NetOk(c.Transport) {
-			util.Log.Info("网络 ok")
-			return nil
-		}
+	G := util.GenerateLoginInfo(c.LoginInfo.Form, c.LoginInfo.Meta)
+	api := SrunApi{
+		BaseUrl: func() string {
+			url := "http"
+			if c.Https {
+				url += "s"
+			}
+			return url + "://" + c.LoginInfo.Form.Domain + "/"
+		}(),
+		Transport: c.Transport,
 	}
 
-	util.Log.Info("Step1: 正在获取客户端ip")
+	var ok bool
+
 	{
-		util.Log.Debug("GET ", G.UrlLoginPage)
-		if _, body, e := tool.HTTP.GetString(&tool.GetRequest{
-			Url:       G.UrlLoginPage,
-			Redirect:  true,
-			Transport: c.Transport,
-		}); e != nil {
-			return e
-		} else if G.Ip, e = util.GetIp(body); e != nil {
+		util.Log.Info("Step.0: 正在检查状态")
+		res, e := api.GetUserInfo()
+		if e != nil {
 			return e
 		}
+		err := res["error"].(string)
+		if err == "ok" {
+			util.Log.Info("--已登录--")
+			return nil
+		}
+
+		util.Log.Info("Step.1: 正在获取客户端ip")
+		var ip interface{}
+		ip, ok = res["client_ip"]
+		if !ok {
+			ip, ok = res["online_ip"]
+			if !ok {
+				return ErrResultCannotFound
+			}
+		}
+		G.Ip = ip.(string)
 		util.Log.Debug("ip: ", G.Ip)
 	}
 
-	util.Log.Info("Step2: 正在获取token")
+	util.Log.Info("Step.2: 正在获取token")
 	{
-		util.Log.Debug("GET ", G.UrlGetChallengeApi)
-		if _, data, e := tool.HTTP.GetString(&tool.GetRequest{
-			Url: G.UrlGetChallengeApi,
-			Query: map[string]interface{}{
-				"callback": "jsonp1583251661367",
-				"username": G.Form.UserName,
-				"ip":       G.Ip,
-			},
-			Redirect:  true,
-			Transport: c.Transport,
-		}); e != nil {
-			return e
-		} else if G.Token, e = util.GetToken(data); e != nil {
+		res, e := api.GetChallenge(G.Form.UserName, G.Ip)
+		if e != nil {
 			return e
 		}
+		var token interface{}
+		token, ok = res["challenge"]
+		if !ok {
+			return ErrResultCannotFound
+		}
+		G.Token = token.(string)
 		util.Log.Debug("token: ", G.Token)
 	}
 
-	util.Log.Info("Step3: 执行登录…")
+	util.Log.Info("Step.3: 执行登录…")
 	{
 		info, e := json.Marshal(map[string]string{
 			"username": G.Form.UserName,
@@ -83,36 +88,27 @@ func Login(c *srunTransfer.Login) error {
 		chkstr += G.Token + G.EncryptedInfo
 		G.EncryptedChkstr = util.Sha1(chkstr)
 
-		util.Log.Debug("GET ", G.UrlLoginApi)
-		if _, res, e := tool.HTTP.GetString(&tool.GetRequest{
-			Url: G.UrlLoginApi,
-			Query: map[string]interface{}{
-				"callback":     "jQuery112401157665",
-				"action":       "login",
-				"username":     G.Form.UserName,
-				"password":     G.EncryptedMd5,
-				"ac_id":        G.Meta.Acid,
-				"ip":           G.Ip,
-				"info":         G.EncryptedInfo,
-				"chksum":       G.EncryptedChkstr,
-				"n":            G.Meta.N,
-				"type":         G.Meta.Type,
-				"os":           "Windows 10",
-				"name":         "windows",
-				"double_stack": 0,
-				"_":            time.Now().UnixNano(),
-			},
-			Redirect:  true,
-			Transport: c.Transport,
-		}); e != nil {
+		res, e := api.Login(
+			G.Form.UserName,
+			G.EncryptedMd5,
+			G.Meta.Acid,
+			G.Ip,
+			G.EncryptedInfo,
+			G.EncryptedChkstr,
+			G.Meta.N,
+			G.Meta.Type,
+		)
+		if e != nil {
 			return e
-		} else if G.LoginResult, e = util.GetResult(res); e != nil {
-			return e
-		} else {
-			util.Log.Info("登录结果: " + G.LoginResult)
-			util.Log.Debug(res)
 		}
+		var result interface{}
+		result, ok = res["error"]
+		if !ok {
+			return ErrResultCannotFound
+		}
+		G.LoginResult = result.(string)
 
+		util.Log.Info("登录结果: " + G.LoginResult)
 		if G.LoginResult != "ok" {
 			return errors.New(G.LoginResult)
 		}
