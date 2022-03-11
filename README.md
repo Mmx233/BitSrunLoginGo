@@ -6,7 +6,7 @@
 
 深澜校园网登录脚本Go语言版。GO语言可以直接交叉编译出mips架构可执行程序（路由器）（主流平台更不用说了），从而免除安装环境。
 
-> 登录逻辑来自： https://github.com/coffeehat/BIT-srun-login-script
+> 主要登录逻辑来自： https://github.com/coffeehat/BIT-srun-login-script
 
 > 对Openwrt更加友好的ipk编译版： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx233/BitSrunLoginGo_Openwrt) ，该版本压缩了binary文件，节省闪存空间
 
@@ -77,8 +77,6 @@ Config.json说明：
       "https": false, //访问校园网API时直接使用https URL
       "skip_cert_verify": false, //是否忽略证书验证
       "interfaces": "", //网卡名称正则（注意JSON转义），如：eth0\\.[2-3]，不为空时为多网卡模式
-      "skip_net_check": false, //是否跳过网络检查（仅非守护模式）
-      "net_check_url": "https://www.baidu.com/", //网络检查使用的URL
       "timeout": 5 //网络请求超时时间（秒）
     },
     "guardian": { //守护模式
@@ -123,7 +121,6 @@ func main() {
 		OutPut:    false,
 		Debug:  false,
 		WriteLog: false,
-		CheckNet:  false,
 		Transport: nil,
 		LoginInfo: srunTransfer.LoginInfo{
 			Form: &srunTransfer.LoginForm{
