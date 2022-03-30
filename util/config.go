@@ -9,7 +9,13 @@ func GenerateLoginInfo(Form *srunTransfer.LoginForm, Meta *srunTransfer.LoginMet
 	return &srunModels.LoginInfo{
 		Meta: Meta,
 		Form: &srunTransfer.LoginForm{
-			UserName: Form.UserName + "@" + Form.UserType,
+			UserName: func() string {
+				if Form.UserType == "" {
+					return Form.UserName
+				} else {
+					return Form.UserName + "@" + Form.UserType
+				}
+			}(),
 			PassWord: Form.PassWord,
 		},
 	}
