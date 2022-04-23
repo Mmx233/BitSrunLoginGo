@@ -53,7 +53,7 @@
 
 至此应该认证完成，打开 https://portal.nwafu.edu.cn/ 应该会显示已登录页面
 
-## 附 使用`--config`指定配置文件
+## 附 使用`--config`指定配置文件及`Config`中字段说明
 
 ```shell
 ./autoLogin --config=/pathA/config1.yaml
