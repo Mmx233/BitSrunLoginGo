@@ -11,8 +11,10 @@
 
 
 ## 使用方法
-1. 根据设备架构下载编译后的可执行文件，解压后获得名为`autoLogin`的文件
+1. 根据设备架构下载编译后的可执行文件，解压后获得名为`autoLogin`的文件（本README书写时，使用最新3.1版本）
    > [点这里跳转到原项目的可执行文件下载页面](https://github.com/Mmx233/BitSrunLoginGo/releases)
+   > [速度过慢可使用国内分流阿里云盘](https://github.com/Mmx233/BitSrunLoginGo/releases)
+   > 由于阿里云盘不支持分享包括zip,rar在内的各种压缩包，因此使用7-zip打包为了.exe，若打不开请安装7-zip
 2. 在`autoLogin`同级文件下创建`Config.yaml`文件
     > 可以通过添加启动参数`--config`指定配置文件路径，默认为当前目录的`Config.yaml`。
     
