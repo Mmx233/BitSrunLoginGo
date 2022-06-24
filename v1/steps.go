@@ -11,8 +11,8 @@ import (
 )
 
 type SrunApi struct {
-	BaseUrl   string
-	Transport *http.Transport
+	BaseUrl string
+	Client  *http.Client
 }
 
 func (a *SrunApi) request(path string, query map[string]interface{}) (map[string]interface{}, error) {
@@ -24,11 +24,9 @@ func (a *SrunApi) request(path string, query map[string]interface{}) (map[string
 	}
 	query["callback"] = callback
 	query["_"] = timestamp
-	_, res, e := tool.HTTP.GetString(&tool.GetRequest{
-		Url:       a.BaseUrl + path,
-		Query:     query,
-		Redirect:  true,
-		Transport: a.Transport,
+	_, res, e := tool.NewHttpTool(a.Client).GetString(&tool.DoHttpReq{
+		Url:   a.BaseUrl + path,
+		Query: query,
 	})
 	if e != nil {
 		util.Log.Debug(e)

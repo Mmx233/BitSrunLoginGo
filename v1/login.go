@@ -21,7 +21,7 @@ func Login(c *srunTransfer.Login) error {
 			}
 			return url + "://" + c.LoginInfo.Form.Domain + "/"
 		}(),
-		Transport: c.Transport,
+		Client: c.Client,
 	}
 
 	var ok bool

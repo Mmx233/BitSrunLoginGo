@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/global"
+	"github.com/Mmx233/BitSrunLoginGo/util"
 	BitSrun "github.com/Mmx233/BitSrunLoginGo/v1"
 	"github.com/Mmx233/BitSrunLoginGo/v1/transfer"
 	"net"
@@ -18,6 +19,6 @@ func Login(output bool, localAddr net.Addr) error {
 			Form: &global.Config.Form,
 			Meta: &global.Config.Meta,
 		},
-		Transport: global.Transports(localAddr),
+		Client: util.HttpTools(localAddr).Client,
 	})
 }

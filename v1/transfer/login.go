@@ -32,5 +32,5 @@ type Login struct {
 	OutPut bool
 	//登录参数，不可缺省
 	LoginInfo LoginInfo
-	Transport *http.Transport
+	Client    *http.Client
 }
