@@ -5,13 +5,10 @@ import (
 	"errors"
 	"github.com/Mmx233/BitSrunLoginGo/util"
 	"github.com/Mmx233/BitSrunLoginGo/v1/transfer"
+	log "github.com/sirupsen/logrus"
 )
 
 func Login(c *srunTransfer.Login) error {
-	util.Log.DebugMode = c.Debug
-	util.Log.WriteFile = c.WriteLog
-	util.Log.OutPut = c.OutPut
-
 	G := util.GenerateLoginInfo(c.LoginInfo.Form, c.LoginInfo.Meta)
 	api := SrunApi{
 		BaseUrl: func() string {
@@ -27,18 +24,18 @@ func Login(c *srunTransfer.Login) error {
 	var ok bool
 
 	{
-		util.Log.Info("Step.0: 正在检查状态")
+		log.Infoln("Step.0: 正在检查状态")
 		res, e := api.GetUserInfo()
 		if e != nil {
 			return e
 		}
 		err := res["error"].(string)
 		if err == "ok" {
-			util.Log.Info("--已登录--")
+			log.Infoln("--已登录--")
 			return nil
 		}
 
-		util.Log.Info("Step.1: 正在获取客户端ip")
+		log.Infoln("Step.1: 正在获取客户端ip")
 		var ip interface{}
 		ip, ok = res["client_ip"]
 		if !ok {
@@ -48,10 +45,10 @@ func Login(c *srunTransfer.Login) error {
 			}
 		}
 		G.Ip = ip.(string)
-		util.Log.Debug("ip: ", G.Ip)
+		log.Debugln("ip: ", G.Ip)
 	}
 
-	util.Log.Info("Step.2: 正在获取token")
+	log.Infoln("Step.2: 正在获取token")
 	{
 		res, e := api.GetChallenge(G.Form.UserName, G.Ip)
 		if e != nil {
@@ -63,10 +60,10 @@ func Login(c *srunTransfer.Login) error {
 			return ErrResultCannotFound
 		}
 		G.Token = token.(string)
-		util.Log.Debug("token: ", G.Token)
+		log.Debugln("token: ", G.Token)
 	}
 
-	util.Log.Info("Step.3: 执行登录…")
+	log.Infoln("Step.3: 执行登录…")
 	{
 		info, e := json.Marshal(map[string]string{
 			"username": G.Form.UserName,
@@ -108,7 +105,7 @@ func Login(c *srunTransfer.Login) error {
 		}
 		G.LoginResult = result.(string)
 
-		util.Log.Info("登录结果: " + G.LoginResult)
+		log.Infoln("登录结果: " + G.LoginResult)
 		if G.LoginResult != "ok" {
 			return errors.New(G.LoginResult)
 		}

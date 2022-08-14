@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/Mmx233/tool v0.6.5
 	github.com/howeyc/fsnotify v0.9.0
+	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.12.0
 )
 

@@ -9,12 +9,9 @@ import (
 )
 
 // Login 登录逻辑
-func Login(output bool, localAddr net.Addr) error {
+func Login(localAddr net.Addr) error {
 	return BitSrun.Login(&srunTransfer.Login{
-		Https:    global.Config.Settings.Basic.Https,
-		Debug:    global.Config.Settings.Debug.Enable,
-		WriteLog: global.Config.Settings.Debug.WriteLog,
-		OutPut:   output,
+		Https: global.Config.Settings.Basic.Https,
 		LoginInfo: srunTransfer.LoginInfo{
 			Form: &global.Config.Form,
 			Meta: &global.Config.Meta,

@@ -1,9 +1,11 @@
 package util
 
+import log "github.com/sirupsen/logrus"
+
 func getbyte(a byte) int {
 	x := int(a)
 	if x > 255 {
-		Log.Fatal("INVALID_CHARACTER_ERR: DOM Exception 5")
+		log.Fatalln("INVALID_CHARACTER_ERR: DOM Exception 5")
 	}
 	return x
 }

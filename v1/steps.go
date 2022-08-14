@@ -3,8 +3,8 @@ package BitSrun
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Mmx233/BitSrunLoginGo/util"
 	"github.com/Mmx233/tool"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
 	"time"
@@ -16,7 +16,7 @@ type SrunApi struct {
 }
 
 func (a *SrunApi) request(path string, query map[string]interface{}) (map[string]interface{}, error) {
-	util.Log.Debug("HTTP GET ", a.BaseUrl+path)
+	log.Debugln("HTTP GET ", a.BaseUrl+path)
 	timestamp := fmt.Sprint(time.Now().UnixNano())
 	callback := "jQuery" + timestamp
 	if query == nil {
@@ -29,11 +29,11 @@ func (a *SrunApi) request(path string, query map[string]interface{}) (map[string
 		Query: query,
 	})
 	if e != nil {
-		util.Log.Debug(e)
+		log.Debugln(e)
 		return nil, e
 	}
 
-	util.Log.Debug(res)
+	log.Debugln(res)
 	res = strings.TrimPrefix(res, callback+"(")
 	res = strings.TrimSuffix(res, ")")
 

@@ -24,12 +24,6 @@ type LoginInfo struct {
 type Login struct {
 	//调用API时直接访问https URL
 	Https bool
-	//Debug模式
-	Debug bool
-	//输出日志文件
-	WriteLog bool
-	//控制台日志打印开关
-	OutPut bool
 	//登录参数，不可缺省
 	LoginInfo LoginInfo
 	Client    *http.Client
