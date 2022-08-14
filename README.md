@@ -14,7 +14,7 @@
 
 **\*运行程序不需要golang环境**
 
-建议安装使用最新版golang
+请安装最新版golang
 
 直接编译本系统可执行程序：
 
@@ -118,10 +118,7 @@ func main() {
 	//具体用法请查看struct注释
 	if e:=BitSrun.Login(&srunTransfer.Login{
 		Https:      false,
-		OutPut:    false,
-		Debug:  false,
-		WriteLog: false,
-		Transport: nil,
+		Client: nil,
 		LoginInfo: srunTransfer.LoginInfo{
 			Form: &srunTransfer.LoginForm{
 				Domain:   "",
