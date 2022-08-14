@@ -100,6 +100,16 @@ Config.json说明：
 
 运营商类型在原网页会被自动附加在账号后，请把`@`后面的部分填入`user_type`，没有则留空（删掉默认的）
 
+## :anchor: Docker / Kubernetes
+
+镜像：`mmx233/bitsrunlogin-go:latest`
+
+配置文件挂载至 `/data/Config.yaml`，若需更改配置文件类型，可以使用 --entrypoint 覆写启动参数
+
+```shell
+docker run path_to_config:/data/Config.yaml mmx233/bitsrunlogin-go:latest
+```
+
 ## :jigsaw: 作为module使用
 
 **\*本项目使用了AGPL V3 License，请酌情引用**
