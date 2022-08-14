@@ -4,8 +4,8 @@ on:
   push:
     tags:
       - v**
-    tags-ignore:
-      - '**beta**'
+      - '!**beta**'
+
 jobs:
   Deploy:
     runs-on: ubuntu-latest
