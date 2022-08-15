@@ -31,7 +31,7 @@ func readConfig() error {
 			Timeout: 5,
 		},
 		Daemon: srunModels.Daemon{
-			Path: ".autoLogin",
+			Path: ".BitSrun",
 		},
 		Guardian: srunModels.Guardian{
 			Duration: 300,
