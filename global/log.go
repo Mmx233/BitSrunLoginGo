@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"time"
 )
 
 func initLog() {
@@ -21,7 +22,7 @@ func initLog() {
 				log.Fatalln(e)
 			}
 
-			f, e := os.OpenFile(Config.Settings.Debug.LogPath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 700)
+			f, e := os.OpenFile(Config.Settings.Debug.LogPath+time.Now().Format("2006.01.02-15.04.05")+".log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 700)
 			if e != nil {
 				log.Fatalln(e)
 			}
