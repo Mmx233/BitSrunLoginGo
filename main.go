@@ -15,7 +15,6 @@ func main() {
 		//进入守护模式流程
 		controllers.EnterGuardian()
 	} else {
-		//单次登录模式
 		if global.Config.Settings.Basic.Interfaces == "" { //单网卡
 			if err := controllers.Login(nil); err != nil {
 				log.Fatalln("运行出错，状态异常: ", err)

@@ -5,6 +5,7 @@ import "net/http"
 type LoginForm struct {
 	Domain   string `json:"domain"`
 	UserName string `json:"username"`
+	//运营商类型
 	UserType string `json:"user_type"`
 	PassWord string `json:"password"`
 }
@@ -22,7 +23,7 @@ type LoginInfo struct {
 }
 
 type Login struct {
-	//调用API时直接访问https URL
+	//调用 API 时直接访问 https URL
 	Https bool
 	//登录参数，不可缺省
 	LoginInfo LoginInfo

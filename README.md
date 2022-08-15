@@ -133,7 +133,7 @@ import (
 func main() {
 	//具体用法请查看struct注释
 	if e:=BitSrun.Login(&srunTransfer.Login{
-		Https:      false,
+		Https:  false,
 		Client: nil,
 		LoginInfo: srunTransfer.LoginInfo{
 			Form: &srunTransfer.LoginForm{
