@@ -36,8 +36,8 @@ func readConfig() {
 		Guardian: srunModels.Guardian{
 			Duration: 300,
 		},
-		Debug: srunModels.Debug{
-			LogPath: "./",
+		Log: srunModels.Log{
+			FilePath: "./",
 		},
 	})
 

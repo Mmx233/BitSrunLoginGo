@@ -19,17 +19,18 @@ type Basic struct {
 	Interfaces     string `json:"interfaces" yaml:"interfaces" mapstructure:"interfaces"`
 }
 
+type Log struct {
+	DebugLevel bool   `json:"debug_level" yaml:"debug_level" mapstructure:"debug_level"`
+	WriteFile  bool   `json:"write_file" yaml:"write_file" mapstructure:"write_file"`
+	FilePath   string `json:"log_path" yaml:"log_path" mapstructure:"log_path"`
+	FileName   string `json:"log_name" yaml:"log_name" mapstructure:"log_name"`
+}
+
 type Settings struct {
 	Basic    Basic    `json:"basic" yaml:"basic" mapstructure:"basic"`
 	Guardian Guardian `json:"guardian" yaml:"guardian" mapstructure:"guardian"`
 	Daemon   Daemon   `json:"daemon" yaml:"daemon" mapstructure:"daemon"`
-	Debug    Debug    `json:"debug" yaml:"debug" mapstructure:"debug"`
-}
-
-type Debug struct {
-	Enable   bool   `json:"enable" yaml:"enable" mapstructure:"enable"`
-	WriteLog bool   `json:"write_log" yaml:"write_log" mapstructure:"write_log"`
-	LogPath  string `json:"log_path" yaml:"log_path" mapstructure:"log_path"`
+	Log      Log
 }
 
 type Config struct {
