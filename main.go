@@ -15,8 +15,10 @@ func main() {
 		//进入守护模式流程
 		controllers.EnterGuardian()
 	} else {
+		//登录流程
+		var err error
 		if global.Config.Settings.Basic.Interfaces == "" { //单网卡
-			if err := controllers.Login(nil); err != nil {
+			if err = controllers.Login(nil); err != nil {
 				log.Fatalln("运行出错，状态异常: ", err)
 			}
 		} else { //多网卡
@@ -24,7 +26,7 @@ func main() {
 			interfaces, _ := util.GetInterfaceAddr()
 			for _, eth := range interfaces {
 				log.Infoln("网卡: ", eth.Name)
-				if err := controllers.Login(eth.Addr); err != nil {
+				if err = controllers.Login(eth.Addr); err != nil {
 					log.Errorln("运行出错，状态异常: ", err)
 				}
 			}
