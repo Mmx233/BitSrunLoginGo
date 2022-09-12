@@ -10,41 +10,9 @@
 
 > 对 OpenWrt 更加友好的 ipk 编译版： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx233/BitSrunLoginGo_Openwrt) ，该版本压缩了 binary 文件，节省闪存空间
 
-## :hammer_and_wrench:构建
-
-**\*运行程序不需要 golang 环境**
-
-请安装最新版 golang
-
-直接编译本系统可执行程序：
-
-```shell
-go build -ldflags "-s -w -extldflags '-static'"
-```
-
-交叉编译（Linux）：
-
-```shell
-export GOGGC=0
-export GOOS=windows #系统
-export GOARCH=amd64 #架构
-go build -ldflags "-s -w -extldflags '-static'"
-```
-
-交叉编译（Powershell）：
-
-```shell
-$env:GOGGC=0
-$env:GOOS='linux' #系统
-$env:GOARCH='amd64' #架构
-go build -ldflags "-s -w -extldflags '-static'"
-```
-
-golang 支持的系统与架构请自行查询
-
 ## :gear:运行
 
-编译结果为可执行文件，直接启动即可
+编译结果为可执行文件，下载 release 或编译后直接启动即可
 
 可以通过添加启动参数 `--config` 指定配置文件路径，默认为当前目录的 `Config.yaml`
 
@@ -115,6 +83,36 @@ git clone https://github.com/Mmx233/BitSrunLoginGo.git
 cd BitSrunLoginGo
 docker build . --file Dockerfile --tag mmx233/bitsrunlogin-go:latest
 ```
+
+## :hammer_and_wrench:构建
+
+请安装最新版 golang
+
+直接编译本系统可执行程序：
+
+```shell
+go build -ldflags "-s -w -extldflags '-static'"
+```
+
+交叉编译（Linux）：
+
+```shell
+export GOGGC=0
+export GOOS=windows #系统
+export GOARCH=amd64 #架构
+go build -ldflags "-s -w -extldflags '-static'"
+```
+
+交叉编译（Powershell）：
+
+```shell
+$env:GOGGC=0
+$env:GOOS='linux' #系统
+$env:GOARCH='amd64' #架构
+go build -ldflags "-s -w -extldflags '-static'"
+```
+
+golang 支持的系统与架构请自行查询
 
 ## :jigsaw: 作为 module 使用
 
