@@ -71,7 +71,7 @@ settings:
 配置文件挂载至 `/data/Config.yaml`，若需更改配置文件类型，可以使用 --entrypoint 覆写启动参数
 
 ```shell
-docker run path_to_config:/data/Config.yaml mmx233/bitsrunlogin-go:latest
+docker run -v path_to_config:/data/Config.yaml mmx233/bitsrunlogin-go:latest
 ```
 
 自行构建：
