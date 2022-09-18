@@ -42,7 +42,15 @@ func GetInterfaceAddr() ([]srunModels.Eth, error) {
 					break
 				}
 			}
+		} else {
+			log.Debugf("网卡 %s 不匹配", eth.Name)
 		}
+	}
+
+	log.Debugln("有效匹配网卡：", result)
+
+	if len(result) == 0 {
+		log.Warnln("没有扫描到有效匹配网卡")
 	}
 
 	return result, nil
