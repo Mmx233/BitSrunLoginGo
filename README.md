@@ -91,7 +91,15 @@ docker build . --file Dockerfile --tag mmx233/bitsrunlogin-go:latest
 直接编译本系统可执行程序：
 
 ```shell
-go build -ldflags "-s -w -extldflags '-static'"
+git clone https://github.com/Mmx233/BitSrunLoginGo.git
+cd BitSrunLoginGo
+go build
+```
+
+或者使用经过优化的构建命令：
+
+```shell
+go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'"
 ```
 
 交叉编译（Linux）：
@@ -100,7 +108,7 @@ go build -ldflags "-s -w -extldflags '-static'"
 export GOGGC=0
 export GOOS=windows #系统
 export GOARCH=amd64 #架构
-go build -ldflags "-s -w -extldflags '-static'"
+go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'"
 ```
 
 交叉编译（Powershell）：
@@ -109,7 +117,7 @@ go build -ldflags "-s -w -extldflags '-static'"
 $env:GOGGC=0
 $env:GOOS='linux' #系统
 $env:GOARCH='amd64' #架构
-go build -ldflags "-s -w -extldflags '-static'"
+go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'"
 ```
 
 golang 支持的系统与架构请自行查询
