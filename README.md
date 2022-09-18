@@ -8,7 +8,7 @@
 
 > 主要登录逻辑来自： https://github.com/coffeehat/BIT-srun-login-script
 
-> 对 OpenWrt 更加友好的 ipk 编译版： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx233/BitSrunLoginGo_Openwrt) ，该版本压缩了 binary 文件，节省闪存空间
+OpenWrt 特供插件： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx233/BitSrunLoginGo_Openwrt) ，压缩了 binary 文件，节省闪存空间
 
 ## :gear:运行
 
@@ -49,11 +49,11 @@ settings:
   daemon: #后台挂起（不建议 windows 使用，windows 请使用系统计划任务）
     enable: false
     path: .BitSrun #守护监听文件路径，用于确保只有单守护运行
-  debug: #debug模式，将打印更多日志
-    enable: false 
-    write_log: false #写日志文件
-    log_path: ./ #日志文件存放目录路径
-
+  log:
+      debug_level: true #打印调试日志
+      write_file: false #写日志文件
+      log_path: ./ #日志文件存放目录路径
+      log_name: "" #指定日志文件名
 ```
 
 登录参数从原网页登陆时对 `/srun_portal` 的请求抓取，抓取时请把浏览器控制台的 `preserve log`（保留日志）启用。
