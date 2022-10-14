@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/BitSrunLoginGo/util"
 	srunTransfer "github.com/Mmx233/BitSrunLoginGo/v1/transfer"
 	log "github.com/sirupsen/logrus"
@@ -11,6 +12,7 @@ import (
 
 func Login(c *srunTransfer.Login) error {
 	G := util.GenerateLoginInfo(c.LoginInfo.Form, c.LoginInfo.Meta)
+	slientMode := global.Config.Settings.Log.SlientMode
 	api := SrunApi{
 		BaseUrl: func() string {
 			url := "http"
@@ -25,14 +27,18 @@ func Login(c *srunTransfer.Login) error {
 	var ok bool
 
 	{
-		log.Infoln("正在检查登录状态")
+		if !slientMode {
+			log.Infoln("正在检查登录状态")
+		}
 		res, e := api.GetUserInfo()
 		if e != nil {
 			return e
 		}
 		err := res["error"].(string)
 		if err == "ok" {
-			log.Infoln("用户已登录~")
+			if !slientMode {
+				log.Infoln("用户已登录~")
+			}
 			return nil
 		}
 		log.Infoln("用户似乎未登录，开始尝试登录")

@@ -1,6 +1,6 @@
 package srunModels
 
-import "github.com/Mmx233/BitSrunLoginGo/v1/transfer"
+import srunTransfer "github.com/Mmx233/BitSrunLoginGo/v1/transfer"
 
 type Daemon struct {
 	Enable bool   `json:"enable" yaml:"enable" mapstructure:"enable"`
@@ -21,6 +21,7 @@ type Basic struct {
 
 type Log struct {
 	DebugLevel bool   `json:"debug_level" yaml:"debug_level" mapstructure:"debug_level"`
+	SlientMode bool   `json:"slient_mode" yaml:"slient_mode" mapstructure:"slient_mode"`
 	WriteFile  bool   `json:"write_file" yaml:"write_file" mapstructure:"write_file"`
 	FilePath   string `json:"log_path" yaml:"log_path" mapstructure:"log_path"`
 	FileName   string `json:"log_name" yaml:"log_name" mapstructure:"log_name"`
