@@ -40,7 +40,7 @@ func initLog() {
 		log.SetFormatter(&nested.Formatter{
 			HideKeys:        true,
 			NoColors:        true,
-			TimestampFormat: "[2006-01-02 15:04:05]",
+			TimestampFormat: "2006-01-02 15:04:05",
 		})
 	}
 }
