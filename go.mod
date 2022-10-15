@@ -4,13 +4,13 @@ go 1.19
 
 require (
 	github.com/Mmx233/tool v0.6.5
+	github.com/antonfisher/nested-logrus-formatter v1.3.1
 	github.com/howeyc/fsnotify v0.9.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.13.0
 )
 
 require (
-	github.com/antonfisher/nested-logrus-formatter v1.3.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
