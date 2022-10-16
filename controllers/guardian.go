@@ -37,7 +37,9 @@ func Guardian() {
 				interfaces, e := util.GetInterfaceAddr()
 				if e == nil {
 					for _, eth := range interfaces {
-						log.Infoln(eth.Name)
+						if !global.Config.Settings.Log.SlientMode {
+							log.Infoln("登录使用的网口: " + eth.Name)
+						}
 						e = Login(eth.Addr)
 						if e != nil {
 							log.Errorln("网口 ", eth.Name+" 登录失败: ", e)
