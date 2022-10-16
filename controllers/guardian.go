@@ -31,7 +31,7 @@ func Guardian() {
 			if global.Config.Settings.Basic.Interfaces == "" { //单网卡
 				e := Login(nil)
 				if e != nil {
-					log.Errorln("登陆失败: ", e)
+					log.Errorln("错误: ", e)
 				}
 			} else { //多网卡
 				interfaces, e := util.GetInterfaceAddr()

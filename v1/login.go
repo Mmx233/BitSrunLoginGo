@@ -2,7 +2,6 @@ package BitSrun
 
 import (
 	"encoding/json"
-	"errors"
 
 	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/BitSrunLoginGo/util"
@@ -119,9 +118,11 @@ func Login(c *srunTransfer.Login) error {
 		}
 		G.LoginResult = result.(string)
 
-		log.Infoln("登录结果: " + G.LoginResult)
-		if G.LoginResult != "ok" {
-			return errors.New(G.LoginResult)
+		if G.LoginResult == "ok" {
+			log.Infoln("已成功登录~")
+		} else {
+			log.Errorln("登陆失败: ", e)
+			return nil
 		}
 	}
 
