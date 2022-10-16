@@ -121,7 +121,7 @@ func Login(c *srunTransfer.Login) error {
 		if G.LoginResult == "ok" {
 			log.Infoln("已成功登录~")
 		} else {
-			log.Errorln("登陆失败: ", e)
+			log.Errorln("登陆失败: ", G.LoginResult)
 			return nil
 		}
 	}
