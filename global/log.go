@@ -39,7 +39,7 @@ func initLog() {
 		log.SetOutput(mw)
 		log.SetFormatter(&nested.Formatter{
 			HideKeys:        true,
-			NoColors:        true,
+			NoColors:        Config.Settings.Log.WriteFile,
 			TimestampFormat: "2006-01-02 15:04:05",
 		})
 	}
