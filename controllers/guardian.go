@@ -62,7 +62,7 @@ func EnterGuardian() {
 		if err := exec.Command(os.Args[0], append(os.Args[1:], "--running-daemon")...).Start(); err != nil {
 			log.Fatalln("启动守护失败: ", err)
 		}
-		log.Infoln("[进入后台进程模式")
+		log.Infoln("[进入后台进程模式]")
 		return
 	}
 	Guardian()
