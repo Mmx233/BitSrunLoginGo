@@ -25,7 +25,7 @@ func main() {
 			log.Debugln("多网卡模式")
 			interfaces, _ := util.GetInterfaceAddr()
 			for _, eth := range interfaces {
-				log.Infoln("网卡: ", eth.Name)
+				log.Debugln("使用网卡: ", eth.Name)
 				if err = controllers.Login(eth.Addr); err != nil {
 					log.Errorln("运行出错，状态异常: ", err)
 				}
