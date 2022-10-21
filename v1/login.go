@@ -92,7 +92,7 @@ func Login(c *Conf) error {
 	}
 	G.LoginResult = result.(string)
 
-	if G.LoginResult == "ok" {
+	if G.LoginResult != "ok" {
 		return errors.New(G.LoginResult)
 	}
 
