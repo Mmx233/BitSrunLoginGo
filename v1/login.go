@@ -25,6 +25,7 @@ func Login(c *srunTransfer.Login) error {
 
 	{
 		log.Debugln("正在检查登录状态")
+
 		res, e := api.GetUserInfo()
 		if e != nil {
 			return e
@@ -36,21 +37,25 @@ func Login(c *srunTransfer.Login) error {
 		}
 		log.Infoln("检测到用户未登录，开始尝试登录...")
 
-		log.Debugln("正在获取客户端 IP")
-		var ip interface{}
-		ip, ok = res["client_ip"]
-		if !ok {
-			ip, ok = res["online_ip"]
+		{
+			log.Debugln("正在获取客户端 IP")
+
+			var ip interface{}
+			ip, ok = res["client_ip"]
 			if !ok {
-				return ErrResultCannotFound
+				ip, ok = res["online_ip"]
+				if !ok {
+					return ErrResultCannotFound
+				}
 			}
+			G.Ip = ip.(string)
+			log.Debugln("ip: ", G.Ip)
 		}
-		G.Ip = ip.(string)
-		log.Debugln("ip: ", G.Ip)
 	}
 
-	log.Debugln("正在获取 Token")
 	{
+		log.Debugln("正在获取 Token")
+
 		res, e := api.GetChallenge(G.Form.UserName, G.Ip)
 		if e != nil {
 			return e
@@ -64,8 +69,9 @@ func Login(c *srunTransfer.Login) error {
 		log.Debugln("token: ", G.Token)
 	}
 
-	log.Debugln("发送登录请求")
 	{
+		log.Debugln("发送登录请求")
+
 		info, e := json.Marshal(map[string]string{
 			"username": G.Form.UserName,
 			"password": G.Form.PassWord,
