@@ -31,7 +31,7 @@ func Login(c *srunTransfer.Login) error {
 		}
 		err := res["error"].(string)
 		if err == "ok" {
-			log.Debugln("用户已登录~")
+			log.Debugln("已登录~")
 			return nil
 		}
 		log.Infoln("检测到用户未登录，开始尝试登录...")
@@ -109,7 +109,7 @@ func Login(c *srunTransfer.Login) error {
 		if G.LoginResult == "ok" {
 			log.Infoln("已成功登录~")
 		} else {
-			log.Errorln("登陆失败: ", G.LoginResult)
+			log.Errorf("登陆失败: %s\n请开启日志 debug_level 获取更多信息", G.LoginResult)
 			return nil
 		}
 	}
