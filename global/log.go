@@ -37,6 +37,8 @@ func initLog() {
 		//设置双重输出
 		mw := io.MultiWriter(os.Stdout, f)
 		log.SetOutput(mw)
+
+		//设置输出格式
 		log.SetFormatter(&nested.Formatter{
 			HideKeys:        true,
 			NoColors:        Config.Settings.Log.WriteFile,
