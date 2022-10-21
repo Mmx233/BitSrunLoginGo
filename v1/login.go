@@ -3,13 +3,12 @@ package BitSrun
 import (
 	"encoding/json"
 	"errors"
-	"github.com/Mmx233/BitSrunLoginGo/util"
 	log "github.com/sirupsen/logrus"
 )
 
 func Login(c *Conf) error {
 	c.initApi()
-	G := util.GenerateLoginInfo(c.LoginInfo.Form, c.LoginInfo.Meta)
+	G := GenerateLoginInfo(c.LoginInfo.Form, c.LoginInfo.Meta)
 
 	log.Debugln("正在检查登录状态")
 
@@ -63,15 +62,15 @@ func Login(c *Conf) error {
 	if e != nil {
 		return e
 	}
-	G.EncryptedInfo = "{SRBX1}" + util.Base64(util.XEncode(string(info), G.Token))
-	G.Md5 = util.Md5(G.Token)
+	G.EncryptedInfo = "{SRBX1}" + Base64(XEncode(string(info), G.Token))
+	G.Md5 = Md5(G.Token)
 	G.EncryptedMd5 = "{MD5}" + G.Md5
 
 	var chkstr = G.Token + G.Form.UserName + G.Token + G.Md5
 	chkstr += G.Token + G.Meta.Acid + G.Token + G.Ip
 	chkstr += G.Token + G.Meta.N + G.Token + G.Meta.Type
 	chkstr += G.Token + G.EncryptedInfo
-	G.EncryptedChkstr = util.Sha1(chkstr)
+	G.EncryptedChkstr = Sha1(chkstr)
 
 	res, e = c.api.Login(
 		G.Form.UserName,

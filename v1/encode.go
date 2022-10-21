@@ -1,4 +1,4 @@
-package util
+package BitSrun
 
 import (
 	"crypto/md5"

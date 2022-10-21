@@ -38,3 +38,16 @@ type Conf struct {
 func (a *Conf) initApi() {
 	a.api.Init(a.Https, a.LoginInfo.Form.Domain, a.Client)
 }
+
+type LoginContext struct {
+	Ip              string
+	Token           string
+	EncryptedInfo   string
+	Md5             string
+	EncryptedMd5    string
+	EncryptedChkstr string
+	LoginResult     string
+
+	Form *LoginForm
+	Meta *LoginMeta
+}
