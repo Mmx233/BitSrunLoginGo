@@ -137,7 +137,7 @@ import (
 
 func main() {
 	//具体用法请查看struct注释
-	if e:=BitSrun.Login(&BitSrun.Conf{
+	conf:=&BitSrun.Conf{
 		Https:  false,
 		Client: nil,
 		LoginInfo: BitSrun.LoginInfo{
@@ -154,8 +154,18 @@ func main() {
 				Enc:  "",
 			},
 		},
-	});e!=nil {
-		panic(e)
+	}
+
+    online, clientIP, e := BitSrun.LoginStatus(conf)
+    if e!=nil {
+        panic(e)
+    }
+	
+    if !online {
+        e=BitSrun.DoLogin(clientIP, conf)
+        if e!=nil {
+            panic(e)
+        }	
     }
 }
 ```
