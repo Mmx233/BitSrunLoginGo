@@ -9,7 +9,7 @@ import (
 
 // Login 登录逻辑
 func Login(localAddr net.Addr) error {
-	return BitSrun.Login(&BitSrun.LoginConf{
+	return BitSrun.Login(&BitSrun.Conf{
 		Https: global.Config.Settings.Basic.Https,
 		LoginInfo: BitSrun.LoginInfo{
 			Form: &global.Config.Form,

@@ -25,7 +25,7 @@ type LoginInfo struct {
 	Meta *LoginMeta
 }
 
-type LoginConf struct {
+type Conf struct {
 	//调用 API 时直接访问 https URL
 	Https bool
 	//登录参数，不可缺省
@@ -35,6 +35,6 @@ type LoginConf struct {
 	api srun.Api
 }
 
-func (a *LoginConf) initApi() {
+func (a *Conf) initApi() {
 	a.api.Init(a.Https, a.LoginInfo.Form.Domain, a.Client)
 }
