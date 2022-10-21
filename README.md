@@ -22,7 +22,7 @@ OpenWrt 特供插件： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx23
 ./autoLogin --config=/demo/i.json
 ```
 
-首次运行将自动生成配置文件
+首次运行将自动生成配置文件，首次使用建议开启调试日志（`settings.log.debug_level`）
 
 Config.yaml 说明：
 
@@ -50,7 +50,7 @@ settings:
     enable: false
     path: .BitSrun #守护监听文件路径，用于确保只有单守护运行
   log:
-      debug_level: true #打印调试日志
+      debug_level: false #打印调试日志
       write_file: false #写日志文件
       log_path: ./ #日志文件存放目录路径
       log_name: "" #指定日志文件名
@@ -133,22 +133,21 @@ package main
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/v1"
-	"github.com/Mmx233/BitSrunLoginGo/v1/transfer"
 )
 
 func main() {
 	//具体用法请查看struct注释
-	if e:=BitSrun.Login(&srunTransfer.Login{
+	if e:=BitSrun.Login(&BitSrun.Conf{
 		Https:  false,
 		Client: nil,
-		LoginInfo: srunTransfer.LoginInfo{
-			Form: &srunTransfer.LoginForm{
+		LoginInfo: BitSrun.LoginInfo{
+			Form: &BitSrun.LoginForm{
 				Domain:   "",
 				UserName: "",
 				UserType: "",
 				PassWord: "",
 			},
-			Meta: &srunTransfer.LoginMeta{
+			Meta: &BitSrun.LoginMeta{
 				N:    "",
 				Type: "",
 				Acid: "",
