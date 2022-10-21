@@ -32,7 +32,7 @@ func main() {
 			for _, eth := range interfaces {
 				log.Infoln("使用网卡: ", eth.Name)
 				if err = controllers.Login(eth.Addr, false); err != nil {
-					log.Errorln("登录出错: ", err)
+					log.Errorf("网卡 %s 登录出错: %v", eth.Name, err)
 				}
 			}
 		}

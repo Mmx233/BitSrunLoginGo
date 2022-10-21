@@ -40,8 +40,14 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 
 		return nil
 	} else {
-		output("检测到用户未登录，开始尝试登录...")
+		log.Infoln("检测到用户未登录，开始尝试登录...")
 
-		return BitSrun.DoLogin(ip, conf)
+		if e = BitSrun.DoLogin(ip, conf); e != nil {
+			return e
+		}
+
+		log.Infoln("登录成功~")
 	}
+
+	return nil
 }
