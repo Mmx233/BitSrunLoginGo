@@ -29,7 +29,7 @@ func Guardian() {
 				_ = recover()
 			}()
 			if global.Config.Settings.Basic.Interfaces == "" { //单网卡
-				e := Login(nil)
+				e := Login(nil, true)
 				if e != nil {
 					log.Errorln("登录出错: ", e)
 				}
@@ -38,7 +38,7 @@ func Guardian() {
 				if e == nil {
 					for _, eth := range interfaces {
 						log.Debugf("使用 %s 网口登录 ", eth.Name)
-						e = Login(eth.Addr)
+						e = Login(eth.Addr, true)
 						if e != nil {
 							log.Errorln("网口 ", eth.Name+" 登录出错: ", e)
 						}

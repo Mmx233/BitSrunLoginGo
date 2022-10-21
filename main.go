@@ -19,7 +19,7 @@ func main() {
 		//登录流程
 		var err error
 		if global.Config.Settings.Basic.Interfaces == "" { //单网卡
-			if err = controllers.Login(nil); err != nil {
+			if err = controllers.Login(nil, false); err != nil {
 				log.Errorln("登录出错: ", err)
 				if !global.Config.Settings.Log.DebugLevel {
 					fmt.Printf("开启调试日志（debug_level）获取详细信息")
@@ -27,11 +27,11 @@ func main() {
 				return
 			}
 		} else { //多网卡
-			log.Debugln("多网卡模式")
+			log.Infoln("多网卡模式")
 			interfaces, _ := util.GetInterfaceAddr()
 			for _, eth := range interfaces {
-				log.Debugln("使用网卡: ", eth.Name)
-				if err = controllers.Login(eth.Addr); err != nil {
+				log.Infoln("使用网卡: ", eth.Name)
+				if err = controllers.Login(eth.Addr, false); err != nil {
 					log.Errorln("登录出错: ", err)
 				}
 			}
