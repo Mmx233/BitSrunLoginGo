@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/Mmx233/BitSrunLoginGo/controllers"
 	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/BitSrunLoginGo/util"
@@ -19,7 +20,11 @@ func main() {
 		var err error
 		if global.Config.Settings.Basic.Interfaces == "" { //单网卡
 			if err = controllers.Login(nil); err != nil {
-				log.Fatalln("运行出错，状态异常: ", err)
+				log.Errorln("登录出错: ", err)
+				if !global.Config.Settings.Log.DebugLevel {
+					fmt.Printf("开启调试日志（debug_level）获取详细信息")
+				}
+				return
 			}
 		} else { //多网卡
 			log.Debugln("多网卡模式")
@@ -27,7 +32,7 @@ func main() {
 			for _, eth := range interfaces {
 				log.Debugln("使用网卡: ", eth.Name)
 				if err = controllers.Login(eth.Addr); err != nil {
-					log.Errorln("运行出错，状态异常: ", err)
+					log.Errorln("登录出错: ", err)
 				}
 			}
 		}

@@ -31,16 +31,16 @@ func Guardian() {
 			if global.Config.Settings.Basic.Interfaces == "" { //单网卡
 				e := Login(nil)
 				if e != nil {
-					log.Errorln("错误: ", e)
+					log.Errorln("登录出错: ", e)
 				}
 			} else { //多网卡
 				interfaces, e := util.GetInterfaceAddr()
 				if e == nil {
 					for _, eth := range interfaces {
-						log.Debugln("登录使用的网口: " + eth.Name)
+						log.Debugf("使用 %s 网口登录 ", eth.Name)
 						e = Login(eth.Addr)
 						if e != nil {
-							log.Errorln("网口 ", eth.Name+" 登录失败: ", e)
+							log.Errorln("网口 ", eth.Name+" 登录出错: ", e)
 						}
 					}
 				}
