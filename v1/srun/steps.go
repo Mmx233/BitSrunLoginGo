@@ -1,4 +1,4 @@
-package BitSrun
+package srun
 
 import (
 	"encoding/json"
@@ -10,12 +10,29 @@ import (
 	"time"
 )
 
-type SrunApi struct {
+type Api struct {
+	inited  bool
 	BaseUrl string
 	Client  *http.Client
 }
 
-func (a *SrunApi) request(path string, query map[string]interface{}) (map[string]interface{}, error) {
+func (a *Api) Init(https bool, domain string, client *http.Client) {
+	if a.inited {
+		return
+	}
+
+	a.BaseUrl = "http"
+	if https {
+		a.BaseUrl += "s"
+	}
+	a.BaseUrl = a.BaseUrl + "://" + domain + "/"
+
+	a.Client = client
+
+	a.inited = true
+}
+
+func (a *Api) request(path string, query map[string]interface{}) (map[string]interface{}, error) {
 	log.Debugln("HTTP GET ", a.BaseUrl+path)
 	timestamp := fmt.Sprint(time.Now().UnixNano())
 	callback := "jQuery" + timestamp
@@ -41,11 +58,11 @@ func (a *SrunApi) request(path string, query map[string]interface{}) (map[string
 	return r, json.Unmarshal([]byte(res), &r)
 }
 
-func (a *SrunApi) GetUserInfo() (map[string]interface{}, error) {
+func (a *Api) GetUserInfo() (map[string]interface{}, error) {
 	return a.request("cgi-bin/rad_user_info", nil)
 }
 
-func (a *SrunApi) Login(
+func (a *Api) Login(
 	Username,
 	Password,
 	AcID,
@@ -73,7 +90,7 @@ func (a *SrunApi) Login(
 		})
 }
 
-func (a *SrunApi) GetChallenge(username, ip string) (map[string]interface{}, error) {
+func (a *Api) GetChallenge(username, ip string) (map[string]interface{}, error) {
 	return a.request(
 		"cgi-bin/get_challenge",
 		map[string]interface{}{

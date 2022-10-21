@@ -1,6 +1,8 @@
 package srunModels
 
-import "github.com/Mmx233/BitSrunLoginGo/v1/transfer"
+import (
+	"github.com/Mmx233/BitSrunLoginGo/v1"
+)
 
 type LoginInfo struct {
 	Ip              string
@@ -11,6 +13,6 @@ type LoginInfo struct {
 	EncryptedChkstr string
 	LoginResult     string
 
-	Form *srunTransfer.LoginForm
-	Meta *srunTransfer.LoginMeta
+	Form *BitSrun.LoginForm
+	Meta *BitSrun.LoginMeta
 }

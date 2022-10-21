@@ -2,7 +2,7 @@ package global
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/models"
-	"github.com/Mmx233/BitSrunLoginGo/v1/transfer"
+	"github.com/Mmx233/BitSrunLoginGo/v1"
 	"github.com/Mmx233/tool"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -16,11 +16,11 @@ var Timeout time.Duration
 
 func readConfig() {
 	//配置文件默认值
-	viper.SetDefault("form", srunTransfer.LoginForm{
+	viper.SetDefault("form", BitSrun.LoginForm{
 		Domain:   "www.msftconnecttest.com",
 		UserType: "cmcc",
 	})
-	viper.SetDefault("meta", srunTransfer.LoginMeta{
+	viper.SetDefault("meta", BitSrun.LoginMeta{
 		N:    "200",
 		Type: "1",
 		Acid: "5",

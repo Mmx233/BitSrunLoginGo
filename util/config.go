@@ -2,13 +2,13 @@ package util
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/models"
-	"github.com/Mmx233/BitSrunLoginGo/v1/transfer"
+	"github.com/Mmx233/BitSrunLoginGo/v1"
 )
 
-func GenerateLoginInfo(Form *srunTransfer.LoginForm, Meta *srunTransfer.LoginMeta) *srunModels.LoginInfo {
+func GenerateLoginInfo(Form *BitSrun.LoginForm, Meta *BitSrun.LoginMeta) *srunModels.LoginInfo {
 	return &srunModels.LoginInfo{
 		Meta: Meta,
-		Form: &srunTransfer.LoginForm{
+		Form: &BitSrun.LoginForm{
 			UserName: func() string {
 				if Form.UserType == "" {
 					return Form.UserName

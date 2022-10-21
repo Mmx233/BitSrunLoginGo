@@ -2,31 +2,20 @@ package BitSrun
 
 import (
 	"encoding/json"
-
 	"github.com/Mmx233/BitSrunLoginGo/util"
-	srunTransfer "github.com/Mmx233/BitSrunLoginGo/v1/transfer"
 	log "github.com/sirupsen/logrus"
 )
 
-func Login(c *srunTransfer.Login) error {
+func Login(c *LoginConf) error {
+	c.initApi()
 	G := util.GenerateLoginInfo(c.LoginInfo.Form, c.LoginInfo.Meta)
-	api := SrunApi{
-		BaseUrl: func() string {
-			url := "http"
-			if c.Https {
-				url += "s"
-			}
-			return url + "://" + c.LoginInfo.Form.Domain + "/"
-		}(),
-		Client: c.Client,
-	}
 
 	var ok bool
 
 	{
 		log.Debugln("正在检查登录状态")
 
-		res, e := api.GetUserInfo()
+		res, e := c.api.GetUserInfo()
 		if e != nil {
 			return e
 		}
@@ -56,7 +45,7 @@ func Login(c *srunTransfer.Login) error {
 	{
 		log.Debugln("正在获取 Token")
 
-		res, e := api.GetChallenge(G.Form.UserName, G.Ip)
+		res, e := c.api.GetChallenge(G.Form.UserName, G.Ip)
 		if e != nil {
 			return e
 		}
@@ -92,7 +81,7 @@ func Login(c *srunTransfer.Login) error {
 		chkstr += G.Token + G.EncryptedInfo
 		G.EncryptedChkstr = util.Sha1(chkstr)
 
-		res, e := api.Login(
+		res, e := c.api.Login(
 			G.Form.UserName,
 			G.EncryptedMd5,
 			G.Meta.Acid,

@@ -1,6 +1,9 @@
-package srunTransfer
+package BitSrun
 
-import "net/http"
+import (
+	"github.com/Mmx233/BitSrunLoginGo/v1/srun"
+	"net/http"
+)
 
 type LoginForm struct {
 	Domain   string `json:"domain"`
@@ -22,10 +25,16 @@ type LoginInfo struct {
 	Meta *LoginMeta
 }
 
-type Login struct {
+type LoginConf struct {
 	//调用 API 时直接访问 https URL
 	Https bool
 	//登录参数，不可缺省
 	LoginInfo LoginInfo
 	Client    *http.Client
+
+	api srun.Api
+}
+
+func (a *LoginConf) initApi() {
+	a.api.Init(a.Https, a.LoginInfo.Form.Domain, a.Client)
 }
