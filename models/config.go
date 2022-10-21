@@ -1,6 +1,6 @@
 package srunModels
 
-import "github.com/Mmx233/BitSrunLoginGo/v1/transfer"
+import srunTransfer "github.com/Mmx233/BitSrunLoginGo/v1/transfer"
 
 type Daemon struct {
 	Enable bool   `json:"enable" yaml:"enable" mapstructure:"enable"`

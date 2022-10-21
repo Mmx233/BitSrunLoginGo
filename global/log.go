@@ -1,11 +1,13 @@
 package global
 
 import (
-	log "github.com/sirupsen/logrus"
 	"io"
 	"os"
 	"strings"
 	"time"
+
+	nested "github.com/antonfisher/nested-logrus-formatter"
+	log "github.com/sirupsen/logrus"
 )
 
 func initLog() {
@@ -27,7 +29,7 @@ func initLog() {
 			Config.Settings.Log.FileName = time.Now().Format("2006.01.02-15.04.05") + ".log"
 		}
 
-		f, e := os.OpenFile(Config.Settings.Log.FilePath+Config.Settings.Log.FileName, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 700)
+		f, e := os.OpenFile(Config.Settings.Log.FilePath+Config.Settings.Log.FileName, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 		if e != nil {
 			log.Fatalln(e)
 		}
@@ -35,5 +37,10 @@ func initLog() {
 		//设置双重输出
 		mw := io.MultiWriter(os.Stdout, f)
 		log.SetOutput(mw)
+		log.SetFormatter(&nested.Formatter{
+			HideKeys:        true,
+			NoColors:        Config.Settings.Log.WriteFile,
+			TimestampFormat: "2006-01-02 15:04:05",
+		})
 	}
 }

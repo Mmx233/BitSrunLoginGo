@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"github.com/Mmx233/BitSrunLoginGo/global"
-	"github.com/Mmx233/BitSrunLoginGo/util"
-	log "github.com/sirupsen/logrus"
 	"os"
 	"os/exec"
 	"time"
+
+	"github.com/Mmx233/BitSrunLoginGo/global"
+	"github.com/Mmx233/BitSrunLoginGo/util"
+	log "github.com/sirupsen/logrus"
 )
 
 // Guardian 守护模式逻辑
@@ -30,13 +31,13 @@ func Guardian() {
 			if global.Config.Settings.Basic.Interfaces == "" { //单网卡
 				e := Login(nil)
 				if e != nil {
-					log.Errorln("登陆失败: ", e)
+					log.Errorln("错误: ", e)
 				}
 			} else { //多网卡
 				interfaces, e := util.GetInterfaceAddr()
 				if e == nil {
 					for _, eth := range interfaces {
-						log.Infoln(eth.Name)
+						log.Debugln("登录使用的网口: " + eth.Name)
 						e = Login(eth.Addr)
 						if e != nil {
 							log.Errorln("网口 ", eth.Name+" 登录失败: ", e)
@@ -54,12 +55,12 @@ func Guardian() {
 
 // EnterGuardian 守护模式入口，控制是否进入daemon
 func EnterGuardian() {
-	log.Infoln("[Guardian mode]")
+	log.Infoln("[以守护模式启动]")
 	if global.Config.Settings.Daemon.Enable || global.Flags.Daemon {
 		if err := exec.Command(os.Args[0], append(os.Args[1:], "--running-daemon")...).Start(); err != nil {
 			log.Fatalln("启动守护失败: ", err)
 		}
-		log.Infoln("[Daemon mode entered]")
+		log.Infoln("[进入后台进程模式]")
 		return
 	}
 	Guardian()

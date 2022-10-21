@@ -2,9 +2,9 @@ package BitSrun
 
 import (
 	"encoding/json"
-	"errors"
+
 	"github.com/Mmx233/BitSrunLoginGo/util"
-	"github.com/Mmx233/BitSrunLoginGo/v1/transfer"
+	srunTransfer "github.com/Mmx233/BitSrunLoginGo/v1/transfer"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -24,18 +24,19 @@ func Login(c *srunTransfer.Login) error {
 	var ok bool
 
 	{
-		log.Infoln("Step.0: 正在检查状态")
+		log.Debugln("正在检查登录状态")
 		res, e := api.GetUserInfo()
 		if e != nil {
 			return e
 		}
 		err := res["error"].(string)
 		if err == "ok" {
-			log.Infoln("--已登录--")
+			log.Debugln("用户已登录~")
 			return nil
 		}
+		log.Infoln("检测到用户未登录，开始尝试登录...")
 
-		log.Infoln("Step.1: 正在获取客户端ip")
+		log.Debugln("正在获取客户端 IP")
 		var ip interface{}
 		ip, ok = res["client_ip"]
 		if !ok {
@@ -48,7 +49,7 @@ func Login(c *srunTransfer.Login) error {
 		log.Debugln("ip: ", G.Ip)
 	}
 
-	log.Infoln("Step.2: 正在获取token")
+	log.Debugln("正在获取 Token")
 	{
 		res, e := api.GetChallenge(G.Form.UserName, G.Ip)
 		if e != nil {
@@ -63,7 +64,7 @@ func Login(c *srunTransfer.Login) error {
 		log.Debugln("token: ", G.Token)
 	}
 
-	log.Infoln("Step.3: 执行登录…")
+	log.Debugln("发送登录请求")
 	{
 		info, e := json.Marshal(map[string]string{
 			"username": G.Form.UserName,
@@ -105,9 +106,11 @@ func Login(c *srunTransfer.Login) error {
 		}
 		G.LoginResult = result.(string)
 
-		log.Infoln("登录结果: " + G.LoginResult)
-		if G.LoginResult != "ok" {
-			return errors.New(G.LoginResult)
+		if G.LoginResult == "ok" {
+			log.Infoln("已成功登录~")
+		} else {
+			log.Errorln("登陆失败: ", G.LoginResult)
+			return nil
 		}
 	}
 
