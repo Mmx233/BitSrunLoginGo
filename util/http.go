@@ -3,40 +3,55 @@ package util
 import (
 	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/tool"
+	"github.com/corpix/uarand"
 	"net"
+	"net/http"
 )
 
-var HttpTool *tool.Http
+type Http struct {
+	Client *http.Client
+	Header http.Header
+}
 
-var httpTools map[net.Addr]*tool.Http
+var HttpPack *Http
+
+var httpTools map[net.Addr]*Http
 
 func init() {
 	if global.Config.Settings.Basic.Interfaces == "" {
-		HttpTool = genHttpTool(nil)
+		HttpPack = genHttpPack(nil)
 	} else {
-		httpTools = make(map[net.Addr]*tool.Http, 0)
+		httpTools = make(map[net.Addr]*Http, 0)
 	}
 }
 
-func HttpTools(addr net.Addr) *tool.Http {
-	if HttpTool != nil {
-		return HttpTool
+func HttpPackSelect(addr net.Addr) *Http {
+	if HttpPack != nil {
+		return HttpPack
 	}
 	if addrHttp, ok := httpTools[addr]; ok {
 		return addrHttp
 	} else {
-		httpTools[addr] = genHttpTool(addr)
+		addrHttp = genHttpPack(addr)
+		httpTools[addr] = addrHttp
 		return addrHttp
 	}
 }
 
-func genHttpTool(addr net.Addr) *tool.Http {
-	return tool.NewHttpTool(tool.GenHttpClient(&tool.HttpClientOptions{
-		Transport: tool.GenHttpTransport(&tool.HttpTransportOptions{
-			Timeout:           global.Timeout,
-			LocalAddr:         addr,
-			SkipSslCertVerify: global.Config.Settings.Basic.SkipCertVerify,
+func genHttpPack(addr net.Addr) *Http {
+	var header = make(http.Header, 2)
+	header.Add("User-Agent", uarand.GetRandom())
+	header.Set("X-Requested-With", "XMLHttpRequest")
+
+	return &Http{
+		Client: tool.GenHttpClient(&tool.HttpClientOptions{
+			Transport: tool.GenHttpTransport(&tool.HttpTransportOptions{
+				Timeout:           global.Timeout,
+				LocalAddr:         addr,
+				SkipSslCertVerify: global.Config.Settings.Basic.SkipCertVerify,
+			}),
+			Timeout: global.Timeout,
 		}),
-		Timeout: global.Timeout,
-	}))
+		Header: header,
+	}
 }

@@ -31,10 +31,11 @@ type Conf struct {
 	//登录参数，不可缺省
 	LoginInfo LoginInfo
 	Client    *http.Client
+	Header    http.Header
 
 	api srun.Api
 }
 
 func (a *Conf) initApi() {
-	a.api.Init(a.Https, a.LoginInfo.Form.Domain, a.Client)
+	a.api.Init(a.Https, a.LoginInfo.Form.Domain, a.Client, a.Header)
 }

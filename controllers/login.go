@@ -16,7 +16,8 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 			Form: &global.Config.Form,
 			Meta: &global.Config.Meta,
 		},
-		Client: util.HttpTools(localAddr).Client,
+		Client: util.HttpPackSelect(localAddr).Client,
+		Header: util.HttpPackSelect(localAddr).Header,
 	}
 
 	var output func(args ...interface{})
