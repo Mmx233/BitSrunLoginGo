@@ -33,6 +33,10 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 		return e
 	}
 
+	if localAddr != nil && global.Config.Settings.Basic.UseDhcpIP {
+		ip = localAddr.(*net.TCPAddr).IP.String()
+	}
+
 	log.Debugln("认证客户端 ip: ", ip)
 
 	if online {
