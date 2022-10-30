@@ -28,10 +28,10 @@ func HttpTools(addr net.Addr) *tool.Http {
 	if HttpTool != nil {
 		return HttpTool
 	}
-	if transport, ok := httpTools[addr]; ok {
-		return transport
+	if addrHttp, ok := httpTools[addr]; ok {
+		return addrHttp
 	} else {
-		transport = tool.NewHttpTool(tool.GenHttpClient(&tool.HttpClientOptions{
+		addrHttp = tool.NewHttpTool(tool.GenHttpClient(&tool.HttpClientOptions{
 			Transport: tool.GenHttpTransport(&tool.HttpTransportOptions{
 				Timeout:           global.Timeout,
 				LocalAddr:         addr,
@@ -39,7 +39,7 @@ func HttpTools(addr net.Addr) *tool.Http {
 			}),
 			Timeout: global.Timeout,
 		}))
-		httpTools[addr] = transport
-		return transport
+		httpTools[addr] = addrHttp
+		return addrHttp
 	}
 }

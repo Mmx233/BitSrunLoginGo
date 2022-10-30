@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/Mmx233/tool"
 	log "github.com/sirupsen/logrus"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -14,6 +15,7 @@ type Api struct {
 	inited  bool
 	BaseUrl string
 	Client  *http.Client
+	Header  http.Header
 }
 
 func (a *Api) Init(https bool, domain string, client *http.Client) {
@@ -41,7 +43,8 @@ func (a *Api) request(path string, query map[string]interface{}) (map[string]int
 	}
 	query["callback"] = callback
 	query["_"] = timestamp
-	_, res, e := tool.NewHttpTool(a.Client).GetString(&tool.DoHttpReq{
+	httpTool := tool.NewHttpTool(a.Client)
+	req, e := httpTool.GenReq("GET", &tool.DoHttpReq{
 		Url:   a.BaseUrl + path,
 		Query: query,
 	})
@@ -49,6 +52,24 @@ func (a *Api) request(path string, query map[string]interface{}) (map[string]int
 		log.Debugln(e)
 		return nil, e
 	}
+
+	for k, v := range a.Header {
+		req.Header[k] = v
+	}
+
+	resp, e := httpTool.Client.Do(req)
+	if e != nil {
+		log.Debugln(e)
+		return nil, e
+	}
+	defer resp.Body.Close()
+
+	data, e := io.ReadAll(resp.Body)
+	if e != nil {
+		log.Debugln(e)
+		return nil, e
+	}
+	res := string(data)
 
 	log.Debugln(res)
 	res = strings.TrimPrefix(res, callback+"(")

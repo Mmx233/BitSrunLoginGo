@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/Mmx233/tool v0.6.8
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
+	github.com/corpix/uarand v0.2.0
 	github.com/howeyc/fsnotify v0.9.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.13.0
