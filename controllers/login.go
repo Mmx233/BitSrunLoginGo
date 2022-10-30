@@ -17,7 +17,6 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 			Meta: &global.Config.Meta,
 		},
 		Client: util.HttpPackSelect(localAddr).Client,
-		Header: util.HttpPackSelect(localAddr).Header,
 	}
 
 	var output func(args ...interface{})

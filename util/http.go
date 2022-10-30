@@ -3,14 +3,12 @@ package util
 import (
 	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/tool"
-	"github.com/corpix/uarand"
 	"net"
 	"net/http"
 )
 
 type Http struct {
 	Client *http.Client
-	Header http.Header
 }
 
 var HttpPack *Http
@@ -39,10 +37,6 @@ func HttpPackSelect(addr net.Addr) *Http {
 }
 
 func genHttpPack(addr net.Addr) *Http {
-	var header = make(http.Header, 2)
-	header.Add("User-Agent", uarand.GetRandom())
-	header.Set("X-Requested-With", "XMLHttpRequest")
-
 	return &Http{
 		Client: tool.GenHttpClient(&tool.HttpClientOptions{
 			Transport: tool.GenHttpTransport(&tool.HttpTransportOptions{
@@ -52,6 +46,5 @@ func genHttpPack(addr net.Addr) *Http {
 			}),
 			Timeout: global.Timeout,
 		}),
-		Header: header,
 	}
 }
