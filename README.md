@@ -54,11 +54,27 @@ settings:
       write_file: false #写日志文件
       log_path: ./ #日志文件存放目录路径
       log_name: "" #指定日志文件名
+  ddns: # 校园网内网 ip ddns
+    enable: false
+    domain: www.example.com
+    ttl: 600
+    provider: "" # dns provider 配置见 DDNS 说明
 ```
 
 登录参数从原网页登陆时对 `/srun_portal` 的请求抓取，抓取时请把浏览器控制台的 `preserve log`（保留日志）启用。
 
 运营商类型在原网页会被自动附加在账号后，请把 `@` 后面的部分填入 `user_type`，没有则留空（删掉默认的）
+
+## :bow_and_arrow: DDNS
+
+将 `ddns.enable` 设为 `true` 后，将在登录成功时设置指定域名的地址（ipv4，A 记录）
+
+支持的 Provider 及其设置：
+
+|  Provider  | 额外配置项                                   |
+|:----------:|-----------------------------------------|
+|   aliyun   | `access_key_id`<br/>`access_key_secret` |
+| cloudflare | `zone` 区域 ID<br/>`token` API 令牌         |
 
 ## :anchor: Docker / Kubernetes
 
