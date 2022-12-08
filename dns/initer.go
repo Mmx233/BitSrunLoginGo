@@ -2,6 +2,7 @@ package dns
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/dns/aliyun"
+	"github.com/Mmx233/BitSrunLoginGo/dns/cloudflare"
 	"github.com/mitchellh/mapstructure"
 	log "github.com/sirupsen/logrus"
 )
@@ -24,6 +25,8 @@ func Run(c *Config) error {
 	switch c.Provider {
 	case "aliyun":
 		dns, e = aliyun.New(meta.TTL, meta.Other, c.Http)
+	case "cloudflare":
+		dns, e = cloudflare.New(meta.TTL, meta.Other, c.Http)
 	default:
 		log.Warnf("DDNS 模块 dns 运营商 %s 不支持", c.Provider)
 		return nil

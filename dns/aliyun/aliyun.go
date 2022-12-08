@@ -9,7 +9,6 @@ import (
 	"fmt"
 	dnsUtil "github.com/Mmx233/BitSrunLoginGo/dns/util"
 	"github.com/Mmx233/tool"
-	log "github.com/sirupsen/logrus"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -29,8 +28,16 @@ func New(ttl uint, conf map[string]interface{}, Http *http.Client) (*DnsProvider
 		TTL:  ttl,
 		Http: tool.NewHttpTool(Http),
 	}
-	defer log.Debugln("aliun dns provider:", &p)
-	return &p, dnsUtil.DecodeConfig(conf, &p)
+	e := dnsUtil.DecodeConfig(conf, &p)
+	if e != nil {
+		return nil, e
+	}
+
+	if p.AccessKeyId == "" || p.AccessKeySecret == "" {
+		return nil, errors.New("aliyun AccessKey 不能为空")
+	}
+
+	return &p, nil
 }
 
 func (a DnsProvider) SendRequest(Type, Action string, data map[string]interface{}) (*http.Response, error) {
