@@ -62,9 +62,10 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 	}
 
 	// DDNS
-
 	enable, _ := global.Config.Settings.DDNS["enable"]
 	if open, _ := enable.(bool); open {
+		log.Debugln("开始 DDNS 设置流程")
+
 		provider, _ := global.Config.Settings.DDNS["provider"]
 		providerStr, _ := provider.(string)
 		if providerStr == "" {
