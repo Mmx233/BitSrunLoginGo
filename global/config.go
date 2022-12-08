@@ -41,6 +41,8 @@ func readConfig() {
 		},
 		DDNS: map[string]interface{}{
 			"enable":   false,
+			"domain":   "www.example.com",
+			"ttl":      600,
 			"provider": "",
 		},
 	})
