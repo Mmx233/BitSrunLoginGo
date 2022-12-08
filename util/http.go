@@ -37,14 +37,16 @@ func HttpPackSelect(addr net.Addr) *Http {
 }
 
 func genHttpPack(addr net.Addr) *Http {
+	tr := tool.GenHttpTransport(&tool.HttpTransportOptions{
+		Timeout:           global.Timeout,
+		LocalAddr:         addr,
+		SkipSslCertVerify: global.Config.Settings.Basic.SkipCertVerify,
+	})
+	tr.Proxy = http.ProxyFromEnvironment
 	return &Http{
 		Client: tool.GenHttpClient(&tool.HttpClientOptions{
-			Transport: tool.GenHttpTransport(&tool.HttpTransportOptions{
-				Timeout:           global.Timeout,
-				LocalAddr:         addr,
-				SkipSslCertVerify: global.Config.Settings.Basic.SkipCertVerify,
-			}),
-			Timeout: global.Timeout,
+			Transport: tr,
+			Timeout:   global.Timeout,
 		}),
 	}
 }
