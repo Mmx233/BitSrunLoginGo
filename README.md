@@ -43,6 +43,7 @@ settings:
     skip_cert_verify: false #跳过证书有效校验
     timeout: 5 #网络请求超时时间（秒，正整数）
     interfaces: "" #网卡名称正则（注意转义），如：eth0\.[2-3]，不为空时为多网卡模式
+    use_dhcp_ip: false #多网卡模式下使用网卡 ip 认证
   guardian: #守护模式（后台常驻）
     enable: false 
     duration: 300 #网络检查周期（秒，正整数）
