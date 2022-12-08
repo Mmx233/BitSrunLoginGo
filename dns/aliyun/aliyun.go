@@ -25,6 +25,7 @@ type DnsProvider struct {
 
 func New(ttl uint, conf map[string]interface{}, Http *http.Client) (*DnsProvider, error) {
 	var p = DnsProvider{
+		TTL:  ttl,
 		Http: tool.NewHttpTool(Http),
 	}
 	return &p, dnsUtil.DecodeConfig(conf, &p)
@@ -38,11 +39,13 @@ func (a DnsProvider) SendRequest(Type, Action string, data map[string]interface{
 	data["Format"] = "json"
 	data["Version"] = "2015-01-09"
 	data["SignatureMethod"] = "HMAC-SHA1"
+	data["SignatureVersion"] = "1.0"
 	data["SignatureNonce"] = fmt.Sprint(tool.Rand.Num(10000000, 90000000))
 	data["Timestamp"] = time.Now().UTC().Format("2006-01-02T15:04:05Z")
 	data["Action"] = Action
+	data["AccessKeyId"] = a.AccessKeyId
 
-	signStr := Type + "&" + url.QueryEscape("/")
+	signStr := Type + "&" + url.QueryEscape("/") + "&"
 	var keys = make([]string, len(data))
 	var i int
 	for k := range data {
@@ -50,8 +53,14 @@ func (a DnsProvider) SendRequest(Type, Action string, data map[string]interface{
 		i++
 	}
 	sort.Strings(keys)
-	for _, k := range keys {
-		signStr += "&" + k + "=" + url.QueryEscape(fmt.Sprint(data[k]))
+	for i, k := range keys {
+		str := k + "=" + url.QueryEscape(fmt.Sprint(data[k]))
+		if i == 0 {
+			str = url.QueryEscape(str)
+		} else {
+			str = url.QueryEscape("&" + str)
+		}
+		signStr += str
 	}
 
 	mac := hmac.New(sha1.New, []byte(a.AccessKeySecret+"&"))
@@ -59,7 +68,7 @@ func (a DnsProvider) SendRequest(Type, Action string, data map[string]interface{
 	if e != nil {
 		return nil, e
 	}
-	data["Signature"] = base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%x", mac.Sum(nil))))
+	data["Signature"] = base64.StdEncoding.EncodeToString(mac.Sum(nil))
 
 	if Type == "GET" || Type == "DELETE" {
 		reqOpt.Query = data
