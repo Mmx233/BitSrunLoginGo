@@ -39,6 +39,10 @@ func readConfig() {
 		Log: srunModels.Log{
 			FilePath: "./",
 		},
+		DDNS: map[string]interface{}{
+			"enable":   false,
+			"provider": "",
+		},
 	})
 
 	//生成配置文件

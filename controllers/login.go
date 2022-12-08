@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/Mmx233/BitSrunLoginGo/dns"
 	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/BitSrunLoginGo/util"
 	BitSrun "github.com/Mmx233/BitSrunLoginGo/v1"
@@ -10,6 +11,8 @@ import (
 
 // Login 登录逻辑
 func Login(localAddr net.Addr, debugOutput bool) error {
+	// 登录状态检查
+
 	conf := &BitSrun.Conf{
 		Https: global.Config.Settings.Basic.Https,
 		LoginInfo: BitSrun.LoginInfo{
@@ -41,6 +44,8 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 
 	log.Debugln("认证客户端 ip: ", ip)
 
+	// 登录执行
+
 	if online {
 		output("已登录~")
 
@@ -53,6 +58,22 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 		}
 
 		log.Infoln("登录成功~")
+	}
+
+	// DDNS
+
+	enable, _ := global.Config.Settings.DDNS["enable"]
+	if open, _ := enable.(bool); open {
+		provider, _ := global.Config.Settings.DDNS["provider"]
+		providerStr, _ := provider.(string)
+		if providerStr == "" {
+			log.Warnln("DDNS 模块 dns 运营商不能为空")
+			return nil
+		}
+
+		delete(global.Config.Settings.DDNS, "provider")
+
+		_ = dns.Run(providerStr, ip, global.Config.Settings.DDNS)
 	}
 
 	return nil
