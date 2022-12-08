@@ -14,12 +14,16 @@ func Run(c *Config) error {
 		return e
 	}
 
+	if meta.TTL == 0 {
+		meta.TTL = 600
+	}
+
 	// 配置解析
 
 	var dns Provider
 	switch c.Provider {
 	case "aliyun":
-		dns, e = aliyun.New(meta.Other)
+		dns, e = aliyun.New(meta.TTL, meta.Other, c.Http)
 	default:
 		log.Warnf("DDNS 模块 dns 运营商 %s 不支持", c.Provider)
 		return nil

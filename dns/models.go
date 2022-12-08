@@ -15,5 +15,6 @@ type Config struct {
 
 type BasicConfig struct {
 	Domain string                 `mapstructure:"domain"`
+	TTL    uint                   `mapstructure:"ttl"`
 	Other  map[string]interface{} `mapstructure:",remain"`
 }
