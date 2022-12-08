@@ -165,6 +165,9 @@ func (a DnsProvider) SetDomainRecord(domain, ip string) error {
 	}
 
 	if exist {
+		if record.Value == ip {
+			return nil
+		}
 		return a.UpdateRecord(record.RecordId, subDomain, ip)
 	} else {
 		return a.NewRecord(subDomain, rootDomain, ip)
