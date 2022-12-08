@@ -13,13 +13,14 @@ import (
 func Login(localAddr net.Addr, debugOutput bool) error {
 	// 登录状态检查
 
+	httpClient := util.HttpPackSelect(localAddr).Client
 	conf := &BitSrun.Conf{
 		Https: global.Config.Settings.Basic.Https,
 		LoginInfo: BitSrun.LoginInfo{
 			Form: &global.Config.Form,
 			Meta: &global.Config.Meta,
 		},
-		Client: util.HttpPackSelect(localAddr).Client,
+		Client: httpClient,
 	}
 
 	var output func(args ...interface{})
@@ -73,7 +74,12 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 
 		delete(global.Config.Settings.DDNS, "provider")
 
-		_ = dns.Run(providerStr, ip, global.Config.Settings.DDNS)
+		_ = dns.Run(&dns.Config{
+			Provider: providerStr,
+			IP:       ip,
+			Conf:     global.Config.Settings.DDNS,
+			Http:     httpClient,
+		})
 	}
 
 	return nil

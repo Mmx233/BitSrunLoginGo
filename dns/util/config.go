@@ -1,4 +1,4 @@
-package util
+package dnsUtil
 
 import (
 	"github.com/mitchellh/mapstructure"
