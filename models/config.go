@@ -30,10 +30,11 @@ type Log struct {
 }
 
 type Settings struct {
-	Basic    Basic    `json:"basic" yaml:"basic" mapstructure:"basic"`
-	Guardian Guardian `json:"guardian" yaml:"guardian" mapstructure:"guardian"`
-	Daemon   Daemon   `json:"daemon" yaml:"daemon" mapstructure:"daemon"`
-	Log      Log
+	Basic    Basic                  `json:"basic" yaml:"basic" mapstructure:"basic"`
+	Guardian Guardian               `json:"guardian" yaml:"guardian" mapstructure:"guardian"`
+	Daemon   Daemon                 `json:"daemon" yaml:"daemon" mapstructure:"daemon"`
+	Log      Log                    `json:"log" yaml:"log" mapstructure:"log"`
+	DDNS     map[string]interface{} `json:"ddns" yaml:"ddns" mapstructure:"ddns"`
 }
 
 type Config struct {
