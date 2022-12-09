@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	log "github.com/sirupsen/logrus"
+	"strings"
 )
 
 func LoginStatus(c *Conf) (online bool, ip string, e error) {
@@ -27,7 +28,9 @@ func LoginStatus(c *Conf) (online bool, ip string, e error) {
 		}
 	}
 
-	return err.(string) == "ok", ipInterface.(string), nil
+	// 如果深澜分配的 ip 不是内网 ip，说明已经在线且拥有固定 ip
+	inet := strings.HasPrefix(ip, "192.168.") || strings.HasPrefix(ip, "10.") || strings.HasPrefix(ip, "172.")
+	return err.(string) == "ok" || !inet, ipInterface.(string), nil
 }
 
 func DoLogin(clientIP string, c *Conf) error {
