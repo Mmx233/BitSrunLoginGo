@@ -46,5 +46,7 @@ func Run(c *Config) error {
 		return e
 	}
 
+	log.Debugln("DDNS 配置应用成功")
+
 	return nil
 }
