@@ -1,12 +1,16 @@
 package dns
 
 import (
+	"errors"
+	"fmt"
 	"github.com/Mmx233/BitSrunLoginGo/dns/aliyun"
 	"github.com/Mmx233/BitSrunLoginGo/dns/cloudflare"
 	log "github.com/sirupsen/logrus"
 )
 
 func Run(c *Config) error {
+	log.Debugln("开始 DDNS 流程")
+
 	if c.TTL == 0 {
 		c.TTL = 600
 	}
@@ -21,8 +25,14 @@ func Run(c *Config) error {
 	case "cloudflare":
 		dns, e = cloudflare.New(c.TTL, c.Conf, c.Http)
 	default:
-		log.Warnf("DDNS 模块 dns 运营商 %s 不支持", c.Provider)
-		return nil
+		var msg string
+		if c.Provider == "" {
+			msg = "DDNS 模块 dns 运营商不能为空"
+		} else {
+			msg = fmt.Sprintf("DDNS 模块 dns 运营商 %s 不支持", c.Provider)
+		}
+		log.Warnln(msg)
+		return errors.New(msg)
 	}
 	if e != nil {
 		log.Warnf("解析 DDNS 配置失败：%v", e)

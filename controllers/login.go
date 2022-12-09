@@ -7,6 +7,7 @@ import (
 	BitSrun "github.com/Mmx233/BitSrunLoginGo/v1"
 	log "github.com/sirupsen/logrus"
 	"net"
+	"net/http"
 )
 
 // Login 登录逻辑
@@ -50,6 +51,12 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 	if online {
 		output("已登录~")
 
+		if global.Config.Settings.DDNS.Enable && ipLast != ip {
+			if ddns(ip, httpClient) == nil {
+				ipLast = ip
+			}
+		}
+
 		return nil
 	} else {
 		log.Infoln("检测到用户未登录，开始尝试登录...")
@@ -60,25 +67,23 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 
 		log.Infoln("登录成功~")
 
-		// DDNS
 		if global.Config.Settings.DDNS.Enable {
-			log.Debugln("开始 DDNS 设置流程")
-
-			if global.Config.Settings.DDNS.Provider == "" {
-				log.Warnln("DDNS 模块 dns 运营商不能为空")
-				return nil
-			}
-
-			_ = dns.Run(&dns.Config{
-				Provider: global.Config.Settings.DDNS.Provider,
-				IP:       ip,
-				Domain:   global.Config.Settings.DDNS.Domain,
-				TTL:      global.Config.Settings.DDNS.TTL,
-				Conf:     global.Config.Settings.DDNS.Config,
-				Http:     httpClient,
-			})
+			_ = ddns(ip, httpClient)
 		}
 	}
 
 	return nil
+}
+
+var ipLast string
+
+func ddns(ip string, httpClient *http.Client) error {
+	return dns.Run(&dns.Config{
+		Provider: global.Config.Settings.DDNS.Provider,
+		IP:       ip,
+		Domain:   global.Config.Settings.DDNS.Domain,
+		TTL:      global.Config.Settings.DDNS.TTL,
+		Conf:     global.Config.Settings.DDNS.Config,
+		Http:     httpClient,
+	})
 }
