@@ -9,12 +9,8 @@ type Provider interface {
 type Config struct {
 	Provider string
 	IP       string
+	Domain   string
+	TTL      uint
 	Conf     map[string]interface{}
 	Http     *http.Client
-}
-
-type BasicConfig struct {
-	Domain string                 `mapstructure:"domain"`
-	TTL    uint                   `mapstructure:"ttl"`
-	Other  map[string]interface{} `mapstructure:",remain"`
 }

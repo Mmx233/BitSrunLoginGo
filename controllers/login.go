@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/Mmx233/BitSrunLoginGo/dns"
 	"github.com/Mmx233/BitSrunLoginGo/global"
 	"github.com/Mmx233/BitSrunLoginGo/util"
 	BitSrun "github.com/Mmx233/BitSrunLoginGo/v1"
@@ -68,12 +69,14 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 				return nil
 			}
 
-			/*_ = dns.Run(&dns.Config{
-				Provider: providerStr,
+			_ = dns.Run(&dns.Config{
+				Provider: global.Config.Settings.DDNS.Provider,
 				IP:       ip,
-				Conf:     global.Config.Settings.DDNS,
+				Domain:   global.Config.Settings.DDNS.Domain,
+				TTL:      global.Config.Settings.DDNS.TTL,
+				Conf:     global.Config.Settings.DDNS.Config,
 				Http:     httpClient,
-			})*/
+			})
 		}
 	}
 
