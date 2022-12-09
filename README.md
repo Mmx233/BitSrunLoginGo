@@ -51,10 +51,10 @@ settings:
     enable: false
     path: .BitSrun #守护监听文件路径，用于确保只有单守护运行
   log:
-      debug_level: false #打印调试日志
-      write_file: false #写日志文件
-      log_path: ./ #日志文件存放目录路径
-      log_name: "" #指定日志文件名
+    debug_level: false #打印调试日志
+    write_file: false #写日志文件
+    log_path: ./ #日志文件存放目录路径
+    log_name: "" #指定日志文件名
   ddns: # 校园网内网 ip ddns
     enable: false
     domain: www.example.com
