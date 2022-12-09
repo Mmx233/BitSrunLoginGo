@@ -29,12 +29,20 @@ type Log struct {
 	FileName   string `json:"log_name" yaml:"log_name" mapstructure:"log_name"`
 }
 
+type DDNS struct {
+	Enable   bool                   `json:"enable" yaml:"enable" mapstructure:"enable"`
+	TTL      uint                   `json:"ttl" yaml:"ttl" mapstructure:"ttl"`
+	Domain   string                 `json:"domain" yaml:"domain" mapstructure:"domain"`
+	Provider string                 `json:"provider" yaml:"provider" mapstructure:"provider"`
+	Config   map[string]interface{} `mapstructure:",remain"`
+}
+
 type Settings struct {
-	Basic    Basic                  `json:"basic" yaml:"basic" mapstructure:"basic"`
-	Guardian Guardian               `json:"guardian" yaml:"guardian" mapstructure:"guardian"`
-	Daemon   Daemon                 `json:"daemon" yaml:"daemon" mapstructure:"daemon"`
-	Log      Log                    `json:"log" yaml:"log" mapstructure:"log"`
-	DDNS     map[string]interface{} `json:"ddns" yaml:"ddns" mapstructure:"ddns"`
+	Basic    Basic    `json:"basic" yaml:"basic" mapstructure:"basic"`
+	Guardian Guardian `json:"guardian" yaml:"guardian" mapstructure:"guardian"`
+	Daemon   Daemon   `json:"daemon" yaml:"daemon" mapstructure:"daemon"`
+	Log      Log      `json:"log" yaml:"log" mapstructure:"log"`
+	DDNS     DDNS     `json:"ddns" yaml:"ddns" mapstructure:"ddns"`
 }
 
 type Config struct {

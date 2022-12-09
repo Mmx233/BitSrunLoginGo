@@ -39,11 +39,10 @@ func readConfig() {
 		Log: srunModels.Log{
 			FilePath: "./",
 		},
-		DDNS: map[string]interface{}{
-			"enable":   false,
-			"domain":   "www.example.com",
-			"ttl":      600,
-			"provider": "",
+		DDNS: srunModels.DDNS{
+			Enable: false,
+			TTL:    600,
+			Domain: "www.example.com",
 		},
 	})
 
