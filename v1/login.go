@@ -29,8 +29,13 @@ func LoginStatus(c *Conf) (online bool, ip string, e error) {
 	}
 
 	// 如果深澜分配的 ip 不是内网 ip，说明已经在线且拥有固定 ip
+	ip = ipInterface.(string)
+
 	inet := strings.HasPrefix(ip, "192.168.") || strings.HasPrefix(ip, "10.") || strings.HasPrefix(ip, "172.")
-	return err.(string) == "ok" || !inet, ipInterface.(string), nil
+
+	online = err.(string) == "ok" || !inet
+
+	return
 }
 
 func DoLogin(clientIP string, c *Conf) error {
