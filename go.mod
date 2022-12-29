@@ -10,6 +10,8 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.14.0
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.569
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.569
 )
 
 require (
