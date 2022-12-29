@@ -59,7 +59,9 @@ settings:
     enable: false
     domain: www.example.com
     ttl: 600
-    provider: "" # dns provider 配置见 DDNS 说明
+    provider: "cloudflare" # dns provider 配置见 DDNS 说明
+    #zone: "xxxx"
+    #token: "xxxx"
 ```
 
 登录参数从原网页登陆时对 `/srun_portal` 的请求抓取，抓取时请把浏览器控制台的 `preserve log`（保留日志）启用。
