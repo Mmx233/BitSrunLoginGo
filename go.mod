@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/Mmx233/tool v0.6.8
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
-	github.com/cloudflare/cloudflare-go v0.56.0
+	github.com/cloudflare/cloudflare-go v0.57.1
 	github.com/howeyc/fsnotify v0.9.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/sirupsen/logrus v1.9.0
@@ -18,7 +18,7 @@ require (
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/magiconair/properties v1.8.6 // indirect
+	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/spf13/afero v1.9.3 // indirect
