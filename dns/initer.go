@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/Mmx233/BitSrunLoginGo/dns/aliyun"
 	"github.com/Mmx233/BitSrunLoginGo/dns/cloudflare"
+	"github.com/Mmx233/BitSrunLoginGo/dns/dnspod"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -23,7 +24,9 @@ func Run(c *Config) error {
 	case "aliyun":
 		dns, e = aliyun.New(c.TTL, c.Conf, c.Http)
 	case "cloudflare":
-		dns, e = cloudflare.New(c.TTL, c.Conf, c.Http)
+		dns, e = cloudflare.New(int(c.TTL), c.Conf, c.Http)
+	case "dnspod":
+		dns, e = dnspod.New(uint64(c.TTL), c.Conf, c.Http.Transport)
 	default:
 		var msg string
 		if c.Provider == "" {

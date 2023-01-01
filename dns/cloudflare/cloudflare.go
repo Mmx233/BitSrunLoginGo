@@ -15,9 +15,9 @@ type DnsProvider struct {
 	Token string          `mapstructure:"token"`
 }
 
-func New(ttl uint, conf map[string]interface{}, Http *http.Client) (*DnsProvider, error) {
+func New(ttl int, conf map[string]interface{}, Http *http.Client) (*DnsProvider, error) {
 	var p = DnsProvider{
-		TTL: int(ttl),
+		TTL: ttl,
 	}
 	e := dnsUtil.DecodeConfig(conf, &p)
 	if e != nil {

@@ -17,7 +17,7 @@ type DnsProvider struct {
 	SecretKey string         `mapstructure:"secret_key"`
 }
 
-func New(ttl uint64, conf map[string]interface{}, Http *http.Transport) (*DnsProvider, error) {
+func New(ttl uint64, conf map[string]interface{}, Http http.RoundTripper) (*DnsProvider, error) {
 	var p = DnsProvider{TTL: ttl}
 	e := dnsUtil.DecodeConfig(conf, &p)
 	if e != nil {
