@@ -70,14 +70,15 @@ settings:
 
 ## :bow_and_arrow: DDNS
 
-将 `ddns.enable` 设为 `true` 后，将在登录成功时设置指定域名的地址（ipv4，A 记录）
+将 `ddns.enable` 设为 `true` 后，将在登录成功时设置指定域名的解析地址（ipv4，A 记录）
 
-支持的 Provider 及其设置：
+支持的 Provider 及其设置（将额外配置添加到配置文件 DDNS 配置内）：
 
 |  Provider  | 额外配置项                                   |
 |:----------:|-----------------------------------------|
 |   aliyun   | `access_key_id`<br/>`access_key_secret` |
 | cloudflare | `zone` 区域 ID<br/>`token` API 令牌         |
+|   dnspod   | `secret_id`<br/>`secret_key`            |
 
 ## :anchor: Docker / Kubernetes
 
