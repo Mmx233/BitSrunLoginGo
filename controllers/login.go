@@ -51,7 +51,7 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 	if online {
 		output("已登录~")
 
-		if global.Config.Settings.DDNS.Enable && ipLast != ip {
+		if global.Config.Settings.DDNS.Enable && global.Config.Settings.Guardian.Enable && ipLast != ip {
 			if ddns(ip, httpClient) == nil {
 				ipLast = ip
 			}
