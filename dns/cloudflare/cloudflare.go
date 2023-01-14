@@ -9,10 +9,11 @@ import (
 )
 
 type DnsProvider struct {
-	Api   *cloudflare.API `mapstructure:"-"`
-	TTL   int             `mapstructure:"-"`
-	Zone  string          `mapstructure:"zone"`
-	Token string          `mapstructure:"token"`
+	Api          *cloudflare.API               `mapstructure:"-"`
+	TTL          int                           `mapstructure:"-"`
+	Zone         string                        `mapstructure:"zone"`
+	ZoneResource *cloudflare.ResourceContainer `mapstructure:"-"`
+	Token        string                        `mapstructure:"token"`
 }
 
 func New(ttl int, conf map[string]interface{}, Http *http.Client) (*DnsProvider, error) {
@@ -26,7 +27,10 @@ func New(ttl int, conf map[string]interface{}, Http *http.Client) (*DnsProvider,
 
 	if p.Zone == "" {
 		return nil, errors.New("cloudflare zone 不能为空")
-	} else if p.Token == "" {
+	}
+	p.ZoneResource = cloudflare.ZoneIdentifier(p.Zone)
+
+	if p.Token == "" {
 		return nil, errors.New("cloudflare token 不能为空")
 	}
 
@@ -35,7 +39,7 @@ func New(ttl int, conf map[string]interface{}, Http *http.Client) (*DnsProvider,
 }
 
 func (a DnsProvider) SetDomainRecord(domain, ip string) error {
-	records, e := a.Api.DNSRecords(context.Background(), a.Zone, cloudflare.DNSRecord{
+	records, _, e := a.Api.ListDNSRecords(context.Background(), a.ZoneResource, cloudflare.ListDNSRecordsParams{
 		Type: "A",
 		Name: domain,
 	})
@@ -44,7 +48,7 @@ func (a DnsProvider) SetDomainRecord(domain, ip string) error {
 	}
 
 	if len(records) == 0 {
-		_, e = a.Api.CreateDNSRecord(context.Background(), a.Zone, cloudflare.DNSRecord{
+		_, e = a.Api.CreateDNSRecord(context.Background(), a.ZoneResource, cloudflare.CreateDNSRecordParams{
 			Type:    "A",
 			Name:    domain,
 			Content: ip,
@@ -53,11 +57,12 @@ func (a DnsProvider) SetDomainRecord(domain, ip string) error {
 		return e
 	} else {
 		record := records[0]
-
 		if record.Content == ip {
 			return nil
 		}
-		record.Content = ip
-		return a.Api.UpdateDNSRecord(context.Background(), a.Zone, record.ID, record)
+		return a.Api.UpdateDNSRecord(context.Background(), a.ZoneResource, cloudflare.UpdateDNSRecordParams{
+			ID:      record.ID,
+			Content: ip,
+		})
 	}
 }
