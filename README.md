@@ -70,7 +70,7 @@ settings:
 
 ## :bow_and_arrow: DDNS
 
-将 `ddns.enable` 设为 `true` 后，将在登录成功时设置指定域名的解析地址（ipv4，A 记录）
+将 `ddns.enable` 设为 `true` 后，将在登录成功时以及守护模式下首次启动已在线时设置指定域名的解析地址（ipv4，A 记录）
 
 支持的 Provider 及其设置（将额外配置添加到配置文件 DDNS 配置内）：
 
@@ -79,6 +79,8 @@ settings:
 |   aliyun   | `access_key_id`<br/>`access_key_secret` |
 | cloudflare | `zone` 区域 ID<br/>`token` API 令牌         |
 |   dnspod   | `secret_id`<br/>`secret_key`            |
+
+需要注意的是，应该避免在多网卡模式下使用 ddns，如有需要，可以每个网卡创建一个配置文件单独进行登录
 
 ## :anchor: Docker / Kubernetes
 
@@ -156,25 +158,25 @@ import (
 )
 
 func main() {
-	//具体用法请查看struct注释
-	conf:=&BitSrun.Conf{
-		Https:  false,
-		Client: nil,
-		LoginInfo: BitSrun.LoginInfo{
-			Form: &BitSrun.LoginForm{
-				Domain:   "",
-				UserName: "",
-				UserType: "",
-				PassWord: "",
-			},
-			Meta: &BitSrun.LoginMeta{
-				N:    "",
-				Type: "",
-				Acid: "",
-				Enc:  "",
-			},
-		},
-	}
+    //具体用法请查看struct注释
+    conf:=&BitSrun.Conf{
+        Https:  false,
+        Client: nil,
+        LoginInfo: BitSrun.LoginInfo{
+            Form: &BitSrun.LoginForm{
+                Domain:   "",
+                UserName: "",
+                UserType: "",
+                PassWord: "",
+            },
+            Meta: &BitSrun.LoginMeta{
+                N:    "",
+                Type: "",
+                Acid: "",
+                Enc:  "",
+            },
+        },
+    }
 
     online, clientIP, e := BitSrun.LoginStatus(conf)
     if e!=nil {
