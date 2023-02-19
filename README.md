@@ -14,7 +14,7 @@ OpenWrt 特供插件： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx23
 
 编译结果为可执行文件，下载 release 或编译后直接启动即可
 
-可以通过添加启动参数 `--config` 指定配置文件路径，默认为当前目录的 `Config.yaml`
+首次运行将自动生成配置文件，首次使用建议开启调试日志（`settings.log.debug_level`），可以通过添加启动参数 `--config` 指定配置文件路径，默认为当前目录的 `Config.yaml`
 
 支持 `json`、`yaml`、`yml`、`toml`、`hcl`、`tfvars` 等，仅对 `json`和`yaml` 进行了优化与测试
 
@@ -22,7 +22,12 @@ OpenWrt 特供插件： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx23
 ./autoLogin --config=/demo/i.json
 ```
 
-首次运行将自动生成配置文件，首次使用建议开启调试日志（`settings.log.debug_level`）
+其他 Flags:
+
+```text
+--ip [ip] #指定认证客户端 ip，多网卡模式无效
+--daemon #忽略配置文件挂起设定，强制后台挂起
+```
 
 Config.yaml 说明：
 
