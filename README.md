@@ -86,11 +86,11 @@ settings:
 
 镜像：`mmx233/bitsrunlogin-go:latest`
 
-支持 linux/amd64、linux/386、linux/arm64、linux/arm/v7 架构（windows 的 WSL2 版 docker 也算 Linux）
+支持 linux/amd64、linux/386、linux/arm64、linux/arm/v7 架构
 
 直接使用：
 
-配置文件挂载至 `/data/Config.yaml`，若需更改配置文件类型，可以使用 --entrypoint 覆写启动参数
+配置文件挂载至 `/data/Config.yaml`，若需更改配置文件类型，可以使用 `--entrypoint` 覆写启动参数
 
 ```shell
 docker run -v path_to_config:/data/Config.yaml mmx233/bitsrunlogin-go:latest
@@ -110,18 +110,15 @@ docker build . --file Dockerfile --tag mmx233/bitsrunlogin-go:latest
 
 请安装最新版 golang
 
-直接编译本系统可执行程序：
-
 ```shell
+#直接编译本系统可执行程序：
 git clone https://github.com/Mmx233/BitSrunLoginGo.git
 cd BitSrunLoginGo
 go build
-```
 
-或者使用经过优化的构建命令：
-
-```shell
+#或者使用经过优化的构建命令：
 go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'"
+
 ```
 
 交叉编译（Linux）：
@@ -139,7 +136,7 @@ go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w 
 $env:GOGGC=0
 $env:GOOS='linux' #系统
 $env:GOARCH='amd64' #架构
-go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'"
+go build -gcflags=-trimpath=$env:GOPATH -asmflags=-trimpath=$env:GOPATH -ldflags "-s -w -extldflags '-static'"
 ```
 
 golang 支持的系统与架构请自行查询
