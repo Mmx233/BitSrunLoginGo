@@ -19,7 +19,7 @@ OpenWrt 特供插件： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx23
 支持 `json`、`yaml`、`yml`、`toml`、`hcl`、`tfvars` 等，仅对 `json`和`yaml` 进行了优化与测试
 
 ```shell
-./autoLogin --config=/demo/i.json
+./bitsrun --config=/demo/i.json
 ```
 
 其他 Flags:
@@ -156,12 +156,12 @@ golang 支持的系统与架构请自行查询
 package main
 
 import (
-	"github.com/Mmx233/BitSrunLoginGo/v1"
+	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 )
 
 func main() {
     //具体用法请查看struct注释
-    conf:=&BitSrun.Conf{
+    conf:=&srun.Conf{
         Https:  false,
         Client: nil,
         LoginInfo: BitSrun.LoginInfo{
@@ -180,13 +180,13 @@ func main() {
         },
     }
 
-    online, clientIP, e := BitSrun.LoginStatus(conf)
+    online, clientIP, e := srun.LoginStatus(conf)
     if e!=nil {
         panic(e)
     }
 	
     if !online {
-        e=BitSrun.DoLogin(clientIP, conf)
+        e=srun.DoLogin(clientIP, conf)
         if e!=nil {
             panic(e)
         }	
