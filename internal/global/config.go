@@ -1,8 +1,8 @@
 package global
 
 import (
-	"github.com/Mmx233/BitSrunLoginGo/models"
-	"github.com/Mmx233/BitSrunLoginGo/v1"
+	"github.com/Mmx233/BitSrunLoginGo/internal/global/models"
+	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 	"github.com/Mmx233/tool"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -10,36 +10,36 @@ import (
 	"time"
 )
 
-var Config srunModels.Config
+var Config models.Config
 
 var Timeout time.Duration
 
 func readConfig() {
 	//配置文件默认值
-	viper.SetDefault("form", BitSrun.LoginForm{
+	viper.SetDefault("form", srun.LoginForm{
 		Domain:   "www.msftconnecttest.com",
 		UserType: "cmcc",
 	})
-	viper.SetDefault("meta", BitSrun.LoginMeta{
+	viper.SetDefault("meta", srun.LoginMeta{
 		N:    "200",
 		Type: "1",
 		Acid: "5",
 		Enc:  "srun_bx1",
 	})
-	viper.SetDefault("settings", srunModels.Settings{
-		Basic: srunModels.Basic{
+	viper.SetDefault("settings", models.Settings{
+		Basic: models.Basic{
 			Timeout: 5,
 		},
-		Daemon: srunModels.Daemon{
+		Daemon: models.Daemon{
 			Path: ".BitSrun",
 		},
-		Guardian: srunModels.Guardian{
+		Guardian: models.Guardian{
 			Duration: 300,
 		},
-		Log: srunModels.Log{
+		Log: models.Log{
 			FilePath: "./",
 		},
-		DDNS: srunModels.DDNS{
+		DDNS: models.DDNS{
 			Enable: false,
 			TTL:    600,
 			Domain: "www.example.com",

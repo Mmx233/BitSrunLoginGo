@@ -1,16 +1,20 @@
-package util
+package tools
 
 import (
-	"github.com/Mmx233/BitSrunLoginGo/global"
-	srunModels "github.com/Mmx233/BitSrunLoginGo/models"
+	"github.com/Mmx233/BitSrunLoginGo/internal/global"
 	log "github.com/sirupsen/logrus"
 	"net"
 	"regexp"
 	"strings"
 )
 
-func GetInterfaceAddr() ([]srunModels.Eth, error) {
-	var result []srunModels.Eth
+type Eth struct {
+	Name string
+	Addr net.Addr
+}
+
+func GetInterfaceAddr() ([]Eth, error) {
+	var result []Eth
 
 	interfaces, e := net.Interfaces()
 	if e != nil {
@@ -35,7 +39,7 @@ func GetInterfaceAddr() ([]srunModels.Eth, error) {
 						log.Warnln(eth.Name+" ip解析失败：", e)
 						continue
 					}
-					result = append(result, srunModels.Eth{
+					result = append(result, Eth{
 						Name: eth.Name,
 						Addr: ip,
 					})

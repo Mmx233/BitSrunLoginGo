@@ -1,7 +1,6 @@
-package BitSrun
+package srun
 
 import (
-	"github.com/Mmx233/BitSrunLoginGo/v1/srun"
 	"net/http"
 )
 
@@ -33,7 +32,7 @@ type Conf struct {
 	Client    *http.Client
 	Header    http.Header
 
-	api srun.Api
+	api Api
 }
 
 func (a *Conf) initApi() {

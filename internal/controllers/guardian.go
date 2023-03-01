@@ -1,12 +1,12 @@
 package controllers
 
 import (
+	"github.com/Mmx233/BitSrunLoginGo/internal/global"
 	"os"
 	"os/exec"
 	"time"
 
-	"github.com/Mmx233/BitSrunLoginGo/global"
-	"github.com/Mmx233/BitSrunLoginGo/util"
+	"github.com/Mmx233/BitSrunLoginGo/tools"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -34,7 +34,7 @@ func Guardian() {
 					log.Errorln("登录出错: ", e)
 				}
 			} else { //多网卡
-				interfaces, e := util.GetInterfaceAddr()
+				interfaces, e := tools.GetInterfaceAddr()
 				if e == nil {
 					for _, eth := range interfaces {
 						log.Debugf("使用 %s 网口登录 ", eth.Name)

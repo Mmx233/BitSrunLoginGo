@@ -1,7 +1,7 @@
-package srunModels
+package models
 
 import (
-	"github.com/Mmx233/BitSrunLoginGo/v1"
+	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 )
 
 type Daemon struct {
@@ -46,7 +46,7 @@ type Settings struct {
 }
 
 type Config struct {
-	Form     BitSrun.LoginForm `json:"form" yaml:"form" mapstructure:"form"`
-	Meta     BitSrun.LoginMeta `json:"meta" yaml:"meta" mapstructure:"meta"`
-	Settings Settings          `json:"settings" yaml:"settings" mapstructure:"settings"`
+	Form     srun.LoginForm `json:"form" yaml:"form" mapstructure:"form"`
+	Meta     srun.LoginMeta `json:"meta" yaml:"meta" mapstructure:"meta"`
+	Settings Settings       `json:"settings" yaml:"settings" mapstructure:"settings"`
 }

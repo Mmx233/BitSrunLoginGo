@@ -1,7 +1,7 @@
-package util
+package tools
 
 import (
-	"github.com/Mmx233/BitSrunLoginGo/global"
+	"github.com/Mmx233/BitSrunLoginGo/internal/global"
 	"github.com/Mmx233/tool"
 	"net"
 	"net/http"

@@ -3,7 +3,7 @@ package cloudflare
 import (
 	"context"
 	"errors"
-	dnsUtil "github.com/Mmx233/BitSrunLoginGo/dns/util"
+	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/util"
 	"github.com/cloudflare/cloudflare-go"
 	"net/http"
 )

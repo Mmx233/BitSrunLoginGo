@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/Mmx233/BitSrunLoginGo/global"
+	"github.com/Mmx233/BitSrunLoginGo/internal/global"
 	"github.com/Mmx233/tool"
 	"github.com/howeyc/fsnotify"
 	"os"

@@ -1,7 +1,7 @@
 package dnspod
 
 import (
-	dnsUtil "github.com/Mmx233/BitSrunLoginGo/dns/util"
+	dnsUtil2 "github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/util"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
@@ -19,7 +19,7 @@ type DnsProvider struct {
 
 func New(ttl uint64, conf map[string]interface{}, Http http.RoundTripper) (*DnsProvider, error) {
 	var p = DnsProvider{TTL: ttl}
-	e := dnsUtil.DecodeConfig(conf, &p)
+	e := dnsUtil2.DecodeConfig(conf, &p)
 	if e != nil {
 		return nil, e
 	}
@@ -29,7 +29,7 @@ func New(ttl uint64, conf map[string]interface{}, Http http.RoundTripper) (*DnsP
 }
 
 func (a DnsProvider) SetDomainRecord(domain, ip string) error {
-	subDomain, rootDomain, e := dnsUtil.DecodeDomain(domain)
+	subDomain, rootDomain, e := dnsUtil2.DecodeDomain(domain)
 	if e != nil {
 		return e
 	}

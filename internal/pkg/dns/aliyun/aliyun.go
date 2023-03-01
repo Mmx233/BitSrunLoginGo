@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	dnsUtil "github.com/Mmx233/BitSrunLoginGo/dns/util"
+	dnsUtil2 "github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/util"
 	"github.com/Mmx233/tool"
 	"math/rand"
 	"net/http"
@@ -28,7 +28,7 @@ func New(ttl uint, conf map[string]interface{}, Http *http.Client) (*DnsProvider
 		TTL:  ttl,
 		Http: tool.NewHttpTool(Http),
 	}
-	e := dnsUtil.DecodeConfig(conf, &p)
+	e := dnsUtil2.DecodeConfig(conf, &p)
 	if e != nil {
 		return nil, e
 	}
@@ -161,7 +161,7 @@ func (a DnsProvider) NewRecord(subDomain, rootDomain, ip string) error {
 }
 
 func (a DnsProvider) SetDomainRecord(domain, ip string) error {
-	subDomain, rootDomain, e := dnsUtil.DecodeDomain(domain)
+	subDomain, rootDomain, e := dnsUtil2.DecodeDomain(domain)
 	if e != nil {
 		return e
 	}
