@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 	"github.com/Mmx233/BitSrunLoginGo/internal/global"
-	"github.com/Mmx233/tool"
 	"github.com/howeyc/fsnotify"
 	"os"
 	"time"
@@ -22,12 +21,12 @@ var Daemon = daemon{
 
 // MarkDaemon 写入后台标记文件
 func (a *daemon) MarkDaemon() error {
-	return tool.File.WriteAll(a.Path, []byte(a.Mark))
+	return os.WriteFile(a.Path, []byte(a.Mark), 0600)
 }
 
 // CheckDaemon 检查后台标记文件
 func (a *daemon) CheckDaemon() bool {
-	if data, err := tool.File.ReadAll(a.Path); err != nil {
+	if data, err := os.ReadFile(a.Path); err != nil {
 		return false
 	} else {
 		return string(data) == a.Mark

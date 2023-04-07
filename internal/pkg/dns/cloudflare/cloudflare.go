@@ -60,9 +60,10 @@ func (a DnsProvider) SetDomainRecord(domain, ip string) error {
 		if record.Content == ip {
 			return nil
 		}
-		return a.Api.UpdateDNSRecord(context.Background(), a.ZoneResource, cloudflare.UpdateDNSRecordParams{
+		_, e = a.Api.UpdateDNSRecord(context.Background(), a.ZoneResource, cloudflare.UpdateDNSRecordParams{
 			ID:      record.ID,
 			Content: ip,
 		})
+		return e
 	}
 }
