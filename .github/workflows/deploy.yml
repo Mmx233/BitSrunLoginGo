@@ -36,4 +36,4 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/386,linux/arm64,linux/arm/v7
-          tags: mmx233/bitsrunlogin-go:latest,mmx233/bitsrunlogin-go:${GITHUB_REF/refs\/tags\//}
+          tags: mmx233/bitsrunlogin-go:latest,mmx233/bitsrunlogin-go:${{GITHUB_REF/refs\/tags\//}}
