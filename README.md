@@ -12,13 +12,14 @@ OpenWrt 特供插件： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx23
 
 ## :gear:运行
 
-编译结果为可执行文件，下载 release 或编译后直接启动即可
+编译结果为可执行文件，下载 release 或编译后直接运行即可
 
 首次运行将自动生成配置文件，首次使用建议开启调试日志（`settings.log.debug_level`），可以通过添加启动参数 `--config` 指定配置文件路径，默认为当前目录的 `Config.yaml`
 
 支持 `json`、`yaml`、`yml`、`toml`、`hcl`、`tfvars` 等，仅对 `json`和`yaml` 进行了优化与测试
 
 ```shell
+./bitsrun --config=./another-config.yaml
 ./bitsrun --config=/demo/i.json
 ```
 
@@ -119,10 +120,10 @@ docker build . --file Dockerfile --tag mmx233/bitsrunlogin-go:latest
 #直接编译本系统可执行程序：
 git clone https://github.com/Mmx233/BitSrunLoginGo.git
 cd BitSrunLoginGo
-go build
+go build ./cmd/bitsrun
 
 #或者使用经过优化的构建命令：
-go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'"
+go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
 
 ```
 
@@ -132,7 +133,7 @@ go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w 
 export GOGGC=0
 export GOOS=windows #系统
 export GOARCH=amd64 #架构
-go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'"
+go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
 ```
 
 交叉编译（Powershell）：
@@ -141,7 +142,7 @@ go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w 
 $env:GOGGC=0
 $env:GOOS='linux' #系统
 $env:GOARCH='amd64' #架构
-go build -gcflags=-trimpath=$env:GOPATH -asmflags=-trimpath=$env:GOPATH -ldflags "-s -w -extldflags '-static'"
+go build -gcflags=-trimpath=$env:GOPATH -asmflags=-trimpath=$env:GOPATH -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
 ```
 
 golang 支持的系统与架构请自行查询
