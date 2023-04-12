@@ -165,14 +165,14 @@ func main() {
     conf:=&srun.Conf{
         Https:  false,
         Client: nil,
-        LoginInfo: BitSrun.LoginInfo{
-            Form: &BitSrun.LoginForm{
+        LoginInfo: srun.LoginInfo{
+            Form: &srun.LoginForm{
                 Domain:   "",
                 UserName: "",
                 UserType: "",
                 PassWord: "",
             },
-            Meta: &BitSrun.LoginMeta{
+            Meta: &srun.LoginMeta{
                 N:    "",
                 Type: "",
                 Acid: "",

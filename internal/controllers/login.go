@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	global2 "github.com/Mmx233/BitSrunLoginGo/internal/global"
-	dns2 "github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns"
+	"github.com/Mmx233/BitSrunLoginGo/internal/global"
+	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns"
 	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 	"github.com/Mmx233/BitSrunLoginGo/tools"
 	log "github.com/sirupsen/logrus"
@@ -16,10 +16,10 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 
 	httpClient := tools.HttpPackSelect(localAddr).Client
 	conf := &srun.Conf{
-		Https: global2.Config.Settings.Basic.Https,
+		Https: global.Config.Settings.Basic.Https,
 		LoginInfo: srun.LoginInfo{
-			Form: &global2.Config.Form,
-			Meta: &global2.Config.Meta,
+			Form: &global.Config.Form,
+			Meta: &global.Config.Meta,
 		},
 		Client: httpClient,
 	}
@@ -38,10 +38,10 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 		return e
 	}
 
-	if localAddr != nil && global2.Config.Settings.Basic.UseDhcpIP {
+	if localAddr != nil && global.Config.Settings.Basic.UseDhcpIP {
 		ip = localAddr.(*net.TCPAddr).IP.String()
-	} else if global2.Flags.ClientIP != "" {
-		ip = global2.Flags.ClientIP
+	} else if global.Flags.ClientIP != "" {
+		ip = global.Flags.ClientIP
 	}
 
 	log.Debugln("认证客户端 ip: ", ip)
@@ -51,7 +51,7 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 	if online {
 		output("已登录~")
 
-		if global2.Config.Settings.DDNS.Enable && global2.Config.Settings.Guardian.Enable && ipLast != ip {
+		if global.Config.Settings.DDNS.Enable && global.Config.Settings.Guardian.Enable && ipLast != ip {
 			if ddns(ip, httpClient) == nil {
 				ipLast = ip
 			}
@@ -67,7 +67,7 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 
 		log.Infoln("登录成功~")
 
-		if global2.Config.Settings.DDNS.Enable {
+		if global.Config.Settings.DDNS.Enable {
 			_ = ddns(ip, httpClient)
 		}
 	}
@@ -78,12 +78,12 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 var ipLast string
 
 func ddns(ip string, httpClient *http.Client) error {
-	return dns2.Run(&dns2.Config{
-		Provider: global2.Config.Settings.DDNS.Provider,
+	return dns.Run(&dns.Config{
+		Provider: global.Config.Settings.DDNS.Provider,
 		IP:       ip,
-		Domain:   global2.Config.Settings.DDNS.Domain,
-		TTL:      global2.Config.Settings.DDNS.TTL,
-		Conf:     global2.Config.Settings.DDNS.Config,
+		Domain:   global.Config.Settings.DDNS.Domain,
+		TTL:      global.Config.Settings.DDNS.TTL,
+		Conf:     global.Config.Settings.DDNS.Config,
 		Http:     httpClient,
 	})
 }
