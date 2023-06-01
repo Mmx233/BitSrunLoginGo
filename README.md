@@ -26,7 +26,6 @@ OpenWrt 特供插件： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx23
 其他 Flags:
 
 ```text
---daemon #忽略配置文件挂起设定，强制后台挂起
 --interface eth0.1 #指定使用 eth0.1 登录，多网卡模式无效
 ```
 
@@ -52,9 +51,6 @@ settings:
   guardian: #守护模式（后台常驻）
     enable: false 
     duration: 300 #网络检查周期（秒，正整数）
-  daemon: #后台挂起（不建议 windows 使用，windows 请使用系统计划任务）
-    enable: false
-    path: .BitSrun #守护监听文件路径，用于确保只有单守护运行
   log:
     debug_level: false #打印调试日志
     write_file: false #写日志文件
@@ -148,6 +144,9 @@ $env:GOGGC=0
 $env:GOOS='linux' #系统
 $env:GOARCH='amd64' #架构
 go build -gcflags=-trimpath=$env:GOPATH -asmflags=-trimpath=$env:GOPATH -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
+
+#消除命令行窗口
+go build -gcflags=-trimpath=$env:GOPATH -asmflags=-trimpath=$env:GOPATH -ldflags "-s -w -extldflags '-static' -H windowsgui" ./cmd/bitsrun
 ```
 
 golang 支持的系统与架构请自行查询
