@@ -161,7 +161,7 @@ import (
 )
 
 func main() {
-    //具体用法请查看struct注释
+    //具体用法请查看 struct 注释
     conf:=&srun.Conf{
         Https:  false,
         Client: nil,
