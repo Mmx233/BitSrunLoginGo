@@ -6,7 +6,7 @@ WORKDIR /build
 
 COPY . .
 
-RUN go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags '-extldflags "-static" -s -w' -o runner ./cmd/bitsrun
+RUN go build -ldflags '-extldflags "-static" -s -w' -o runner ./cmd/bitsrun
 
 FROM alpine:latest
 
