@@ -11,6 +11,9 @@ import (
 )
 
 func initLog() {
+	if Flags.Debug {
+		Config.Settings.Log.DebugLevel = true
+	}
 	if Config.Settings.Log.DebugLevel {
 		log.SetLevel(log.DebugLevel)
 	}
