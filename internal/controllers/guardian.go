@@ -34,7 +34,7 @@ func Guardian() {
 					log.Errorln("登录出错: ", e)
 				}
 			} else { //多网卡
-				interfaces, e := tools.GetInterfaceAddr()
+				interfaces, e := tools.GetInterfaceAddr(global.Config.Settings.Basic.Interfaces)
 				if e == nil {
 					for _, eth := range interfaces {
 						log.Debugf("使用 %s 网口登录 ", eth.Name)
