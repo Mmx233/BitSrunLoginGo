@@ -27,6 +27,7 @@ OpenWrt 特供插件： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx23
 
 ```text
 --interface eth0.1 #指定使用 eth0.1 登录，多网卡模式无效
+--debug #临时开启 debug 模式
 ```
 
 Config.yaml 说明：
