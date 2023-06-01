@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/Mmx233/BitSrunLoginGo/internal/controllers"
 	"github.com/Mmx233/BitSrunLoginGo/internal/global"
 	"github.com/Mmx233/BitSrunLoginGo/tools"
@@ -34,7 +33,7 @@ func main() {
 			if err = controllers.Login(eth, false); err != nil {
 				log.Errorln("登录出错: ", err)
 				if !global.Config.Settings.Log.DebugLevel {
-					fmt.Printf("开启调试日志（debug_level）获取详细信息")
+					log.Infoln("开启调试日志（debug_level）获取详细信息")
 				}
 				return
 			}
