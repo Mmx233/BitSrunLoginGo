@@ -27,6 +27,7 @@ OpenWrt 特供插件： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx23
 
 ```text
 --daemon #忽略配置文件挂起设定，强制后台挂起
+--interface eth0.1 #指定使用 eth0.1 登录，多网卡模式无效
 ```
 
 Config.yaml 说明：
@@ -85,6 +86,12 @@ settings:
 |   dnspod   | `secret_id`<br/>`secret_key`            |
 
 需要注意的是，应该避免在多网卡模式下使用 ddns，如有需要，可以每个网卡创建一个配置文件单独进行登录
+
+## :shower: 多拨
+
+登录请求的网卡绑定目前只在 Linux 下卓有成效，因为在别的系统中很难将请求与网卡绑定。如果要在 windows 等系统寻求稳定的多拨效果，可以考虑使用 docker 的网桥或其他系统层面的绑定
+
+你可以通过配置文件中的 `settings.basic.interfaces` 指定网卡，也可以在将该配置留空的情况下使用 `--interface` 指定网卡。
 
 ## :anchor: Docker / Kubernetes
 
