@@ -26,7 +26,6 @@ OpenWrt 特供插件： [Mmx233/BitSrunLoginGo_Openwrt](https://github.com/Mmx23
 其他 Flags:
 
 ```text
---ip [ip] #指定认证客户端 ip，多网卡模式无效
 --daemon #忽略配置文件挂起设定，强制后台挂起
 ```
 
@@ -49,7 +48,6 @@ settings:
     skip_cert_verify: false #跳过证书有效校验
     timeout: 5 #网络请求超时时间（秒，正整数）
     interfaces: "" #网卡名称正则（注意转义），如：eth0\.[2-3]，不为空时为多网卡模式
-    use_dhcp_ip: false #多网卡模式下使用网卡 ip 认证
   guardian: #守护模式（后台常驻）
     enable: false 
     duration: 300 #网络检查周期（秒，正整数）
