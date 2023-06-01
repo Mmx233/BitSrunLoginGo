@@ -27,6 +27,8 @@ func main() {
 						log.Warnf("获取指定网卡 %s ip 地址失败，使用默认网卡: %v", global.Flags.Interface, e)
 					} else if eth == nil {
 						log.Warnf("指定网卡 %s 无可用 ip 地址，使用默认网卡", global.Flags.Interface)
+					} else {
+						log.Debugf("使用指定网卡 %s ip: %s", eth.Name, eth.Addr.String())
 					}
 				}
 			}
