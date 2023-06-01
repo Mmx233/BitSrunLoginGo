@@ -6,15 +6,14 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 	"github.com/Mmx233/BitSrunLoginGo/tools"
 	log "github.com/sirupsen/logrus"
-	"net"
 	"net/http"
 )
 
 // Login 登录逻辑
-func Login(localAddr net.Addr, debugOutput bool) error {
+func Login(eth *tools.Eth, debugOutput bool) error {
 	// 登录状态检查
 
-	httpClient := tools.HttpPackSelect(localAddr).Client
+	httpClient := tools.HttpPackSelect(eth).Client
 	conf := &srun.Conf{
 		Https: global.Config.Settings.Basic.Https,
 		LoginInfo: srun.LoginInfo{
@@ -36,12 +35,6 @@ func Login(localAddr net.Addr, debugOutput bool) error {
 	online, ip, e := srun.LoginStatus(conf)
 	if e != nil {
 		return e
-	}
-
-	if localAddr != nil && global.Config.Settings.Basic.UseDhcpIP {
-		ip = localAddr.(*net.TCPAddr).IP.String()
-	} else if global.Flags.ClientIP != "" {
-		ip = global.Flags.ClientIP
 	}
 
 	log.Debugln("认证客户端 ip: ", ip)

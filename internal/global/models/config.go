@@ -19,7 +19,6 @@ type Basic struct {
 	SkipCertVerify bool   `json:"skip_cert_verify" yaml:"skip_cert_verify" mapstructure:"skip_cert_verify"`
 	Timeout        uint   `json:"timeout" yaml:"timeout" mapstructure:"timeout"`
 	Interfaces     string `json:"interfaces" yaml:"interfaces" mapstructure:"interfaces"`
-	UseDhcpIP      bool   `json:"use_dhcp_ip" yaml:"use_dhcp_ip" mapstructure:"use_dhcp_ip"`
 }
 
 type Log struct {

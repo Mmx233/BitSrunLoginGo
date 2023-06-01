@@ -38,7 +38,7 @@ func Guardian() {
 				if e == nil {
 					for _, eth := range interfaces {
 						log.Debugf("使用 %s 网口登录 ", eth.Name)
-						e = Login(eth.Addr, true)
+						e = Login(&eth, true)
 						if e != nil {
 							log.Errorln("网口 ", eth.Name+" 登录出错: ", e)
 						}

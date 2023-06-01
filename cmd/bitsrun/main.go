@@ -31,7 +31,7 @@ func main() {
 			interfaces, _ := tools.GetInterfaceAddr()
 			for _, eth := range interfaces {
 				log.Infoln("使用网卡: ", eth.Name)
-				if err = controllers.Login(eth.Addr, false); err != nil {
+				if err = controllers.Login(&eth, false); err != nil {
 					log.Errorf("网卡 %s 登录出错: %v", eth.Name, err)
 				}
 			}

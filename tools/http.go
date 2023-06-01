@@ -2,8 +2,6 @@ package tools
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/global"
-	"github.com/Mmx233/tool"
-	"net"
 	"net/http"
 )
 
@@ -13,40 +11,25 @@ type Http struct {
 
 var HttpPack *Http
 
-var httpTools map[net.Addr]*Http
+var httpTools map[string]*Http
 
 func init() {
 	if global.Config.Settings.Basic.Interfaces == "" {
 		HttpPack = genHttpPack(nil)
 	} else {
-		httpTools = make(map[net.Addr]*Http, 0)
+		httpTools = make(map[string]*Http, 0)
 	}
 }
 
-func HttpPackSelect(addr net.Addr) *Http {
+func HttpPackSelect(eth *Eth) *Http {
 	if HttpPack != nil {
 		return HttpPack
 	}
-	if addrHttp, ok := httpTools[addr]; ok {
+	if addrHttp, ok := httpTools[eth.Name]; ok {
 		return addrHttp
 	} else {
-		addrHttp = genHttpPack(addr)
-		httpTools[addr] = addrHttp
+		addrHttp = genHttpPack(eth)
+		httpTools[eth.Name] = addrHttp
 		return addrHttp
-	}
-}
-
-func genHttpPack(addr net.Addr) *Http {
-	tr := tool.GenHttpTransport(&tool.HttpTransportOptions{
-		Timeout:           global.Timeout,
-		LocalAddr:         addr,
-		SkipSslCertVerify: global.Config.Settings.Basic.SkipCertVerify,
-	})
-	tr.Proxy = http.ProxyFromEnvironment
-	return &Http{
-		Client: tool.GenHttpClient(&tool.HttpClientOptions{
-			Transport: tr,
-			Timeout:   global.Timeout,
-		}),
 	}
 }
