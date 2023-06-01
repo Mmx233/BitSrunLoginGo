@@ -10,12 +10,9 @@ import (
 )
 
 func main() {
-	if global.Flags.RunningDaemon {
-		//后台挂起模式中
+	if global.Config.Settings.Guardian.Enable {
+		//进入守护模式
 		controllers.Guardian()
-	} else if global.Config.Settings.Guardian.Enable {
-		//进入守护模式流程
-		controllers.EnterGuardian()
 	} else {
 		//登录流程
 		var err error

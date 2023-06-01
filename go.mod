@@ -6,7 +6,6 @@ require (
 	github.com/Mmx233/tool v0.7.2
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
 	github.com/cloudflare/cloudflare-go v0.68.0
-	github.com/howeyc/fsnotify v0.9.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/sirupsen/logrus v1.9.2
 	github.com/spf13/viper v1.16.0

@@ -18,7 +18,7 @@ type Api struct {
 	Header  http.Header
 }
 
-func (a *Api) Init(https bool, domain string, client *http.Client, header http.Header) {
+func (a *Api) Init(https bool, domain string, client *http.Client) {
 	if a.inited {
 		return
 	}

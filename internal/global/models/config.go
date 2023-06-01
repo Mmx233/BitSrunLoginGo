@@ -4,11 +4,6 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 )
 
-type Daemon struct {
-	Enable bool   `json:"enable" yaml:"enable" mapstructure:"enable"`
-	Path   string `json:"path" yaml:"path" mapstructure:"path"`
-}
-
 type Guardian struct {
 	Enable   bool `json:"enable" yaml:"enable" mapstructure:"enable"`
 	Duration uint `json:"duration" yaml:"duration" mapstructure:"duration"`
@@ -39,7 +34,6 @@ type DDNS struct {
 type Settings struct {
 	Basic    Basic    `json:"basic" yaml:"basic" mapstructure:"basic"`
 	Guardian Guardian `json:"guardian" yaml:"guardian" mapstructure:"guardian"`
-	Daemon   Daemon   `json:"daemon" yaml:"daemon" mapstructure:"daemon"`
 	Log      Log      `json:"log" yaml:"log" mapstructure:"log"`
 	DDNS     DDNS     `json:"ddns" yaml:"ddns" mapstructure:"ddns"`
 }

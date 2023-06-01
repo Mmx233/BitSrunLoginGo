@@ -30,9 +30,6 @@ func readConfig() {
 		Basic: models.Basic{
 			Timeout: 5,
 		},
-		Daemon: models.Daemon{
-			Path: ".BitSrun",
-		},
 		Guardian: models.Guardian{
 			Duration: 300,
 		},

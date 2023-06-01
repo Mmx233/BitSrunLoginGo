@@ -2,8 +2,6 @@ package controllers
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/global"
-	"os"
-	"os/exec"
 	"time"
 
 	"github.com/Mmx233/BitSrunLoginGo/tools"
@@ -12,15 +10,9 @@ import (
 
 // Guardian 守护模式逻辑
 func Guardian() {
+	log.Infoln("[以守护模式启动]")
+
 	GuardianDuration := time.Duration(global.Config.Settings.Guardian.Duration) * time.Second
-
-	if global.Config.Settings.Daemon.Enable {
-		go Daemon.DaemonChan()
-
-		if e := Daemon.MarkDaemon(); e != nil {
-			log.Warnln("写入daemon标记文件失败: ", e)
-		}
-	}
 
 	var c = make(chan bool)
 	for {
@@ -51,17 +43,4 @@ func Guardian() {
 		<-c
 		time.Sleep(GuardianDuration)
 	}
-}
-
-// EnterGuardian 守护模式入口，控制是否进入daemon
-func EnterGuardian() {
-	log.Infoln("[以守护模式启动]")
-	if global.Config.Settings.Daemon.Enable || global.Flags.Daemon {
-		if err := exec.Command(os.Args[0], append(os.Args[1:], "--running-daemon")...).Start(); err != nil {
-			log.Fatalln("启动守护失败: ", err)
-		}
-		log.Infoln("[进入后台进程模式]")
-		return
-	}
-	Guardian()
 }
