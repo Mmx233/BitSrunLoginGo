@@ -11,10 +11,13 @@ var Flags struct {
 	RunningDaemon bool
 	//强制daemon
 	Daemon bool
+
+	Interface string
 }
 
 func initFlags() {
 	flag.StringVar(&Flags.Path, "config", "Config.yaml", "config path")
+	flag.StringVar(&Flags.Interface, "interface", "", "specify the eth name")
 	flag.BoolVar(&Flags.RunningDaemon, "running-daemon", false, "")
 	flag.BoolVar(&Flags.Daemon, "daemon", false, "")
 	flag.Parse()
