@@ -26,8 +26,10 @@ Openwrt 可以参考 [immortalwrt/packages/net/bitsrunlogin-go](https://github.c
 其他 Flags:
 
 ```text
---interface eth0.1 #指定使用 eth0.1 登录，多网卡模式无效
---debug #临时开启 debug 模式
+--interface eth0.1  #指定使用 eth0.1 登录，多网卡模式无效
+--debug             #临时开启 debug 模式
+--auto-acid         #自动嗅探 acid
+--acid 7            #覆写配置文件 acid 值
 ```
 
 Config.yaml 说明：
