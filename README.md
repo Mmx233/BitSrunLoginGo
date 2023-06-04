@@ -169,7 +169,7 @@ import (
 
 func main() {
     //具体用法请查看 struct 注释
-    conf:=&srun.Conf{
+    client:=srun.New(&srun.Conf{
         Https:  false,
         Client: nil,
         LoginInfo: srun.LoginInfo{
@@ -186,15 +186,15 @@ func main() {
                 Enc:  "",
             },
         },
-    }
+    })
 
-    online, clientIP, e := srun.LoginStatus(conf)
+    online, ip, e := client.LoginStatus()
     if e!=nil {
         panic(e)
     }
 	
     if !online {
-        e=srun.DoLogin(clientIP, conf)
+        e=client.DoLogin(ip)
         if e!=nil {
             panic(e)
         }	
