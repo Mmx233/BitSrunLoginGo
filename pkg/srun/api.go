@@ -13,8 +13,6 @@ import (
 )
 
 type Api struct {
-	inited bool
-
 	BaseUrl string
 	Client  *http.Client
 	// 禁用自动重定向
@@ -22,10 +20,6 @@ type Api struct {
 }
 
 func (a *Api) Init(https bool, domain string, client *http.Client) {
-	if a.inited {
-		return
-	}
-
 	a.BaseUrl = "http"
 	if https {
 		a.BaseUrl += "s"
@@ -38,8 +32,6 @@ func (a *Api) Init(https bool, domain string, client *http.Client) {
 	a.NoDirect.CheckRedirect = func(_ *http.Request, _ []*http.Request) error {
 		return http.ErrUseLastResponse
 	}
-
-	a.inited = true
 }
 
 func (a *Api) request(path string, query map[string]interface{}) (map[string]interface{}, error) {

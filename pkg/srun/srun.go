@@ -4,12 +4,33 @@ import (
 	"encoding/json"
 	"errors"
 	log "github.com/sirupsen/logrus"
+	"net/http"
 	"strings"
 )
 
-func LoginStatus(c *Conf) (online bool, ip string, e error) {
-	c.initApi()
+type Conf struct {
+	//调用 API 时直接访问 https URL
+	Https bool
+	//登录参数，不可缺省
+	LoginInfo LoginInfo
+	Client    *http.Client
+}
 
+func New(conf *Conf) *Srun {
+	srun := &Srun{
+		LoginInfo: conf.LoginInfo,
+	}
+	srun.api.Init(conf.Https, conf.LoginInfo.Form.Domain, conf.Client)
+	return srun
+}
+
+type Srun struct {
+	//登录参数，不可缺省
+	LoginInfo LoginInfo
+	api       Api
+}
+
+func (c *Srun) LoginStatus() (online bool, ip string, e error) {
 	res, e := c.api.GetUserInfo()
 	if e != nil {
 		return false, "", e
@@ -38,7 +59,7 @@ func LoginStatus(c *Conf) (online bool, ip string, e error) {
 	return
 }
 
-func DoLogin(clientIP string, c *Conf) error {
+func (c *Srun) DoLogin(clientIP string) error {
 	log.Debugln("正在获取 Token")
 
 	if c.LoginInfo.Form.UserType != "" {
