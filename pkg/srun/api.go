@@ -81,7 +81,6 @@ func (a *Api) GetUserInfo() (map[string]interface{}, error) {
 
 // DetectAcid error 为 nil 的情况下 acid 可能为空
 func (a *Api) DetectAcid() (string, error) {
-	fmt.Println("开始嗅探 Acid")
 	addr := a.BaseUrl
 	for {
 		log.Debugln("HTTP GET ", addr)

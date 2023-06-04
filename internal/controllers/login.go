@@ -13,13 +13,27 @@ import (
 func Login(eth *tools.Eth, debugOutput bool) error {
 	// 登录配置初始化
 	httpClient := tools.HttpPackSelect(eth).Client
-	conf := &srun.Conf{
+	srunClient := srun.New(&srun.Conf{
 		Https: global.Config.Settings.Basic.Https,
 		LoginInfo: srun.LoginInfo{
 			Form: global.Config.Form,
 			Meta: global.Config.Meta,
 		},
 		Client: httpClient,
+	})
+
+	// 嗅探 acid
+	if global.Flags.AutoAcid {
+		log.Debugln("开始嗅探 acid")
+		acid, e := srunClient.DetectAcid()
+		if e != nil {
+			log.Errorf("嗅探 acid 失败，使用配置 acid: %v", e)
+		} else if acid == "" {
+			log.Errorln("找不到 acid，使用配置 acid")
+		} else {
+			log.Debugf("使用嗅探 acid: %s", acid)
+			srunClient.LoginInfo.Meta.Acid = acid
+		}
 	}
 
 	// 选择输出函数
@@ -32,7 +46,7 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 
 	output("正在获取登录状态")
 
-	online, ip, e := srun.LoginStatus(conf)
+	online, ip, e := srunClient.LoginStatus()
 	if e != nil {
 		return e
 	}
@@ -54,7 +68,7 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 	} else {
 		log.Infoln("检测到用户未登录，开始尝试登录...")
 
-		if e = srun.DoLogin(ip, conf); e != nil {
+		if e = srunClient.DoLogin(ip); e != nil {
 			return e
 		}
 

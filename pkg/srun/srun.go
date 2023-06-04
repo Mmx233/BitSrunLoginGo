@@ -30,7 +30,7 @@ type Srun struct {
 	api       Api
 }
 
-func (c *Srun) LoginStatus() (online bool, ip string, e error) {
+func (c Srun) LoginStatus() (online bool, ip string, e error) {
 	res, e := c.api.GetUserInfo()
 	if e != nil {
 		return false, "", e
@@ -59,7 +59,7 @@ func (c *Srun) LoginStatus() (online bool, ip string, e error) {
 	return
 }
 
-func (c *Srun) DoLogin(clientIP string) error {
+func (c Srun) DoLogin(clientIP string) error {
 	log.Debugln("正在获取 Token")
 
 	if c.LoginInfo.Form.UserType != "" {
@@ -124,4 +124,8 @@ func (c *Srun) DoLogin(clientIP string) error {
 	}
 
 	return nil
+}
+
+func (c Srun) DetectAcid() (string, error) {
+	return c.api.DetectAcid()
 }
