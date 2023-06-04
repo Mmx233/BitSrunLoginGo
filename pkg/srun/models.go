@@ -20,8 +20,8 @@ type LoginMeta struct {
 }
 
 type LoginInfo struct {
-	Form *LoginForm
-	Meta *LoginMeta
+	Form LoginForm
+	Meta LoginMeta
 }
 
 type Conf struct {

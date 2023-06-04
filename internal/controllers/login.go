@@ -11,18 +11,18 @@ import (
 
 // Login 登录逻辑
 func Login(eth *tools.Eth, debugOutput bool) error {
-	// 登录状态检查
-
+	// 登录配置初始化
 	httpClient := tools.HttpPackSelect(eth).Client
 	conf := &srun.Conf{
 		Https: global.Config.Settings.Basic.Https,
 		LoginInfo: srun.LoginInfo{
-			Form: &global.Config.Form,
-			Meta: &global.Config.Meta,
+			Form: global.Config.Form,
+			Meta: global.Config.Meta,
 		},
 		Client: httpClient,
 	}
 
+	// 选择输出函数
 	var output func(args ...interface{})
 	if debugOutput {
 		output = log.Debugln

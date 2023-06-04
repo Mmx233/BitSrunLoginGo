@@ -7,15 +7,18 @@ import (
 	log "github.com/sirupsen/logrus"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
 
 type Api struct {
-	inited  bool
+	inited bool
+
 	BaseUrl string
 	Client  *http.Client
-	Header  http.Header
+	// 禁用自动重定向
+	NoDirect *http.Client
 }
 
 func (a *Api) Init(https bool, domain string, client *http.Client) {
@@ -29,7 +32,12 @@ func (a *Api) Init(https bool, domain string, client *http.Client) {
 	}
 	a.BaseUrl = a.BaseUrl + "://" + domain + "/"
 
+	// 初始化 http client
 	a.Client = client
+	a.NoDirect = &(*client)
+	a.NoDirect.CheckRedirect = func(_ *http.Request, _ []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
 
 	a.inited = true
 }
@@ -51,10 +59,6 @@ func (a *Api) request(path string, query map[string]interface{}) (map[string]int
 	if e != nil {
 		log.Debugln(e)
 		return nil, e
-	}
-
-	for k, v := range a.Header {
-		req.Header[k] = v
 	}
 
 	resp, e := httpTool.Client.Do(req)
@@ -81,6 +85,35 @@ func (a *Api) request(path string, query map[string]interface{}) (map[string]int
 
 func (a *Api) GetUserInfo() (map[string]interface{}, error) {
 	return a.request("cgi-bin/rad_user_info", nil)
+}
+
+// DetectAcid error 为 nil 的情况下 acid 可能为空
+func (a *Api) DetectAcid() (string, error) {
+	fmt.Println("开始嗅探 Acid")
+	addr := a.BaseUrl
+	for {
+		log.Debugln("HTTP GET ", addr)
+		res, e := a.NoDirect.Get(addr)
+		if e != nil {
+			return "", e
+		}
+		_ = res.Body.Close()
+		loc := res.Header.Get("location")
+		if res.StatusCode == 302 && loc != "" {
+			if strings.HasPrefix(loc, "/") {
+				addr = a.BaseUrl + strings.TrimPrefix(loc, "/")
+			} else {
+				addr = loc
+			}
+			continue
+		}
+		break
+	}
+	u, e := url.Parse(addr)
+	if e != nil {
+		return "", e
+	}
+	return u.Query().Get(`ac_id`), e
 }
 
 func (a *Api) Login(

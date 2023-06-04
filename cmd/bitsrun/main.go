@@ -9,6 +9,10 @@ import (
 )
 
 func main() {
+	if global.Flags.AutoAcid {
+		//todo detect acid
+	}
+
 	if global.Config.Settings.Guardian.Enable {
 		//进入守护模式
 		controllers.Guardian()

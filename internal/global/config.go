@@ -43,7 +43,7 @@ func readConfig() {
 		},
 	})
 
-	//生成配置文件
+	// 生成配置文件
 	if exist, e := tool.File.Exists(Flags.Path); e != nil {
 		log.Fatalln("[init] 读取配置文件失败：", e)
 	} else if !exist {
@@ -55,12 +55,20 @@ func readConfig() {
 		os.Exit(0)
 	}
 
-	//读取配置文件
+	// 读取配置文件
 	viper.SetConfigFile(Flags.Path)
 	if e := viper.ReadInConfig(); e != nil {
 		log.Fatalln("[init] 读取配置失败：", e)
 	}
 	if e := viper.Unmarshal(&Config); e != nil {
 		log.Fatalln("[init] 解析配置失败：", e)
+	}
+
+	// flag 配置覆写
+	if Flags.Debug {
+		Config.Settings.Log.DebugLevel = true
+	}
+	if Flags.Acid != "" {
+		Config.Meta.Acid = Flags.Acid
 	}
 }
