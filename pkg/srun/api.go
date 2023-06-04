@@ -79,7 +79,6 @@ func (a *Api) GetUserInfo() (map[string]interface{}, error) {
 	return a.request("cgi-bin/rad_user_info", nil)
 }
 
-// DetectAcid error 为 nil 的情况下 acid 可能为空
 func (a *Api) DetectAcid() (string, error) {
 	addr := a.BaseUrl
 	for {
@@ -96,15 +95,22 @@ func (a *Api) DetectAcid() (string, error) {
 			} else {
 				addr = loc
 			}
+
+			var u *url.URL
+			u, e = url.Parse(addr)
+			if e != nil {
+				return "", e
+			}
+			acid := u.Query().Get(`ac_id`)
+			if acid != "" {
+				return acid, nil
+			}
+
 			continue
 		}
 		break
 	}
-	u, e := url.Parse(addr)
-	if e != nil {
-		return "", e
-	}
-	return u.Query().Get(`ac_id`), e
+	return "", ErrAcidCannotFound
 }
 
 func (a *Api) Login(

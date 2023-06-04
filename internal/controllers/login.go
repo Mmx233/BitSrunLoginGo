@@ -27,9 +27,11 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 		log.Debugln("开始嗅探 acid")
 		acid, e := srunClient.DetectAcid()
 		if e != nil {
-			log.Errorf("嗅探 acid 失败，使用配置 acid: %v", e)
-		} else if acid == "" {
-			log.Errorln("找不到 acid，使用配置 acid")
+			if e == srun.ErrAcidCannotFound {
+				log.Errorln("找不到 acid，使用配置 acid")
+			} else {
+				log.Errorf("嗅探 acid 失败，使用配置 acid: %v", e)
+			}
 		} else {
 			log.Debugf("使用嗅探 acid: %s", acid)
 			srunClient.LoginInfo.Meta.Acid = acid
