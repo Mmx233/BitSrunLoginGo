@@ -74,7 +74,7 @@ settings:
 
 ## :bow_and_arrow: DDNS
 
-将 `ddns.enable` 设为 `true` 后，将在登录成功时以及守护模式下首次启动已在线时设置指定域名的解析地址（ipv4，A 记录）
+将 `ddns.enable` 设为 `true` 后，将在登录成功时以及守护模式下首次启动已在线时设置指定域名的解析地址（ipv4，A 记录），用于校园网内网通信
 
 支持的 Provider 及其设置（将额外配置添加到配置文件 DDNS 配置内）：
 
@@ -84,7 +84,7 @@ settings:
 | cloudflare | `zone` 区域 ID<br/>`token` API 令牌         |
 |   dnspod   | `secret_id`<br/>`secret_key`            |
 
-需要注意的是，应该避免在多网卡模式下使用 ddns，如有需要，可以每个网卡创建一个配置文件单独进行登录
+需要注意的是，应该避免在多网卡模式下使用 ddns，如有需要，可以每个网卡创建一个配置文件单独进行登录。此外，校园网内网通信并不是安全的，校方往往会对其施加监管
 
 ## :shower: 多拨
 
