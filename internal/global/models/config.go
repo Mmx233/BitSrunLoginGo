@@ -5,41 +5,41 @@ import (
 )
 
 type Guardian struct {
-	Enable   bool `json:"enable" yaml:"enable" mapstructure:"enable"`
-	Duration uint `json:"duration" yaml:"duration" mapstructure:"duration"`
+	Enable   bool `yaml:"enable"`
+	Duration uint `yaml:"duration"`
 }
 
 type Basic struct {
-	Https          bool   `json:"https" yaml:"https" mapstructure:"https"`
-	SkipCertVerify bool   `json:"skip_cert_verify" yaml:"skip_cert_verify" mapstructure:"skip_cert_verify"`
-	Timeout        uint   `json:"timeout" yaml:"timeout" mapstructure:"timeout"`
-	Interfaces     string `json:"interfaces" yaml:"interfaces" mapstructure:"interfaces"`
+	Https          bool   `yaml:"https"`
+	SkipCertVerify bool   `yaml:"skip_cert_verify"`
+	Timeout        uint   `yaml:"timeout"`
+	Interfaces     string `yaml:"interfaces"`
 }
 
 type Log struct {
-	DebugLevel bool   `json:"debug_level" yaml:"debug_level" mapstructure:"debug_level"`
-	WriteFile  bool   `json:"write_file" yaml:"write_file" mapstructure:"write_file"`
-	FilePath   string `json:"log_path" yaml:"log_path" mapstructure:"log_path"`
-	FileName   string `json:"log_name" yaml:"log_name" mapstructure:"log_name"`
+	DebugLevel bool   `yaml:"debug_level"`
+	WriteFile  bool   `yaml:"write_file"`
+	FilePath   string `yaml:"log_path"`
+	FileName   string `yaml:"log_name"`
 }
 
 type DDNS struct {
-	Enable   bool                   `json:"enable" yaml:"enable" mapstructure:"enable"`
-	TTL      uint                   `json:"ttl" yaml:"ttl" mapstructure:"ttl"`
-	Domain   string                 `json:"domain" yaml:"domain" mapstructure:"domain"`
-	Provider string                 `json:"provider" yaml:"provider" mapstructure:"provider"`
-	Config   map[string]interface{} `mapstructure:",remain"`
+	Enable   bool                   `yaml:"enable"`
+	TTL      uint                   `yaml:"ttl"`
+	Domain   string                 `yaml:"domain"`
+	Provider string                 `yaml:"provider"`
+	Config   map[string]interface{} `yaml:",inline"`
 }
 
 type Settings struct {
-	Basic    Basic    `json:"basic" yaml:"basic" mapstructure:"basic"`
-	Guardian Guardian `json:"guardian" yaml:"guardian" mapstructure:"guardian"`
-	Log      Log      `json:"log" yaml:"log" mapstructure:"log"`
-	DDNS     DDNS     `json:"ddns" yaml:"ddns" mapstructure:"ddns"`
+	Basic    Basic    `yaml:"basic"`
+	Guardian Guardian `yaml:"guardian"`
+	Log      Log      `yaml:"log"`
+	DDNS     DDNS     `yaml:"ddns"`
 }
 
 type Config struct {
-	Form     srun.LoginForm `json:"form" yaml:"form" mapstructure:"form"`
-	Meta     srun.LoginMeta `json:"meta" yaml:"meta" mapstructure:"meta"`
-	Settings Settings       `json:"settings" yaml:"settings" mapstructure:"settings"`
+	Form     srun.LoginForm `yaml:"form"`
+	Meta     srun.LoginMeta `yaml:"meta"`
+	Settings Settings       `yaml:"settings"`
 }

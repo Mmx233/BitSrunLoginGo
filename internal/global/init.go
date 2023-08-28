@@ -8,7 +8,7 @@ func init() {
 	initFlags()
 
 	//配置文件初始化
-	readConfig()
+	initConfig()
 
 	//初始化常变量
 	Timeout = time.Duration(Config.Settings.Basic.Timeout) * time.Second
