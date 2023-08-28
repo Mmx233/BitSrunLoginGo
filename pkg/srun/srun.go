@@ -30,13 +30,13 @@ type Srun struct {
 	api       Api
 }
 
-func (c Srun) LoginStatus() (online bool, ip string, e error) {
-	res, e := c.api.GetUserInfo()
-	if e != nil {
-		return false, "", e
+func (c Srun) LoginStatus() (online bool, ip string, err error) {
+	res, err := c.api.GetUserInfo()
+	if err != nil {
+		return false, "", err
 	}
 
-	err, ok := res["error"]
+	errRes, ok := res["error"]
 	if !ok {
 		return false, "", ErrResultCannotFound
 	}
@@ -54,7 +54,7 @@ func (c Srun) LoginStatus() (online bool, ip string, e error) {
 
 	inet := strings.HasPrefix(ip, "192.168.") || strings.HasPrefix(ip, "10.") || strings.HasPrefix(ip, "172.")
 
-	online = err.(string) == "ok" || !inet
+	online = errRes.(string) == "ok" || !inet
 
 	return
 }
@@ -66,9 +66,9 @@ func (c Srun) DoLogin(clientIP string) error {
 		c.LoginInfo.Form.Username += "@" + c.LoginInfo.Form.UserType
 	}
 
-	res, e := c.api.GetChallenge(c.LoginInfo.Form.Username, clientIP)
-	if e != nil {
-		return e
+	res, err := c.api.GetChallenge(c.LoginInfo.Form.Username, clientIP)
+	if err != nil {
+		return err
 	}
 	token, ok := res["challenge"]
 	if !ok {
@@ -79,15 +79,15 @@ func (c Srun) DoLogin(clientIP string) error {
 
 	log.Debugln("发送登录请求")
 
-	info, e := json.Marshal(map[string]string{
+	info, err := json.Marshal(map[string]string{
 		"username": c.LoginInfo.Form.Username,
 		"password": c.LoginInfo.Form.Password,
 		"ip":       clientIP,
 		"acid":     c.LoginInfo.Meta.Acid,
 		"enc_ver":  c.LoginInfo.Meta.Enc,
 	})
-	if e != nil {
-		return e
+	if err != nil {
+		return err
 	}
 	EncryptedInfo := "{SRBX1}" + Base64(XEncode(string(info), tokenStr))
 	Md5Str := Md5(tokenStr)
@@ -99,7 +99,7 @@ func (c Srun) DoLogin(clientIP string) error {
 			tokenStr + EncryptedInfo,
 	)
 
-	res, e = c.api.Login(
+	res, err = c.api.Login(
 		c.LoginInfo.Form.Username,
 		EncryptedMd5,
 		c.LoginInfo.Meta.Acid,
@@ -109,8 +109,8 @@ func (c Srun) DoLogin(clientIP string) error {
 		c.LoginInfo.Meta.N,
 		c.LoginInfo.Meta.Type,
 	)
-	if e != nil {
-		return e
+	if err != nil {
+		return err
 	}
 	var result interface{}
 	result, ok = res["error"]

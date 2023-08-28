@@ -50,9 +50,9 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 
 	output("正在获取登录状态")
 
-	online, ip, e := srunClient.LoginStatus()
-	if e != nil {
-		return e
+	online, ip, err := srunClient.LoginStatus()
+	if err != nil {
+		return err
 	}
 
 	log.Debugln("认证客户端 ip: ", ip)
@@ -72,8 +72,8 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 	} else {
 		log.Infoln("检测到用户未登录，开始尝试登录...")
 
-		if e = srunClient.DoLogin(ip); e != nil {
-			return e
+		if err = srunClient.DoLogin(ip); err != nil {
+			return err
 		}
 
 		log.Infoln("登录成功~")

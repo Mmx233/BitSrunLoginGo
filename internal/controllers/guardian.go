@@ -21,18 +21,18 @@ func Guardian() {
 				_ = recover()
 			}()
 			if config.Settings.Basic.Interfaces == "" { //单网卡
-				e := Login(nil, true)
-				if e != nil {
-					log.Errorln("登录出错: ", e)
+				err := Login(nil, true)
+				if err != nil {
+					log.Errorln("登录出错: ", err)
 				}
 			} else { //多网卡
-				interfaces, e := tools.GetInterfaceAddr(config.Settings.Basic.Interfaces)
-				if e == nil {
+				interfaces, err := tools.GetInterfaceAddr(config.Settings.Basic.Interfaces)
+				if err == nil {
 					for _, eth := range interfaces {
 						log.Debugf("使用 %s 网口登录 ", eth.Name)
-						e = Login(&eth, true)
-						if e != nil {
-							log.Errorln("网口 ", eth.Name+" 登录出错: ", e)
+						err = Login(&eth, true)
+						if err != nil {
+							log.Errorln("网口 ", eth.Name+" 登录出错: ", err)
 						}
 					}
 				}

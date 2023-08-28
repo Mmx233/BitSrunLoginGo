@@ -19,13 +19,13 @@ func main() {
 		if config.Settings.Basic.Interfaces == "" { //单网卡
 			var eth *tools.Eth
 			if flags.Interface != "" {
-				netEth, e := net.InterfaceByName(flags.Interface)
-				if e != nil {
-					log.Warnf("获取指定网卡 %s 失败，使用默认网卡: %v", flags.Interface, e)
+				netEth, err := net.InterfaceByName(flags.Interface)
+				if err != nil {
+					log.Warnf("获取指定网卡 %s 失败，使用默认网卡: %v", flags.Interface, err)
 				} else {
-					eth, e = tools.ConvertInterface(*netEth)
-					if e != nil {
-						log.Warnf("获取指定网卡 %s ip 地址失败，使用默认网卡: %v", flags.Interface, e)
+					eth, err = tools.ConvertInterface(*netEth)
+					if err != nil {
+						log.Warnf("获取指定网卡 %s ip 地址失败，使用默认网卡: %v", flags.Interface, err)
 					} else if eth == nil {
 						log.Warnf("指定网卡 %s 无可用 ip 地址，使用默认网卡", flags.Interface)
 					} else {

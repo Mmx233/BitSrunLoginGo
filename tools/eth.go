@@ -14,16 +14,16 @@ type Eth struct {
 
 // ConvertInterface 当没有 ipv4 地址时 eth 可能为 nil
 func ConvertInterface(eth net.Interface) (*Eth, error) {
-	addresses, e := eth.Addrs()
-	if e != nil {
-		return nil, e
+	addresses, err := eth.Addrs()
+	if err != nil {
+		return nil, err
 	}
 	for _, addr := range addresses {
 		if strings.Contains(addr.String(), ".") {
 			var ip *net.TCPAddr
-			ip, e = net.ResolveTCPAddr("tcp", strings.Split(addr.String(), "/")[0]+":0")
-			if e != nil {
-				log.Warnln(eth.Name+" ip解析失败：", e)
+			ip, err = net.ResolveTCPAddr("tcp", strings.Split(addr.String(), "/")[0]+":0")
+			if err != nil {
+				log.Warnln(eth.Name+" ip解析失败：", err)
 				continue
 			}
 			return &Eth{
@@ -38,19 +38,19 @@ func ConvertInterface(eth net.Interface) (*Eth, error) {
 func GetInterfaceAddr(regexpStr string) ([]Eth, error) {
 	var result []Eth
 
-	interfaces, e := net.Interfaces()
-	if e != nil {
-		return nil, e
+	interfaces, err := net.Interfaces()
+	if err != nil {
+		return nil, err
 	}
-	reg, e := regexp.Compile(regexpStr)
-	if e != nil {
-		log.Fatalln("interfaces设置异常，无法解析: ", e)
+	reg, err := regexp.Compile(regexpStr)
+	if err != nil {
+		log.Fatalln("interfaces设置异常，无法解析: ", err)
 	}
 	for _, eth := range interfaces {
 		if reg.Match([]byte(eth.Name)) {
-			cEth, e := ConvertInterface(eth)
-			if e != nil {
-				log.Warnln(eth.Name+" 网卡地址获取失败: ", e)
+			cEth, err := ConvertInterface(eth)
+			if err != nil {
+				log.Warnln(eth.Name+" 网卡地址获取失败: ", err)
 				continue
 			}
 

@@ -28,9 +28,9 @@ func New(ttl uint, conf map[string]interface{}, Http *http.Client) (*DnsProvider
 		TTL:  ttl,
 		Http: tool.NewHttpTool(Http),
 	}
-	e := dnsUtil.DecodeConfig(conf, &p)
-	if e != nil {
-		return nil, e
+	err := dnsUtil.DecodeConfig(conf, &p)
+	if err != nil {
+		return nil, err
 	}
 
 	if p.AccessKeyId == "" || p.AccessKeySecret == "" {
@@ -74,9 +74,9 @@ func (a DnsProvider) SendRequest(Type, Action string, data map[string]interface{
 	}
 
 	mac := hmac.New(sha1.New, []byte(a.AccessKeySecret+"&"))
-	_, e := mac.Write([]byte(signStr))
-	if e != nil {
-		return nil, e
+	_, err := mac.Write([]byte(signStr))
+	if err != nil {
+		return nil, err
 	}
 	data["Signature"] = base64.StdEncoding.EncodeToString(mac.Sum(nil))
 
@@ -86,16 +86,16 @@ func (a DnsProvider) SendRequest(Type, Action string, data map[string]interface{
 		reqOpt.Body = data
 	}
 
-	resp, e := a.Http.Request(Type, &reqOpt)
-	if e != nil {
-		return nil, e
+	resp, err := a.Http.Request(Type, &reqOpt)
+	if err != nil {
+		return nil, err
 	}
 
 	if resp.StatusCode > 299 {
 		defer resp.Body.Close()
 		var res Response
-		if e = json.NewDecoder(resp.Body).Decode(&res); e != nil {
-			return nil, e
+		if err = json.NewDecoder(resp.Body).Decode(&res); err != nil {
+			return nil, err
 		}
 
 		return nil, errors.New(res.Message)
@@ -105,21 +105,21 @@ func (a DnsProvider) SendRequest(Type, Action string, data map[string]interface{
 }
 
 func (a DnsProvider) DomainRecordStatus(subDomain, rootDomain string) (*DomainStatus, bool, error) {
-	resp, e := a.SendRequest("GET", "DescribeDomainRecords", map[string]interface{}{
+	resp, err := a.SendRequest("GET", "DescribeDomainRecords", map[string]interface{}{
 		"DomainName": rootDomain,
 		"SearchMode": "EXACT",
 		"KeyWord":    subDomain,
 		"PageSize":   1,
 		"Type":       "A",
 	})
-	if e != nil {
-		return nil, false, e
+	if err != nil {
+		return nil, false, err
 	}
 	defer resp.Body.Close()
 
 	var res DomainStatusRes
-	if e = json.NewDecoder(resp.Body).Decode(&res); e != nil {
-		return nil, false, e
+	if err = json.NewDecoder(resp.Body).Decode(&res); err != nil {
+		return nil, false, err
 	}
 
 	if res.TotalCount == 0 || len(res.DomainRecords.Record) == 0 {
@@ -130,15 +130,15 @@ func (a DnsProvider) DomainRecordStatus(subDomain, rootDomain string) (*DomainSt
 }
 
 func (a DnsProvider) UpdateRecord(RecordId, subDomain, ip string) error {
-	resp, e := a.SendRequest("POST", "UpdateDomainRecord", map[string]interface{}{
+	resp, err := a.SendRequest("POST", "UpdateDomainRecord", map[string]interface{}{
 		"RecordId": RecordId,
 		"RR":       subDomain,
 		"Type":     "A",
 		"Value":    ip,
 		"TTL":      a.TTL,
 	})
-	if e != nil {
-		return e
+	if err != nil {
+		return err
 	}
 	defer resp.Body.Close()
 
@@ -146,15 +146,15 @@ func (a DnsProvider) UpdateRecord(RecordId, subDomain, ip string) error {
 }
 
 func (a DnsProvider) NewRecord(subDomain, rootDomain, ip string) error {
-	resp, e := a.SendRequest("POST", "AddDomainRecord", map[string]interface{}{
+	resp, err := a.SendRequest("POST", "AddDomainRecord", map[string]interface{}{
 		"DomainName": rootDomain,
 		"RR":         subDomain,
 		"Type":       "A",
 		"Value":      ip,
 		"TTL":        a.TTL,
 	})
-	if e != nil {
-		return e
+	if err != nil {
+		return err
 	}
 	defer resp.Body.Close()
 
@@ -162,14 +162,14 @@ func (a DnsProvider) NewRecord(subDomain, rootDomain, ip string) error {
 }
 
 func (a DnsProvider) SetDomainRecord(domain, ip string) error {
-	subDomain, rootDomain, e := dnsUtil.DecodeDomain(domain)
-	if e != nil {
-		return e
+	subDomain, rootDomain, err := dnsUtil.DecodeDomain(domain)
+	if err != nil {
+		return err
 	}
 
-	record, exist, e := a.DomainRecordStatus(subDomain, rootDomain)
-	if e != nil {
-		return e
+	record, exist, err := a.DomainRecordStatus(subDomain, rootDomain)
+	if err != nil {
+		return err
 	}
 
 	if exist {

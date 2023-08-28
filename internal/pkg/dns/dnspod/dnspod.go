@@ -1,7 +1,7 @@
 package dnspod
 
 import (
-	dnsUtil2 "github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/util"
+	dnsUtil "github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/util"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
@@ -19,19 +19,19 @@ type DnsProvider struct {
 
 func New(ttl uint64, conf map[string]interface{}, Http http.RoundTripper) (*DnsProvider, error) {
 	var p = DnsProvider{TTL: ttl}
-	e := dnsUtil2.DecodeConfig(conf, &p)
-	if e != nil {
-		return nil, e
+	err := dnsUtil.DecodeConfig(conf, &p)
+	if err != nil {
+		return nil, err
 	}
-	p.Client, e = dnspod.NewClient(common.NewCredential(p.SecretId, p.SecretKey), regions.Guangzhou, profile.NewClientProfile())
+	p.Client, err = dnspod.NewClient(common.NewCredential(p.SecretId, p.SecretKey), regions.Guangzhou, profile.NewClientProfile())
 	p.Client.WithHttpTransport(Http)
-	return &p, e
+	return &p, err
 }
 
 func (a DnsProvider) SetDomainRecord(domain, ip string) error {
-	subDomain, rootDomain, e := dnsUtil2.DecodeDomain(domain)
-	if e != nil {
-		return e
+	subDomain, rootDomain, err := dnsUtil.DecodeDomain(domain)
+	if err != nil {
+		return err
 	}
 
 	var (
@@ -44,8 +44,8 @@ func (a DnsProvider) SetDomainRecord(domain, ip string) error {
 	reqRecordList.Domain = &rootDomain
 	reqRecordList.Subdomain = &subDomain
 	reqRecordList.Limit = &limit
-	res, e := a.Client.DescribeRecordList(reqRecordList)
-	if (e != nil && strings.Contains(e.Error(), dnspod.RESOURCENOTFOUND_NODATAOFRECORD)) || (e == nil && len(res.Response.RecordList) == 0) {
+	res, err := a.Client.DescribeRecordList(reqRecordList)
+	if (err != nil && strings.Contains(err.Error(), dnspod.RESOURCENOTFOUND_NODATAOFRECORD)) || (err == nil && len(res.Response.RecordList) == 0) {
 		reqNewRecord := dnspod.NewCreateRecordRequest()
 		reqNewRecord.TTL = &a.TTL
 		reqNewRecord.Domain = &rootDomain
@@ -53,10 +53,10 @@ func (a DnsProvider) SetDomainRecord(domain, ip string) error {
 		reqNewRecord.RecordLine = &recordLine
 		reqNewRecord.Value = &ip
 		reqNewRecord.SubDomain = &subDomain
-		_, e = a.Client.CreateRecord(reqNewRecord)
-		return e
-	} else if e != nil {
-		return e
+		_, err = a.Client.CreateRecord(reqNewRecord)
+		return err
+	} else if err != nil {
+		return err
 	}
 
 	reqModifyRecord := dnspod.NewModifyRecordRequest()
@@ -66,6 +66,6 @@ func (a DnsProvider) SetDomainRecord(domain, ip string) error {
 	reqModifyRecord.RecordId = res.Response.RecordList[0].RecordId
 	reqModifyRecord.RecordLine = &recordLine
 	reqModifyRecord.RecordType = &recordType
-	_, e = a.Client.ModifyRecord(reqModifyRecord)
-	return e
+	_, err = a.Client.ModifyRecord(reqModifyRecord)
+	return err
 }
