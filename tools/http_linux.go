@@ -35,7 +35,7 @@ func genHttpPack(eth *Eth) *Http {
 		DialContext:         dialer.DialContext,
 		TLSHandshakeTimeout: global.Timeout,
 		IdleConnTimeout:     global.Timeout,
-		TLSClientConfig:     &tls.Config{InsecureSkipVerify: global.Config.Settings.Basic.SkipCertVerify},
+		TLSClientConfig:     &tls.Config{InsecureSkipVerify: config.Settings.Basic.SkipCertVerify},
 	}
 	tr.Proxy = http.ProxyFromEnvironment
 	return &Http{

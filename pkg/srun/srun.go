@@ -63,10 +63,10 @@ func (c Srun) DoLogin(clientIP string) error {
 	log.Debugln("正在获取 Token")
 
 	if c.LoginInfo.Form.UserType != "" {
-		c.LoginInfo.Form.UserName += "@" + c.LoginInfo.Form.UserType
+		c.LoginInfo.Form.Username += "@" + c.LoginInfo.Form.UserType
 	}
 
-	res, e := c.api.GetChallenge(c.LoginInfo.Form.UserName, clientIP)
+	res, e := c.api.GetChallenge(c.LoginInfo.Form.Username, clientIP)
 	if e != nil {
 		return e
 	}
@@ -80,8 +80,8 @@ func (c Srun) DoLogin(clientIP string) error {
 	log.Debugln("发送登录请求")
 
 	info, e := json.Marshal(map[string]string{
-		"username": c.LoginInfo.Form.UserName,
-		"password": c.LoginInfo.Form.PassWord,
+		"username": c.LoginInfo.Form.Username,
+		"password": c.LoginInfo.Form.Password,
 		"ip":       clientIP,
 		"acid":     c.LoginInfo.Meta.Acid,
 		"enc_ver":  c.LoginInfo.Meta.Enc,
@@ -93,14 +93,14 @@ func (c Srun) DoLogin(clientIP string) error {
 	Md5Str := Md5(tokenStr)
 	EncryptedMd5 := "{MD5}" + Md5Str
 	EncryptedChkstr := Sha1(
-		tokenStr + c.LoginInfo.Form.UserName + tokenStr + Md5Str +
+		tokenStr + c.LoginInfo.Form.Username + tokenStr + Md5Str +
 			tokenStr + c.LoginInfo.Meta.Acid + tokenStr + clientIP +
 			tokenStr + c.LoginInfo.Meta.N + tokenStr + c.LoginInfo.Meta.Type +
 			tokenStr + EncryptedInfo,
 	)
 
 	res, e = c.api.Login(
-		c.LoginInfo.Form.UserName,
+		c.LoginInfo.Form.Username,
 		EncryptedMd5,
 		c.LoginInfo.Meta.Acid,
 		clientIP,

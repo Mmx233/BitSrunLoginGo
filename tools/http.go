@@ -1,7 +1,7 @@
 package tools
 
 import (
-	"github.com/Mmx233/BitSrunLoginGo/internal/global"
+	"github.com/Mmx233/BitSrunLoginGo/internal/config"
 	"net/http"
 )
 
@@ -14,10 +14,10 @@ var HttpPack *Http
 var httpTools map[string]*Http
 
 func init() {
-	if global.Config.Settings.Basic.Interfaces == "" {
+	if config.Settings.Basic.Interfaces == "" {
 		HttpPack = genHttpPack(nil)
 	} else {
-		httpTools = make(map[string]*Http, 0)
+		httpTools = make(map[string]*Http)
 	}
 }
 
