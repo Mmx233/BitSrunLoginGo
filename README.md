@@ -16,7 +16,7 @@ Openwrt 可以参考 [immortalwrt/packages/net/bitsrunlogin-go](https://github.c
 
 首次运行将自动生成配置文件，首次使用建议开启调试日志（`settings.log.debug_level`），可以通过添加启动参数 `--config` 指定配置文件路径，默认为当前目录的 `Config.yaml`
 
-支持 `json`、`yaml`、`yml`、`toml`、`hcl`、`tfvars` 等，仅对 `json`和`yaml` 进行了优化与测试
+配置类型支持 `json`、`yaml`
 
 ```shell
 ./bitsrun --config=./another-config.yaml
@@ -59,13 +59,14 @@ settings:
     write_file: false #写日志文件
     log_path: ./ #日志文件存放目录路径
     log_name: "" #指定日志文件名
-  ddns: # 校园网内网 ip ddns
+  ddns: #校园网内网 ip ddns
     enable: false
     domain: www.example.com
     ttl: 600
-    provider: "cloudflare" # dns provider 配置见 DDNS 说明
-    #zone: "xxxx"
-    #token: "xxxx"
+    provider: "cloudflare"
+    config: #需要根据 provider 类型配置字段名，见 DDNS 说明
+      zone: "xxxx"
+      token: "xxxx"
 ```
 
 登录参数从原网页登陆时对 `/srun_portal` 的请求抓取，抓取时请把浏览器控制台的 `preserve log`（保留日志）启用。
@@ -177,9 +178,9 @@ func main() {
         LoginInfo: srun.LoginInfo{
             Form: &srun.LoginForm{
                 Domain:   "",
-                UserName: "",
+                Username: "",
                 UserType: "",
-                PassWord: "",
+                Password: "",
             },
             Meta: &srun.LoginMeta{
                 N:    "",
