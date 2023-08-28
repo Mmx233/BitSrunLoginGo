@@ -14,16 +14,16 @@ Openwrt 可以参考 [immortalwrt/packages/net/bitsrunlogin-go](https://github.c
 
 编译结果为可执行文件，下载 release 或编译后直接运行即可
 
-首次运行将自动生成配置文件，首次使用建议开启调试日志（`settings.log.debug_level`），可以通过添加启动参数 `--config` 指定配置文件路径，默认为当前目录的 `Config.yaml`
+首次运行将自动生成配置文件，首次使用建议开启调试日志（`settings.log.debug_level` 设为 `true` 或使用 flag `--debug`），可以通过添加启动参数 `--config` 指定配置文件路径，默认为当前目录的 `Config.yaml`
 
-配置类型支持 `json`、`yaml`
+配置类型支持 `json`、`yaml`，默认使用 `yaml`
 
 ```shell
 ./bitsrun --config=./another-config.yaml
 ./bitsrun --config=/demo/i.json
 ```
 
-其他 Flags:
+其他 flags:
 
 ```text
 --interface eth0.1  #指定使用 eth0.1 登录，多网卡模式无效
@@ -38,7 +38,7 @@ Config.yaml 说明：
 form:
   domain: www.msftconnecttest.com #登录地址 ip 或域名
   username: "" #账号
-  usertype: cmcc #运营商类型，详情看下方
+  usertype: cmcc #运营商类型，详情看下方文字说明
   password: "" #密码
 meta: #登录参数
   "n": "200"
