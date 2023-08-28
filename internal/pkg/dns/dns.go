@@ -10,7 +10,7 @@ import (
 )
 
 func Run(c *Config) error {
-	log.Debugln("开始 DDNS 流程")
+	log.Debugf("开始 %s DDNS 流程", c.Provider)
 
 	if c.TTL == 0 {
 		c.TTL = 600
@@ -19,14 +19,14 @@ func Run(c *Config) error {
 	// 配置解析
 
 	var dns Provider
-	var e error
+	var err error
 	switch c.Provider {
 	case "aliyun":
-		dns, e = aliyun.New(c.TTL, c.Conf, c.Http)
+		dns, err = aliyun.New(c.TTL, c.Conf, c.Http)
 	case "cloudflare":
-		dns, e = cloudflare.New(int(c.TTL), c.Conf, c.Http)
+		dns, err = cloudflare.New(int(c.TTL), c.Conf, c.Http)
 	case "dnspod":
-		dns, e = dnspod.New(uint64(c.TTL), c.Conf, c.Http.Transport)
+		dns, err = dnspod.New(uint64(c.TTL), c.Conf, c.Http.Transport)
 	default:
 		var msg string
 		if c.Provider == "" {
@@ -37,19 +37,19 @@ func Run(c *Config) error {
 		log.Warnln(msg)
 		return errors.New(msg)
 	}
-	if e != nil {
-		log.Warnf("解析 DDNS 配置失败：%v", e)
-		return e
+	if err != nil {
+		log.Warnf("解析 DDNS config 失败：%v", err)
+		return err
 	}
 
 	// 修改 dns 记录
 
-	if e = dns.SetDomainRecord(c.Domain, c.IP); e != nil {
-		log.Warnf("设置 dns 解析记录失败：%v", e)
-		return e
+	if err = dns.SetDomainRecord(c.Domain, c.IP); err != nil {
+		log.Warnf("设置 dns 解析记录失败：%v", err)
+		return err
 	}
 
-	log.Debugln("DDNS 配置应用成功")
+	log.Debugf("DDNS 配置应用成功: %s | %s", c.Domain, c.IP)
 
 	return nil
 }
