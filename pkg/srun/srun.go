@@ -5,7 +5,6 @@ import (
 	"errors"
 	log "github.com/sirupsen/logrus"
 	"net/http"
-	"strings"
 )
 
 type Conf struct {
@@ -49,13 +48,8 @@ func (c Srun) LoginStatus() (online bool, ip string, err error) {
 		}
 	}
 
-	// 如果深澜分配的 ip 不是内网 ip，说明已经在线且拥有固定 ip
 	ip = ipInterface.(string)
-
-	inet := strings.HasPrefix(ip, "192.168.") || strings.HasPrefix(ip, "10.") || strings.HasPrefix(ip, "172.")
-
-	online = errRes.(string) == "ok" || !inet
-
+	online = errRes.(string) == "ok"
 	return
 }
 
