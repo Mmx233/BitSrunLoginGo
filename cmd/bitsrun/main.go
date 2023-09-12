@@ -2,11 +2,9 @@ package main
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
-	"github.com/Mmx233/BitSrunLoginGo/internal/config/flags"
 	"github.com/Mmx233/BitSrunLoginGo/internal/controllers"
 	"github.com/Mmx233/BitSrunLoginGo/tools"
 	log "github.com/sirupsen/logrus"
-	"net"
 )
 
 func main() {
@@ -17,23 +15,7 @@ func main() {
 		//登录流程
 		var err error
 		if config.Settings.Basic.Interfaces == "" { //单网卡
-			var eth *tools.Eth
-			if flags.Interface != "" {
-				netEth, err := net.InterfaceByName(flags.Interface)
-				if err != nil {
-					log.Warnf("获取指定网卡 %s 失败，使用默认网卡: %v", flags.Interface, err)
-				} else {
-					eth, err = tools.ConvertInterface(*netEth)
-					if err != nil {
-						log.Warnf("获取指定网卡 %s ip 地址失败，使用默认网卡: %v", flags.Interface, err)
-					} else if eth == nil {
-						log.Warnf("指定网卡 %s 无可用 ip 地址，使用默认网卡", flags.Interface)
-					} else {
-						log.Debugf("使用指定网卡 %s ip: %s", eth.Name, eth.Addr.String())
-					}
-				}
-			}
-			if err = controllers.Login(eth, false); err != nil {
+			if err = controllers.Login(nil, false); err != nil {
 				log.Errorln("登录出错: ", err)
 				if !config.Settings.Log.DebugLevel {
 					log.Infoln("开启调试日志（debug_level）获取详细信息")

@@ -17,9 +17,6 @@ func Guardian() {
 	var c = make(chan bool)
 	for {
 		go func() {
-			defer func() {
-				_ = recover()
-			}()
 			if config.Settings.Basic.Interfaces == "" { //单网卡
 				err := Login(nil, true)
 				if err != nil {
