@@ -28,7 +28,8 @@ func (a *Api) Init(https bool, domain string, client *http.Client) {
 
 	// 初始化 http client
 	a.Client = client
-	a.NoDirect = &(*client)
+	copyClient := *client
+	a.NoDirect = &copyClient
 	a.NoDirect.CheckRedirect = func(_ *http.Request, _ []*http.Request) error {
 		return http.ErrUseLastResponse
 	}
