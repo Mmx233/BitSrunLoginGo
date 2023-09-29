@@ -16,8 +16,8 @@ type (
 	LogConf struct {
 		DebugLevel bool   `json:"debug_level" yaml:"debug_level"`
 		WriteFile  bool   `json:"write_file" yaml:"write_file"`
-		FilePath   string `json:"file_path" yaml:"log_path"`
-		FileName   string `json:"file_name" yaml:"log_name"`
+		FilePath   string `json:"log_path" yaml:"log_path"`
+		FileName   string `json:"log_name" yaml:"log_name"`
 	}
 
 	DdnsConf struct {
@@ -25,7 +25,7 @@ type (
 		TTL      uint                   `json:"ttl" yaml:"ttl"`
 		Domain   string                 `json:"domain" yaml:"domain"`
 		Provider string                 `json:"provider" yaml:"provider"`
-		Config   map[string]interface{} `json:"config" json:"config" yaml:"config"`
+		Config   map[string]interface{} `json:"config" yaml:"config"`
 	}
 )
 
