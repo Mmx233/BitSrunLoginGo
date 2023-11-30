@@ -10,10 +10,13 @@ var defaultConfig = ConfFromFile{
 		UserType: "cmcc",
 	},
 	Meta: srun.LoginMeta{
-		N:    "200",
-		Type: "1",
-		Acid: "5",
-		Enc:  "srun_bx1",
+		N:           "200",
+		Type:        "1",
+		Acid:        "5",
+		Enc:         "srun_bx1",
+		OS:          "Windows 10",
+		Name:        "windows",
+		DoubleStack: false,
 	},
 	Settings: SettingsConf{
 		Basic: BasicConf{

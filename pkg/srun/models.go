@@ -9,10 +9,13 @@ type LoginForm struct {
 }
 
 type LoginMeta struct {
-	N    string `json:"n" yaml:"n"`
-	Type string `json:"type" yaml:"type"`
-	Acid string `json:"acid" yaml:"acid"`
-	Enc  string `json:"enc" yaml:"enc"`
+	N           string `json:"n" yaml:"n"`
+	Type        string `json:"type" yaml:"type"`
+	Acid        string `json:"acid" yaml:"acid"`
+	Enc         string `json:"enc" yaml:"enc"`
+	OS          string `json:"os" yaml:"os"`
+	Name        string `json:"name" yaml:"name"`
+	DoubleStack bool   `json:"double_stack" json:"double_stack"`
 }
 
 type LoginInfo struct {

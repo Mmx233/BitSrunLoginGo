@@ -93,16 +93,25 @@ func (c Srun) DoLogin(clientIP string) error {
 			tokenStr + EncryptedInfo,
 	)
 
-	res, err = c.api.Login(
-		c.LoginInfo.Form.Username,
-		EncryptedMd5,
-		c.LoginInfo.Meta.Acid,
-		clientIP,
-		EncryptedInfo,
-		EncryptedChkstr,
-		c.LoginInfo.Meta.N,
-		c.LoginInfo.Meta.Type,
-	)
+	var doubleStack string
+	if c.LoginInfo.Meta.DoubleStack {
+		doubleStack = "1"
+	} else {
+		doubleStack = "0"
+	}
+	res, err = c.api.Login(&LoginRequest{
+		Username:    c.LoginInfo.Form.Username,
+		Password:    EncryptedMd5,
+		AcID:        c.LoginInfo.Meta.Acid,
+		IP:          clientIP,
+		Info:        EncryptedInfo,
+		ChkSum:      EncryptedChkstr,
+		N:           c.LoginInfo.Meta.N,
+		Type:        c.LoginInfo.Meta.Type,
+		OS:          c.LoginInfo.Meta.OS,
+		Name:        c.LoginInfo.Meta.Name,
+		DoubleStack: doubleStack,
+	})
 	if err != nil {
 		return err
 	}
