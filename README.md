@@ -45,6 +45,10 @@ meta: #登录参数
   type: "1"
   acid: "5"
   enc: srun_bx1
+  os: Windows 10
+  name: windows
+  info_prefix: SRBX1 # info 字段前缀括号中的值
+  double_stack: false
 settings:
   basic: #基础设置
     https: false #访问校园网 API 时使用 https 协议
