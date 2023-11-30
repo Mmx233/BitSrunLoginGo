@@ -16,7 +16,7 @@ type LoginMeta struct {
 	OS          string `json:"os" yaml:"os"`
 	Name        string `json:"name" yaml:"name"`
 	InfoPrefix  string `json:"info_prefix" yaml:"info_prefix"`
-	DoubleStack bool   `json:"double_stack" json:"double_stack"`
+	DoubleStack bool   `json:"double_stack" yaml:"double_stack"`
 }
 
 type LoginInfo struct {
