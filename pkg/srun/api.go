@@ -114,31 +114,36 @@ func (a *Api) DetectAcid() (string, error) {
 	return "", ErrAcidCannotFound
 }
 
-func (a *Api) Login(
-	Username,
-	Password,
-	AcID,
-	Ip,
-	Info,
-	ChkSum,
-	N,
-	Type string,
-) (map[string]interface{}, error) {
+type LoginRequest struct {
+	Username    string
+	Password    string
+	AcID        string
+	IP          string
+	Info        string
+	ChkSum      string
+	N           string
+	Type        string
+	OS          string
+	Name        string
+	DoubleStack string
+}
+
+func (a *Api) Login(req *LoginRequest) (map[string]interface{}, error) {
 	return a.request(
 		"cgi-bin/srun_portal",
 		map[string]interface{}{
 			"action":       "login",
-			"username":     Username,
-			"password":     Password,
-			"ac_id":        AcID,
-			"ip":           Ip,
-			"info":         Info,
-			"chksum":       ChkSum,
-			"n":            N,
-			"type":         Type,
-			"os":           "Windows 10",
-			"name":         "windows",
-			"double_stack": 0,
+			"username":     req.Username,
+			"password":     req.Password,
+			"ac_id":        req.AcID,
+			"ip":           req.IP,
+			"info":         req.Info,
+			"chksum":       req.ChkSum,
+			"n":            req.N,
+			"type":         req.Type,
+			"os":           req.OS,
+			"name":         req.Name,
+			"double_stack": req.DoubleStack,
 		})
 }
 
