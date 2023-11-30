@@ -10,7 +10,7 @@ import (
 )
 
 func Run(c *Config) error {
-	log.Debugf("开始 %s DDNS 流程", c.Provider)
+	log.Infof("开始 %s DDNS 流程", c.Provider)
 
 	if c.TTL == 0 {
 		c.TTL = 600
@@ -49,7 +49,7 @@ func Run(c *Config) error {
 		return err
 	}
 
-	log.Debugf("DDNS 配置应用成功: %s | %s", c.Domain, c.IP)
+	log.Infof("DDNS 配置应用成功: %s | %s", c.Domain, c.IP)
 
 	return nil
 }
