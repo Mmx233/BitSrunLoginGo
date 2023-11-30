@@ -3,6 +3,7 @@ package srun
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 )
@@ -83,7 +84,12 @@ func (c Srun) DoLogin(clientIP string) error {
 	if err != nil {
 		return err
 	}
-	EncryptedInfo := "{SRBX1}" + Base64(XEncode(string(info), tokenStr))
+
+	var infoPrefix string
+	if c.LoginInfo.Meta.InfoPrefix != "" {
+		infoPrefix = fmt.Sprintf("{%s}", c.LoginInfo.Meta.InfoPrefix)
+	}
+	EncryptedInfo := infoPrefix + Base64(XEncode(string(info), tokenStr))
 	Md5Str := Md5(tokenStr)
 	EncryptedMd5 := "{MD5}" + Md5Str
 	EncryptedChkstr := Sha1(
@@ -99,6 +105,7 @@ func (c Srun) DoLogin(clientIP string) error {
 	} else {
 		doubleStack = "0"
 	}
+
 	res, err = c.api.Login(&LoginRequest{
 		Username:    c.LoginInfo.Form.Username,
 		Password:    EncryptedMd5,

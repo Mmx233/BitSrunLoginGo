@@ -16,6 +16,7 @@ var defaultConfig = ConfFromFile{
 		Enc:         "srun_bx1",
 		OS:          "Windows 10",
 		Name:        "windows",
+		InfoPrefix:  "SRBX1",
 		DoubleStack: false,
 	},
 	Settings: SettingsConf{
