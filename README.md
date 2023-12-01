@@ -44,7 +44,7 @@ meta: #登录参数
   "n": "200"
   type: "1"
   acid: "5"
-  enc: srun_bx1
+  enc: srun_bx1 # enc 不在表单中，但一般都是默认值。你可以在 jquery.srun.portal.js 中搜索 var enc 来找到真实值
   os: Windows 10
   name: windows
   info_prefix: SRBX1 # info 字段前缀括号中的值
