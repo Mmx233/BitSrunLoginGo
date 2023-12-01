@@ -38,7 +38,7 @@ Config.yaml 说明：
 form:
   domain: www.msftconnecttest.com #登录地址 ip 或域名
   username: "" #账号
-  usertype: cmcc #运营商类型，详情看下方文字说明
+  user_type: cmcc #运营商类型，详情看下方文字说明
   password: "" #密码
 meta: #登录参数
   "n": "200"

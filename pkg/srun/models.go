@@ -4,7 +4,7 @@ type LoginForm struct {
 	Domain   string `json:"domain" yaml:"domain"`
 	Username string `json:"username" yaml:"username"`
 	//运营商类型
-	UserType string `json:"user_type" yaml:"userType"`
+	UserType string `json:"user_type" yaml:"user_type"`
 	Password string `json:"password" yaml:"password"`
 }
 
