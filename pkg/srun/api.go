@@ -88,6 +88,7 @@ func (a *Api) DetectAcid() (string, error) {
 		if err != nil {
 			return "", err
 		}
+		_, _ = io.Copy(io.Discard, res.Body)
 		_ = res.Body.Close()
 		loc := res.Header.Get("location")
 		if res.StatusCode == 302 && loc != "" {
