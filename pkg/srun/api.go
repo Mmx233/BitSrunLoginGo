@@ -17,18 +17,29 @@ type Api struct {
 	Client  *http.Client
 	// 禁用自动重定向
 	NoDirect *http.Client
+
+	CustomHeader map[string]interface{}
 }
 
-func (a *Api) Init(https bool, domain string, client *http.Client) {
+type ApiConfig struct {
+	Https        bool
+	Domain       string
+	Client       *http.Client
+	CustomHeader map[string]interface{}
+}
+
+func (a *Api) Init(conf *ApiConfig) {
 	a.BaseUrl = "http"
-	if https {
+	if conf.Https {
 		a.BaseUrl += "s"
 	}
-	a.BaseUrl = a.BaseUrl + "://" + domain + "/"
+	a.BaseUrl = a.BaseUrl + "://" + conf.Domain + "/"
+
+	a.CustomHeader = conf.CustomHeader
 
 	// 初始化 http client
-	a.Client = client
-	copyClient := *client
+	a.Client = conf.Client
+	copyClient := *conf.Client
 	a.NoDirect = &copyClient
 	a.NoDirect.CheckRedirect = func(_ *http.Request, _ []*http.Request) error {
 		return http.ErrUseLastResponse
@@ -46,8 +57,9 @@ func (a *Api) request(path string, query map[string]interface{}) (map[string]int
 	query["_"] = timestamp
 	httpTool := tool.NewHttpTool(a.Client)
 	req, err := httpTool.GenReq("GET", &tool.DoHttpReq{
-		Url:   a.BaseUrl + path,
-		Query: query,
+		Url:    a.BaseUrl + path,
+		Query:  query,
+		Header: a.CustomHeader,
 	})
 	if err != nil {
 		log.Debugln(err)
@@ -84,7 +96,14 @@ func (a *Api) DetectAcid() (string, error) {
 	addr := a.BaseUrl
 	for {
 		log.Debugln("HTTP GET ", addr)
-		res, err := a.NoDirect.Get(addr)
+		req, err := http.NewRequest("GET", addr, nil)
+		if err != nil {
+			return "", err
+		}
+		for k, v := range a.CustomHeader {
+			req.Header.Set(k, fmt.Sprint(v))
+		}
+		res, err := a.NoDirect.Do(req)
 		if err != nil {
 			return "", err
 		}

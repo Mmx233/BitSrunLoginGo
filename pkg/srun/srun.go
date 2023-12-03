@@ -12,15 +12,21 @@ type Conf struct {
 	//调用 API 时直接访问 https URL
 	Https bool
 	//登录参数，不可缺省
-	LoginInfo LoginInfo
-	Client    *http.Client
+	LoginInfo    LoginInfo
+	Client       *http.Client
+	CustomHeader map[string]interface{}
 }
 
 func New(conf *Conf) *Srun {
 	srun := &Srun{
 		LoginInfo: conf.LoginInfo,
 	}
-	srun.api.Init(conf.Https, conf.LoginInfo.Form.Domain, conf.Client)
+	srun.api.Init(&ApiConfig{
+		Https:        conf.Https,
+		Domain:       conf.LoginInfo.Form.Domain,
+		Client:       conf.Client,
+		CustomHeader: conf.CustomHeader,
+	})
 	return srun
 }
 
