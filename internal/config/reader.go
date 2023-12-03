@@ -1,6 +1,7 @@
 package config
 
 import (
+	"bytes"
 	"encoding/json"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
@@ -31,7 +32,9 @@ func (Json) Marshal(v any) ([]byte, error) {
 	return json.MarshalIndent(v, "", " ")
 }
 func (Json) Unmarshal(data []byte, v any) error {
-	return json.Unmarshal(data, v)
+	jsonDecoder := json.NewDecoder(bytes.NewReader(data))
+	jsonDecoder.UseNumber()
+	return jsonDecoder.Decode(v)
 }
 
 type Yaml struct {

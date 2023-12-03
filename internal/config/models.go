@@ -30,8 +30,9 @@ type (
 )
 
 type SettingsConf struct {
-	Basic    BasicConf    `json:"basic" yaml:"basic"`
-	Guardian GuardianConf `json:"guardian" yaml:"guardian"`
-	Log      LogConf      `json:"log" yaml:"log"`
-	DDNS     DdnsConf     `json:"ddns" yaml:"ddns"`
+	Basic        BasicConf              `json:"basic" yaml:"basic"`
+	Guardian     GuardianConf           `json:"guardian" yaml:"guardian"`
+	Log          LogConf                `json:"log" yaml:"log"`
+	DDNS         DdnsConf               `json:"ddns" yaml:"ddns"`
+	CustomHeader map[string]interface{} `json:"custom_header" yaml:"custom_header"`
 }
