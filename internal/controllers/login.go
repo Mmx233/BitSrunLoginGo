@@ -55,7 +55,14 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 		return err
 	}
 
-	log.Debugln("认证客户端 ip: ", ip)
+	var loginIp string
+
+	if config.Meta.DoubleStack {
+		log.Debugln("使用双栈网络时认证 ip 为空")
+	} else {
+		loginIp = ip
+		log.Debugln("认证客户端 ip: ", ip)
+	}
 
 	// 登录执行
 
@@ -72,7 +79,7 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 	} else {
 		log.Infoln("检测到用户未登录，开始尝试登录...")
 
-		if err = srunClient.DoLogin(ip); err != nil {
+		if err = srunClient.DoLogin(loginIp); err != nil {
 			return err
 		}
 
