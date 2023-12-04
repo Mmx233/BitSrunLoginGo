@@ -21,7 +21,8 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 			Form: *config.Form,
 			Meta: *config.Meta,
 		},
-		Client: httpClient,
+		Client:       httpClient,
+		CustomHeader: config.Settings.CustomHeader,
 	})
 
 	// 嗅探 acid
