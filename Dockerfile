@@ -4,6 +4,10 @@ RUN go env -w CGO_ENABLED=0
 
 WORKDIR /build
 
+COPY go.mod go.sum ./
+
+RUN go mod download
+
 COPY . .
 
 RUN go build -ldflags '-extldflags "-static" -s -w' -o runner ./cmd/bitsrun
