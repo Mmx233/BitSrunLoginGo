@@ -44,13 +44,11 @@ func (a DnsProvider) SendRequest(Type, Action string, data map[string]interface{
 	var reqOpt = tool.DoHttpReq{
 		Url: "https://alidns.aliyuncs.com",
 	}
-	randSource := rand.NewSource(time.Now().UnixNano())
-	randRand := rand.New(randSource)
 	data["Format"] = "json"
 	data["Version"] = "2015-01-09"
 	data["SignatureMethod"] = "HMAC-SHA1"
 	data["SignatureVersion"] = "1.0"
-	data["SignatureNonce"] = fmt.Sprint(tool.RandNum(randRand, 10000000, 90000000))
+	data["SignatureNonce"] = fmt.Sprint(tool.NewRand(rand.NewSource(time.Now().UnixNano())).Num(10000000, 90000000))
 	data["Timestamp"] = time.Now().UTC().Format("2006-01-02T15:04:05Z")
 	data["Action"] = Action
 	data["AccessKeyId"] = a.AccessKeyId

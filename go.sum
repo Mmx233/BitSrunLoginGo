@@ -1,5 +1,5 @@
-github.com/Mmx233/tool v0.7.3 h1:a9uB8Fd7qE+sKck0lH8ZKNyc1vkb3rasXD0WUM5nuVA=
-github.com/Mmx233/tool v0.7.3/go.mod h1:pCKnFmN2yf3u58YjANsQ8261SxI/c8/0wiZhptjRsOk=
+github.com/Mmx233/tool v0.7.4 h1:fFmzMGR4nKdbXijmPbyi0GcAFYsicf9lvuCllPdmnZE=
+github.com/Mmx233/tool v0.7.4/go.mod h1:tEQN6qc2s/sOJKcxr06SktzZ2fCuwdOs0fK01UTfe4Q=
 github.com/antonfisher/nested-logrus-formatter v1.3.1 h1:NFJIr+pzwv5QLHTPyKz9UMEoHck02Q9L0FP13b/xSbQ=
 github.com/antonfisher/nested-logrus-formatter v1.3.1/go.mod h1:6WTfyWFkBc9+zyBaKIqRrg/KwMqBbodBjgbHjDz7zjA=
 github.com/cloudflare/cloudflare-go v0.82.0 h1:t4G5BcutMcd+3U1FJHifo7Gv3m3LCzhARKZDinSi9Qs=

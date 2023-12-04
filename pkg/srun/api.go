@@ -6,6 +6,7 @@ import (
 	"github.com/Mmx233/tool"
 	log "github.com/sirupsen/logrus"
 	"io"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"strings"
@@ -48,13 +49,12 @@ func (a *Api) Init(conf *ApiConfig) {
 
 func (a *Api) request(path string, query map[string]interface{}) (map[string]interface{}, error) {
 	log.Debugln("HTTP GET ", a.BaseUrl+path)
-	timestamp := fmt.Sprint(time.Now().UnixNano())
-	callback := "jQuery" + timestamp
+	callback := fmt.Sprintf("jQuery%s_%d", tool.NewRand(rand.NewSource(time.Now().UnixNano())).WithLetters("123456789").String(21), time.Now().UnixMilli())
 	if query == nil {
 		query = make(map[string]interface{}, 2)
 	}
 	query["callback"] = callback
-	query["_"] = timestamp
+	query["_"] = fmt.Sprint(time.Now().UnixMilli())
 	httpTool := tool.NewHttpTool(a.Client)
 	req, err := httpTool.GenReq("GET", &tool.DoHttpReq{
 		Url:    a.BaseUrl + path,

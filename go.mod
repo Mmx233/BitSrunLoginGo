@@ -3,7 +3,7 @@ module github.com/Mmx233/BitSrunLoginGo
 go 1.21.4
 
 require (
-	github.com/Mmx233/tool v0.7.3
+	github.com/Mmx233/tool v0.7.4
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
 	github.com/cloudflare/cloudflare-go v0.82.0
 	github.com/mitchellh/mapstructure v1.5.0
