@@ -25,11 +25,13 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 		CustomHeader: config.Settings.CustomHeader,
 	})
 
+	srunDetector := srunClient.Api.NewDetector()
+
 	// Reality 与 Acid
 	var acidOnReality bool
 	if config.Settings.Reality.Enable {
 		log.Debugln("开始 Reality 流程")
-		acid, _, err := srunClient.Api.Reality(config.Settings.Reality.Addr, flags.AutoAcid)
+		acid, _, err := srunDetector.Reality(config.Settings.Reality.Addr, flags.AutoAcid)
 		if err != nil {
 			log.Errorln("Reality 请求异常:", err)
 			return err
@@ -46,7 +48,7 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 	}
 	if !acidOnReality && flags.AutoAcid {
 		log.Debugln("开始嗅探 acid")
-		acid, err := srunClient.Api.DetectAcid()
+		acid, err := srunDetector.DetectAcid()
 		if err != nil {
 			if errors.Is(err, srun.ErrAcidCannotFound) {
 				log.Warnln("找不到 acid，使用配置 acid")
@@ -61,7 +63,7 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 
 	if flags.AutoEnc {
 		log.Debugln("开始嗅探 enc")
-		enc, err := srunClient.Api.DetectEnc()
+		enc, err := srunDetector.DetectEnc()
 		if err != nil {
 			if errors.Is(err, srun.ErrEnvCannotFound) {
 				log.Warnln("找不到 enc，使用配置 enc")
