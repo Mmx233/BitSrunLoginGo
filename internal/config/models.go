@@ -27,6 +27,11 @@ type (
 		Provider string                 `json:"provider" yaml:"provider"`
 		Config   map[string]interface{} `json:"config" yaml:"config"`
 	}
+
+	RealityConf struct {
+		Enable bool   `json:"enable" yaml:"enable"`
+		Addr   string `json:"addr" yaml:"addr"`
+	}
 )
 
 type SettingsConf struct {
@@ -34,5 +39,6 @@ type SettingsConf struct {
 	Guardian     GuardianConf           `json:"guardian" yaml:"guardian"`
 	Log          LogConf                `json:"log" yaml:"log"`
 	DDNS         DdnsConf               `json:"ddns" yaml:"ddns"`
+	Reality      RealityConf            `json:"reality" yaml:"reality"`
 	CustomHeader map[string]interface{} `json:"custom_header" yaml:"custom_header"`
 }
