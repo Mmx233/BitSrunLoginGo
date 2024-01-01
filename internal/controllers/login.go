@@ -33,15 +33,11 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 		log.Debugln("开始 Reality 流程")
 		acid, _, err := srunDetector.Reality(config.Settings.Reality.Addr, flags.AutoAcid)
 		if err != nil {
-			log.Errorln("Reality 请求异常:", err)
-			return err
-		}
-		if flags.AutoAcid {
-			if acid != "" {
-				acidOnReality = true
-				log.Debugf("使用嗅探 acid: %s", acid)
-				srunClient.LoginInfo.Meta.Acid = acid
-			}
+			log.Warnln("Reality 请求异常:", err)
+		} else if flags.AutoAcid && acid != "" {
+			acidOnReality = true
+			log.Debugf("使用嗅探 acid: %s", acid)
+			srunClient.LoginInfo.Meta.Acid = acid
 		}
 	}
 	if !acidOnReality && flags.AutoAcid {
