@@ -41,8 +41,6 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 				acidOnReality = true
 				log.Debugf("使用嗅探 acid: %s", acid)
 				srunClient.LoginInfo.Meta.Acid = acid
-			} else {
-				log.Debugln("Reality 流程未找到 acid")
 			}
 		}
 	}

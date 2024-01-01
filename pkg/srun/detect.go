@@ -12,15 +12,15 @@ import (
 	"unsafe"
 )
 
-func (a *Api) NewDetector() Detector {
+func (a *Api) NewDetector() *Detector {
 	redirectReg, err := regexp.Compile(
-		`<script>top\.self\.location\.href='(.*)'</script>|<meta http-equiv="refresh" content=".*url=(.*?)">`,
+		`<script>top\.self\.location\.href='(.*)'</script>|<meta http-equiv="refresh" content=".*?url=(.*?)"`,
 	)
 	if err != nil {
 		panic(err)
 	}
 
-	return Detector{
+	return &Detector{
 		api:         a,
 		redirectReg: redirectReg,
 	}
@@ -32,7 +32,8 @@ type Detector struct {
 	redirectReg *regexp.Regexp
 
 	// 登录页 html data
-	page []byte
+	pageUrl string
+	page    []byte
 }
 
 func (a *Detector) _JoinRedirectLocation(addr *url.URL, loc string) (*url.URL, error) {
@@ -40,7 +41,13 @@ func (a *Detector) _JoinRedirectLocation(addr *url.URL, loc string) (*url.URL, e
 		return nil, errors.New("目标跳转地址缺失")
 	}
 	if strings.HasPrefix(loc, "/") {
-		addr.Path = strings.TrimPrefix(loc, "/")
+		locSplit := strings.Split(loc, "?")
+		addr.Path = locSplit[0]
+		if len(locSplit) > 1 {
+			addr.RawQuery = locSplit[1]
+		} else {
+			addr.RawQuery = ""
+		}
 		return addr, nil
 	} else {
 		return url.Parse(loc)
@@ -79,11 +86,16 @@ func (a *Detector) _FollowRedirect(addr *url.URL, conf _FollowRedirectConfig) (*
 				return nil, nil, err
 			}
 			locMatch := a.redirectReg.FindSubmatch(body)
-			if len(locMatch) > 2 {
-				locBytes := locMatch[1]
-				addr, err = a._JoinRedirectLocation(addr, unsafe.String(unsafe.SliceData(locBytes), len(locBytes)))
-				if err != nil {
-					return nil, nil, err
+			if len(locMatch) >= 2 {
+				for i := 1; i < len(locMatch); i++ {
+					locBytes := locMatch[i]
+					if len(locBytes) != 0 {
+						addr, err = a._JoinRedirectLocation(addr, unsafe.String(unsafe.SliceData(locBytes), len(locBytes)))
+						if err != nil {
+							return nil, nil, err
+						}
+						break
+					}
 				}
 			} else {
 				break
@@ -116,19 +128,38 @@ func (a *Detector) _SearchAcid(query url.Values) (string, bool) {
 	return addr, addr != ""
 }
 
-func (a *Detector) DetectEnc() (string, error) {
-	if a.page == nil {
-		log.Debugln("HTTP GET", a.api.BaseUrl)
-		res, err := a.api.Client.Get(a.api.BaseUrl)
+// 用于直接获取登录页数据
+func (a *Detector) _RequestPageBytes() ([]byte, error) {
+	if a.pageUrl != "" {
+		log.Debugln("HTTP GET", a.pageUrl)
+		res, err := a.api.Client.Get(a.pageUrl)
 		if err != nil {
-			return "", err
+			return nil, err
 		}
 		defer res.Body.Close()
 		if res.StatusCode != 200 {
 			_, _ = io.Copy(io.Discard, res.Body)
-			return "", fmt.Errorf("server return http status: %d", res.StatusCode)
+			return nil, fmt.Errorf("server return http status: %d", res.StatusCode)
 		}
 		a.page, err = io.ReadAll(res.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		return a.page, nil
+	}
+
+	baseUrl, err := url.Parse(a.api.BaseUrl)
+	if err != nil {
+		return nil, err
+	}
+	_, a.page, err = a._FollowRedirect(baseUrl, _FollowRedirectConfig{})
+	return a.page, err
+}
+
+func (a *Detector) DetectEnc() (string, error) {
+	if a.page == nil {
+		_, err := a._RequestPageBytes()
 		if err != nil {
 			return "", err
 		}
@@ -142,6 +173,7 @@ func (a *Detector) DetectEnc() (string, error) {
 	if len(jsPathMatch) == 3 {
 		jsPathBytes := jsPathMatch[1]
 		jsPath := unsafe.String(unsafe.SliceData(jsPathBytes), len(jsPathBytes))
+		fmt.Println("111", jsPath)
 		jsUrl, err := url.Parse(a.api.BaseUrl)
 		if err != nil {
 			return "", err
@@ -198,6 +230,7 @@ func (a *Detector) DetectAcid() (string, error) {
 				var ok bool
 				acid, ok = a._SearchAcid(addr.Query())
 				if ok {
+					a.pageUrl = addr.String()
 					return AcidFound
 				}
 				return nil
@@ -234,6 +267,9 @@ func (a *Detector) Reality(addr string, getAcid bool) (acid string, online bool,
 	var AlreadyOnline = errors.New("already online")
 	finalRes, pageBytes, err := a._FollowRedirect(startUrl, _FollowRedirectConfig{
 		onNextAddr: func(addr *url.URL) error {
+			if addr.Host == startUrl.Host {
+				return AlreadyOnline
+			}
 			if getAcid {
 				acid, _ = a._SearchAcid(addr.Query())
 			}
@@ -254,5 +290,6 @@ func (a *Detector) Reality(addr string, getAcid bool) (acid string, online bool,
 }
 
 func (a *Detector) Reset() {
+	a.pageUrl = ""
 	a.page = nil
 }
