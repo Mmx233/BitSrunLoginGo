@@ -169,6 +169,31 @@ func (a *Api) _SearchAcid(query url.Values) (string, bool) {
 
 // DetectAcid err 为 nil 时 acid 一定存在
 func (a *Api) DetectAcid() (string, error) {
+	// 从 html 寻找 acid
+	log.Debugln("HTTP GET", a.BaseUrl)
+	res, err := a.Client.Get(a.BaseUrl)
+	if err == nil {
+		defer res.Body.Close()
+		if res.StatusCode == 200 {
+			var indexHtml []byte
+			indexHtml, err = io.ReadAll(res.Body)
+			if err == nil {
+				var reg *regexp.Regexp
+				reg, err = regexp.Compile(`"ac_id".*?value="(.+)"`)
+				if err != nil {
+					return "", err
+				}
+				result := reg.FindSubmatch(indexHtml)
+				if len(result) == 2 {
+					return string(result[1]), nil
+				}
+			}
+		} else {
+			_, _ = io.Copy(io.Discard, res.Body)
+		}
+	}
+
+	// 从入口地址 url query 寻找 acid
 	baseUrl, err := url.Parse(a.BaseUrl)
 	if err != nil {
 		return "", err
