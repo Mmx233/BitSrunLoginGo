@@ -5,11 +5,11 @@ go 1.21.4
 require (
 	github.com/Mmx233/tool v0.7.4
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
-	github.com/cloudflare/cloudflare-go v0.82.0
+	github.com/cloudflare/cloudflare-go v0.84.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/sirupsen/logrus v1.9.3
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.807
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.807
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.830
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.830
 	gopkg.in/yaml.v3 v3.0.1
 )
 
