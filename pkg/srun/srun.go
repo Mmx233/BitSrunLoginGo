@@ -21,7 +21,7 @@ func New(conf *Conf) *Srun {
 	srun := &Srun{
 		LoginInfo: conf.LoginInfo,
 	}
-	srun.api.Init(&ApiConfig{
+	srun.Api.Init(&ApiConfig{
 		Https:        conf.Https,
 		Domain:       conf.LoginInfo.Form.Domain,
 		Client:       conf.Client,
@@ -33,11 +33,11 @@ func New(conf *Conf) *Srun {
 type Srun struct {
 	//登录参数，不可缺省
 	LoginInfo LoginInfo
-	api       Api
+	Api       Api
 }
 
 func (c Srun) LoginStatus() (online bool, ip string, err error) {
-	res, err := c.api.GetUserInfo()
+	res, err := c.Api.GetUserInfo()
 	if err != nil {
 		return false, "", err
 	}
@@ -67,7 +67,7 @@ func (c Srun) DoLogin(clientIP string) error {
 		c.LoginInfo.Form.Username += "@" + c.LoginInfo.Form.UserType
 	}
 
-	res, err := c.api.GetChallenge(c.LoginInfo.Form.Username, clientIP)
+	res, err := c.Api.GetChallenge(c.LoginInfo.Form.Username, clientIP)
 	if err != nil {
 		return err
 	}
@@ -112,7 +112,7 @@ func (c Srun) DoLogin(clientIP string) error {
 		doubleStack = "0"
 	}
 
-	res, err = c.api.Login(&LoginRequest{
+	res, err = c.Api.Login(&LoginRequest{
 		Username:    c.LoginInfo.Form.Username,
 		Password:    EncryptedMd5,
 		AcID:        c.LoginInfo.Meta.Acid,
@@ -140,12 +140,4 @@ func (c Srun) DoLogin(clientIP string) error {
 	}
 
 	return nil
-}
-
-func (c Srun) DetectAcid() (string, error) {
-	return c.api.DetectAcid()
-}
-
-func (c Srun) Reality(addr string, acid bool) (string, bool, error) {
-	return c.api.Reality(addr, acid)
 }

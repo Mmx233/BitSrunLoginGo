@@ -12,6 +12,7 @@ var (
 	Debug     bool
 	AutoAcid  bool
 	Acid      string
+	AutoEnc   bool
 )
 
 func init() {
@@ -21,6 +22,7 @@ func init() {
 	flag.BoolVar(&Debug, "debug", false, "enable debug mode")
 	flag.BoolVar(&AutoAcid, "auto-acid", false, "auto detect acid")
 	flag.StringVar(&Acid, "acid", "", "specify acid value")
+	flag.BoolVar(&AutoEnc, "auto-enc", false, "auto detect enc")
 
 	flag.Parse()
 }

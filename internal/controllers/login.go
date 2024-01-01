@@ -29,7 +29,7 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 	var acidOnReality bool
 	if config.Settings.Reality.Enable {
 		log.Debugln("开始 Reality 流程")
-		acid, _, err := srunClient.Reality(config.Settings.Reality.Addr, flags.AutoAcid)
+		acid, _, err := srunClient.Api.Reality(config.Settings.Reality.Addr, flags.AutoAcid)
 		if err != nil {
 			log.Errorln("Reality 请求异常:", err)
 			return err
@@ -46,7 +46,7 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 	}
 	if !acidOnReality && flags.AutoAcid {
 		log.Debugln("开始嗅探 acid")
-		acid, err := srunClient.DetectAcid()
+		acid, err := srunClient.Api.DetectAcid()
 		if err != nil {
 			if errors.Is(err, srun.ErrAcidCannotFound) {
 				log.Warnln("找不到 acid，使用配置 acid")
@@ -56,6 +56,21 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 		} else {
 			log.Debugf("使用嗅探 acid: %s", acid)
 			srunClient.LoginInfo.Meta.Acid = acid
+		}
+	}
+
+	if flags.AutoEnc {
+		log.Debugln("开始嗅探 enc")
+		enc, err := srunClient.Api.DetectEnc()
+		if err != nil {
+			if errors.Is(err, srun.ErrEnvCannotFound) {
+				log.Warnln("找不到 enc，使用配置 enc")
+			} else {
+				log.Warnf("嗅探 enc 失败，使用配置 enc: %v", err)
+			}
+		} else {
+			log.Debugf("使用嗅探 enc: %s", enc)
+			srunClient.LoginInfo.Meta.Enc = enc
 		}
 	}
 

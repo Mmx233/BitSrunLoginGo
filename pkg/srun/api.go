@@ -51,7 +51,7 @@ func (a *Api) Init(conf *ApiConfig) {
 }
 
 func (a *Api) request(path string, query map[string]interface{}) (map[string]interface{}, error) {
-	log.Debugln("HTTP GET ", a.BaseUrl+path)
+	log.Debugln("HTTP GET", a.BaseUrl+path)
 	callback := fmt.Sprintf("jQuery%s_%d", tool.NewRand(rand.NewSource(time.Now().UnixNano())).WithLetters("123456789").String(21), time.Now().UnixMilli())
 	if query == nil {
 		query = make(map[string]interface{}, 2)
@@ -118,7 +118,7 @@ func (a *Api) _FollowRedirect(addr *url.URL, conf _FollowRedirectConfig) (*url.U
 	addrCopy := *addr
 	addr = &addrCopy
 	for {
-		log.Debugln("HTTP GET ", addr)
+		log.Debugln("HTTP GET", addr)
 		req, err := http.NewRequest("GET", addr.String(), nil)
 		if err != nil {
 			return nil, err
@@ -167,32 +167,69 @@ func (a *Api) _SearchAcid(query url.Values) (string, bool) {
 	return addr, addr != ""
 }
 
-// DetectAcid err 为 nil 时 acid 一定存在
-func (a *Api) DetectAcid() (string, error) {
-	// 从 html 寻找 acid
+func (a *Api) DetectEnc() (string, error) {
 	log.Debugln("HTTP GET", a.BaseUrl)
 	res, err := a.Client.Get(a.BaseUrl)
-	if err == nil {
-		defer res.Body.Close()
-		if res.StatusCode == 200 {
-			var indexHtml []byte
-			indexHtml, err = io.ReadAll(res.Body)
-			if err == nil {
-				var reg *regexp.Regexp
-				reg, err = regexp.Compile(`"ac_id".*?value="(.+)"`)
-				if err != nil {
-					return "", err
-				}
-				result := reg.FindSubmatch(indexHtml)
-				if len(result) == 2 {
-					return string(result[1]), nil
-				}
-			}
-		} else {
-			_, _ = io.Copy(io.Discard, res.Body)
-		}
+	if err != nil {
+		return "", err
 	}
+	defer res.Body.Close()
+	if res.StatusCode == 200 {
+		indexHtml, err := io.ReadAll(res.Body)
+		if err != nil {
+			return "", err
+		}
+		jsReg, err := regexp.Compile(`(?i)<script src="\.?(.+[./]portal[0-9]*\.js)(\?.*)?">`)
+		if err != nil {
+			return "", err
+		}
+		jsPathMatch := jsReg.FindSubmatch(indexHtml)
+		if len(jsPathMatch) == 3 {
+			jsPathBytes := jsPathMatch[1]
+			jsPath := unsafe.String(unsafe.SliceData(jsPathBytes), len(jsPathBytes))
+			jsUrl, err := url.Parse(a.BaseUrl)
+			if err != nil {
+				return "", err
+			}
+			jsUrl.Path = jsPath
+			jsAddr := jsUrl.String()
+			log.Debugln("HTTP GET", jsAddr)
+			jsRes, err := a.Client.Get(jsAddr)
+			if err != nil {
+				return "", err
+			}
+			defer jsRes.Body.Close()
+			if jsRes.StatusCode == 200 {
+				jsContent, err := io.ReadAll(jsRes.Body)
+				if err == nil {
+					reg, err := regexp.Compile(`var enc = (.*?)[,;]`)
+					if err != nil {
+						return "", err
+					}
+					encMatch := reg.FindSubmatch(jsContent)
+					if len(encMatch) == 2 {
+						encBytes := encMatch[1]
+						encStr := unsafe.String(unsafe.SliceData(encBytes), len(encBytes))
+						encSplit := strings.Split(encStr, "+")
+						for i, v := range encSplit {
+							encSplit[i] = strings.Trim(strings.TrimSpace(v), "'\"")
+						}
+						enc := strings.Join(encSplit, "")
+						return enc, nil
+					}
+				}
+			} else {
+				_, _ = io.Copy(io.Discard, jsRes.Body)
+			}
+		}
+	} else {
+		_, _ = io.Copy(io.Discard, res.Body)
+	}
+	return "", ErrEnvCannotFound
+}
 
+// DetectAcid err 为 nil 时 acid 一定存在
+func (a *Api) DetectAcid() (string, error) {
 	// 从入口地址 url query 寻找 acid
 	baseUrl, err := url.Parse(a.BaseUrl)
 	if err != nil {
@@ -201,7 +238,7 @@ func (a *Api) DetectAcid() (string, error) {
 
 	var AcidFound = errors.New("acid found")
 	var acid string
-	_, err = a._FollowRedirect(baseUrl, _FollowRedirectConfig{
+	finalAddr, err := a._FollowRedirect(baseUrl, _FollowRedirectConfig{
 		onNextAddr: func(addr *url.URL) error {
 			var ok bool
 			acid, ok = a._SearchAcid(addr.Query())
@@ -217,6 +254,32 @@ func (a *Api) DetectAcid() (string, error) {
 		}
 		return "", err
 	}
+
+	// 从 html 寻找 acid
+	log.Debugln("HTTP GET", finalAddr.String())
+	res, err := a.Client.Get(a.BaseUrl)
+	if err != nil {
+		return "", err
+	}
+	defer res.Body.Close()
+	if res.StatusCode == 200 {
+		var indexHtml []byte
+		indexHtml, err = io.ReadAll(res.Body)
+		if err == nil {
+			var reg *regexp.Regexp
+			reg, err = regexp.Compile(`"ac_id".*?value="(.+)"`)
+			if err != nil {
+				return "", err
+			}
+			result := reg.FindSubmatch(indexHtml)
+			if len(result) == 2 {
+				return string(result[1]), nil
+			}
+		}
+	} else {
+		_, _ = io.Copy(io.Discard, res.Body)
+	}
+
 	return "", ErrAcidCannotFound
 }
 
