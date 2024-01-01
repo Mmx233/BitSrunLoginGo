@@ -2,6 +2,7 @@ package srun
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/Mmx233/tool"
 	log "github.com/sirupsen/logrus"
@@ -92,46 +93,68 @@ func (a *Api) GetUserInfo() (map[string]interface{}, error) {
 	return a.request("cgi-bin/rad_user_info", nil)
 }
 
-func (a *Api) DetectAcid() (string, error) {
-	addr := a.BaseUrl
+func (a *Api) FollowRedirect(addr *url.URL, onNext func(addr *url.URL) error) (*url.URL, error) {
+	addrCopy := *addr
+	addr = &addrCopy
 	for {
 		log.Debugln("HTTP GET ", addr)
-		req, err := http.NewRequest("GET", addr, nil)
+		req, err := http.NewRequest("GET", addr.String(), nil)
 		if err != nil {
-			return "", err
+			return nil, err
 		}
 		for k, v := range a.CustomHeader {
 			req.Header.Set(k, fmt.Sprint(v))
 		}
 		res, err := a.NoDirect.Do(req)
 		if err != nil {
-			return "", err
+			return nil, err
 		}
 		_, _ = io.Copy(io.Discard, res.Body)
 		_ = res.Body.Close()
 		loc := res.Header.Get("location")
-		if res.StatusCode == 302 && loc != "" {
+		if res.StatusCode < 300 {
+			break
+		} else if res.StatusCode < 400 {
+			if loc == "" {
+				return nil, errors.New("目标跳转地址缺失")
+			}
 			if strings.HasPrefix(loc, "/") {
-				addr = a.BaseUrl + strings.TrimPrefix(loc, "/")
+				addr.Path = strings.TrimPrefix(loc, "/")
 			} else {
-				addr = loc
+				addr, err = url.Parse(loc)
+				if err != nil {
+					return nil, err
+				}
 			}
-
-			var u *url.URL
-			u, err = url.Parse(addr)
-			if err != nil {
-				return "", err
+			if err = onNext(addr); err != nil {
+				return nil, err
 			}
-			acid := u.Query().Get(`ac_id`)
-			if acid != "" {
-				return acid, nil
-			}
-
-			continue
+		} else {
+			return nil, fmt.Errorf("server return http status %d", res.StatusCode)
 		}
-		break
 	}
-	return "", ErrAcidCannotFound
+	return addr, nil
+}
+
+func (a *Api) DetectAcid() (string, error) {
+	baseUrl, err := url.Parse(a.BaseUrl)
+	if err != nil {
+		return "", err
+	}
+
+	var AcidFound = errors.New("acid found")
+	var acid string
+	_, err = a.FollowRedirect(baseUrl, func(addr *url.URL) error {
+		acid = addr.Query().Get(`ac_id`)
+		if acid != "" {
+			return AcidFound
+		}
+		return nil
+	})
+	if err != nil && !errors.Is(err, AcidFound) {
+		return "", err
+	}
+	return acid, nil
 }
 
 type LoginRequest struct {
