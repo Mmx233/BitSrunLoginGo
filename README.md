@@ -30,6 +30,7 @@ Openwrt 可以参考 [immortalwrt/packages/net/bitsrunlogin-go](https://github.c
 --debug             #临时开启 debug 模式
 --auto-acid         #自动嗅探 acid
 --acid 7            #覆写配置文件 acid 值
+--auto-enc          #自动嗅探 enc
 ```
 
 Config.yaml 说明：
@@ -44,7 +45,7 @@ meta: #登录参数
   "n": "200"
   type: "1"
   acid: "5"
-  enc: srun_bx1 # enc 不在表单中，但一般都是默认值。你可以在 jquery.srun.portal.js 中搜索 var enc 来找到真实值
+  enc: srun_bx1 # enc 不在表单中，但一般都是默认值。你可以使用 --auto-enc 或在 js 中搜索 enc 来找到真实值
   os: Windows 10
   name: windows
   info_prefix: SRBX1 # info 字段前缀括号中的值
@@ -71,6 +72,9 @@ settings:
     config: #这段配置是动态的，需要根据 provider 类型配置字段名，见 DDNS 说明
       zone: "xxxx"
       token: "xxxx"
+  reality: #从指定地址模拟浏览器行为进入登录页，如果登录未出现问题不用启用
+    enable: false
+    addr: http://www.baidu.com #初始地址，需要使用 http、域名
   custom_header: #这段配置是动态的，用于设置请求头，可以自由填写
     User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0
 ```
