@@ -36,6 +36,26 @@ type Detector struct {
 	page    []byte
 }
 
+func (a *Detector) _GET(client *http.Client, addr string) (*http.Response, error) {
+	log.Debugln("HTTP GET", addr)
+	req, err := http.NewRequest("GET", addr, nil)
+	if err != nil {
+		return nil, err
+	}
+	for k, v := range a.api.CustomHeader {
+		req.Header.Set(k, fmt.Sprint(v))
+	}
+	return client.Do(req)
+}
+
+func (a *Detector) _DirectGET(addr string) (*http.Response, error) {
+	return a._GET(a.api.Client, addr)
+}
+
+func (a *Detector) _NoDirectGET(addr string) (*http.Response, error) {
+	return a._GET(a.api.NoDirect, addr)
+}
+
 func (a *Detector) _JoinRedirectLocation(addr *url.URL, loc string) (*url.URL, error) {
 	if loc == "" {
 		return nil, errors.New("目标跳转地址缺失")
@@ -66,15 +86,8 @@ func (a *Detector) _FollowRedirect(addr *url.URL, conf _FollowRedirectConfig) (*
 	var body []byte
 	var res *http.Response
 	for {
-		log.Debugln("HTTP GET", addr)
-		req, err := http.NewRequest("GET", addr.String(), nil)
-		if err != nil {
-			return nil, nil, err
-		}
-		for k, v := range a.api.CustomHeader {
-			req.Header.Set(k, fmt.Sprint(v))
-		}
-		res, err = a.api.NoDirect.Do(req)
+		var err error
+		res, err = a._NoDirectGET(addr.String())
 		if err != nil {
 			return nil, nil, err
 		}
@@ -131,8 +144,7 @@ func (a *Detector) _SearchAcid(query url.Values) (string, bool) {
 // 用于直接获取登录页数据
 func (a *Detector) _RequestPageBytes() ([]byte, error) {
 	if a.pageUrl != "" {
-		log.Debugln("HTTP GET", a.pageUrl)
-		res, err := a.api.Client.Get(a.pageUrl)
+		res, err := a._DirectGET(a.pageUrl)
 		if err != nil {
 			return nil, err
 		}
@@ -173,15 +185,13 @@ func (a *Detector) DetectEnc() (string, error) {
 	if len(jsPathMatch) == 3 {
 		jsPathBytes := jsPathMatch[1]
 		jsPath := unsafe.String(unsafe.SliceData(jsPathBytes), len(jsPathBytes))
-		fmt.Println("111", jsPath)
 		jsUrl, err := url.Parse(a.api.BaseUrl)
 		if err != nil {
 			return "", err
 		}
 		jsUrl.Path = jsPath
 		jsAddr := jsUrl.String()
-		log.Debugln("HTTP GET", jsAddr)
-		jsRes, err := a.api.Client.Get(jsAddr)
+		jsRes, err := a._DirectGET(jsAddr)
 		if err != nil {
 			return "", err
 		}
