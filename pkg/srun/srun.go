@@ -145,3 +145,7 @@ func (c Srun) DoLogin(clientIP string) error {
 func (c Srun) DetectAcid() (string, error) {
 	return c.api.DetectAcid()
 }
+
+func (c Srun) Reality(addr string, acid bool) (string, bool, error) {
+	return c.api.Reality(addr, acid)
+}

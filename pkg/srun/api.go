@@ -136,6 +136,12 @@ func (a *Api) FollowRedirect(addr *url.URL, onNext func(addr *url.URL) error) (*
 	return addr, nil
 }
 
+func (a *Api) searchAcid(query url.Values) (string, bool) {
+	addr := query.Get(`ac_id`)
+	return addr, addr != ""
+}
+
+// DetectAcid err 为 nil 时 acid 一定存在
 func (a *Api) DetectAcid() (string, error) {
 	baseUrl, err := url.Parse(a.BaseUrl)
 	if err != nil {
@@ -145,16 +151,50 @@ func (a *Api) DetectAcid() (string, error) {
 	var AcidFound = errors.New("acid found")
 	var acid string
 	_, err = a.FollowRedirect(baseUrl, func(addr *url.URL) error {
-		acid = addr.Query().Get(`ac_id`)
-		if acid != "" {
+		var ok bool
+		acid, ok = a.searchAcid(addr.Query())
+		if ok {
 			return AcidFound
 		}
 		return nil
 	})
-	if err != nil && !errors.Is(err, AcidFound) {
+	if err != nil {
+		if errors.Is(err, AcidFound) {
+			return acid, nil
+		}
 		return "", err
 	}
-	return acid, nil
+	return "", ErrAcidCannotFound
+}
+
+// Reality acid 可能为空字符串
+func (a *Api) Reality(addr string, getAcid bool) (acid string, online bool, err error) {
+	startUrl, err := url.Parse(addr)
+	if err != nil {
+		return "", false, err
+	}
+	var AlreadyOnline = errors.New("already online")
+	var finalUrl *url.URL
+	finalUrl, err = a.FollowRedirect(startUrl, func(addr *url.URL) error {
+		// 任一跳转没有跳出初始域名说明已经在线
+		if addr.Host == startUrl.Host {
+			return AlreadyOnline
+		}
+		if getAcid {
+			acid, _ = a.searchAcid(addr.Query())
+		}
+		return nil
+	})
+	if err != nil {
+		if errors.Is(err, AlreadyOnline) {
+			online = true
+			err = nil
+			return
+		}
+		return
+	}
+	online = finalUrl.Host == startUrl.Host
+	return
 }
 
 type LoginRequest struct {
