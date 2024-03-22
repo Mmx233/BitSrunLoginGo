@@ -147,7 +147,7 @@ go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w 
 交叉编译（Linux）：
 
 ```shell
-export GOGGC=0
+export CGO_ENABLED=0
 export GOOS=windows #系统
 export GOARCH=amd64 #架构
 go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
@@ -156,7 +156,7 @@ go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w 
 交叉编译（Powershell）：
 
 ```shell
-$env:GOGGC=0
+$env:CGO_ENABLED=0
 $env:GOOS='linux' #系统
 $env:GOARCH='amd64' #架构
 go build -gcflags=-trimpath=$env:GOPATH -asmflags=-trimpath=$env:GOPATH -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
