@@ -96,7 +96,10 @@ func (c Srun) DoLogin(clientIP string) error {
 		infoPrefix = fmt.Sprintf("{%s}", c.LoginInfo.Meta.InfoPrefix)
 	}
 	EncryptedInfo := infoPrefix + Base64(XEncode(string(info), tokenStr))
-	Md5Str := Md5(tokenStr)
+	Md5Str, err := Md5(tokenStr, c.LoginInfo.Form.Password)
+	if err != nil {
+		return err
+	}
 	EncryptedMd5 := "{MD5}" + Md5Str
 	EncryptedChkstr := Sha1(
 		tokenStr + c.LoginInfo.Form.Username + tokenStr + Md5Str +

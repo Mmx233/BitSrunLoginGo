@@ -1,17 +1,21 @@
 package srun
 
 import (
+	"crypto/hmac"
 	"crypto/md5"
 	"crypto/sha1"
+	"encoding/hex"
 	"fmt"
-	"io"
 )
 
 // Md5 编码
-func Md5(content string) string {
-	w := md5.New()
-	_, _ = io.WriteString(w, content)
-	return fmt.Sprintf("%x", w.Sum(nil))
+func Md5(token, password string) (string, error) {
+	mac := hmac.New(md5.New, []byte(token))
+	_, err := mac.Write([]byte(password))
+	if err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(mac.Sum(nil)), nil
 }
 
 // Sha1 编码
