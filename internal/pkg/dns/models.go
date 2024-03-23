@@ -1,6 +1,9 @@
 package dns
 
-import "net/http"
+import (
+	"github.com/Mmx233/BitSrunLoginGo/internal/config"
+	"net/http"
+)
 
 type Provider interface {
 	SetDomainRecord(domain, ip string) error
@@ -11,6 +14,6 @@ type Config struct {
 	IP       string
 	Domain   string
 	TTL      uint
-	Conf     map[string]interface{}
+	Conf     config.DdnsProviderConfigSum
 	Http     *http.Client
 }

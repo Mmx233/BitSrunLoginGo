@@ -3,37 +3,35 @@ package cloudflare
 import (
 	"context"
 	"errors"
-	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/util"
 	"github.com/cloudflare/cloudflare-go"
 	"net/http"
 )
 
-type DnsProvider struct {
-	Api          *cloudflare.API               `mapstructure:"-"`
-	TTL          int                           `mapstructure:"-"`
-	Zone         string                        `mapstructure:"zone"`
-	ZoneResource *cloudflare.ResourceContainer `mapstructure:"-"`
-	Token        string                        `mapstructure:"token"`
+type Cloudflare struct {
+	Zone  string `json:"zone" yaml:"zone"`
+	Token string `json:"token" yaml:"token"`
 }
 
-func New(ttl int, conf map[string]interface{}, Http *http.Client) (*DnsProvider, error) {
-	var p = DnsProvider{
-		TTL: ttl,
-	}
-	err := dnsUtil.DecodeConfig(conf, &p)
-	if err != nil {
-		return nil, err
-	}
+type DnsProvider struct {
+	Api          *cloudflare.API
+	TTL          int
+	ZoneResource *cloudflare.ResourceContainer
+	Cloudflare
+}
 
+func New(ttl int, conf Cloudflare, Http *http.Client) (*DnsProvider, error) {
+	var p = DnsProvider{
+		TTL:        ttl,
+		Cloudflare: conf,
+	}
 	if p.Zone == "" {
 		return nil, errors.New("cloudflare zone 不能为空")
 	}
-	p.ZoneResource = cloudflare.ZoneIdentifier(p.Zone)
-
 	if p.Token == "" {
 		return nil, errors.New("cloudflare token 不能为空")
 	}
-
+	p.ZoneResource = cloudflare.ZoneIdentifier(p.Zone)
+	var err error
 	p.Api, err = cloudflare.NewWithAPIToken(p.Token, cloudflare.HTTPClient(Http))
 	return &p, err
 }

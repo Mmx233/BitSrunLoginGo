@@ -10,19 +10,20 @@ import (
 	"strings"
 )
 
-type DnsProvider struct {
-	Client    *dnspod.Client `mapstructure:"-"`
-	TTL       uint64         `mapstructure:"-"`
-	SecretId  string         `mapstructure:"secret_id"`
-	SecretKey string         `mapstructure:"secret_key"`
+type DnsPod struct {
+	SecretId  string `json:"secret_id,omitempty" yaml:"secret_id,omitempty"`
+	SecretKey string `json:"secret_key,omitempty" yaml:"secret_key,omitempty"`
 }
 
-func New(ttl uint64, conf map[string]interface{}, Http http.RoundTripper) (*DnsProvider, error) {
-	var p = DnsProvider{TTL: ttl}
-	err := dnsUtil.DecodeConfig(conf, &p)
-	if err != nil {
-		return nil, err
-	}
+type DnsProvider struct {
+	Client *dnspod.Client
+	TTL    uint64
+	DnsPod
+}
+
+func New(ttl uint64, conf DnsPod, Http http.RoundTripper) (*DnsProvider, error) {
+	var p = DnsProvider{TTL: ttl, DnsPod: conf}
+	var err error
 	p.Client, err = dnspod.NewClient(common.NewCredential(p.SecretId, p.SecretKey), regions.Guangzhou, profile.NewClientProfile())
 	p.Client.WithHttpTransport(Http)
 	return &p, err

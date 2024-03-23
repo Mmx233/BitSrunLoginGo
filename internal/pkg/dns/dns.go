@@ -16,17 +16,15 @@ func Run(c *Config) error {
 		c.TTL = 600
 	}
 
-	// 配置解析
-
 	var dns Provider
 	var err error
 	switch c.Provider {
 	case "aliyun":
-		dns, err = aliyun.New(c.TTL, c.Conf, c.Http)
+		dns, err = aliyun.New(c.TTL, c.Conf.Aliyun, c.Http)
 	case "cloudflare":
-		dns, err = cloudflare.New(int(c.TTL), c.Conf, c.Http)
+		dns, err = cloudflare.New(int(c.TTL), c.Conf.Cloudflare, c.Http)
 	case "dnspod":
-		dns, err = dnspod.New(uint64(c.TTL), c.Conf, c.Http.Transport)
+		dns, err = dnspod.New(uint64(c.TTL), c.Conf.DnsPod, c.Http.Transport)
 	default:
 		var msg string
 		if c.Provider == "" {

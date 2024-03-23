@@ -16,28 +16,26 @@ import (
 	"time"
 )
 
-type DnsProvider struct {
-	TTL             uint       `mapstructure:"-"`
-	Http            *tool.Http `mapstructure:"-"`
-	AccessKeyId     string     `mapstructure:"access_key_id"`
-	AccessKeySecret string     `mapstructure:"access_key_secret"`
+type Aliyun struct {
+	AccessKeyId     string `json:"access_key_id,omitempty" yaml:"access_key_id,omitempty"`
+	AccessKeySecret string `json:"access_key_secret,omitempty" yaml:"access_key_secret,omitempty"`
 }
 
-func New(ttl uint, conf map[string]interface{}, Http *http.Client) (*DnsProvider, error) {
-	var p = DnsProvider{
-		TTL:  ttl,
-		Http: tool.NewHttpTool(Http),
-	}
-	err := dnsUtil.DecodeConfig(conf, &p)
-	if err != nil {
-		return nil, err
-	}
+type DnsProvider struct {
+	TTL  uint
+	Http *tool.Http
+	Aliyun
+}
 
-	if p.AccessKeyId == "" || p.AccessKeySecret == "" {
+func New(ttl uint, conf Aliyun, Http *http.Client) (*DnsProvider, error) {
+	if conf.AccessKeyId == "" || conf.AccessKeySecret == "" {
 		return nil, errors.New("aliyun AccessKey 不能为空")
 	}
-
-	return &p, nil
+	return &DnsProvider{
+		TTL:    ttl,
+		Http:   tool.NewHttpTool(Http),
+		Aliyun: conf,
+	}, nil
 }
 
 func (a DnsProvider) SendRequest(Type, Action string, data map[string]interface{}) (*http.Response, error) {

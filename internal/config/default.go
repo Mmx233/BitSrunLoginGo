@@ -34,10 +34,6 @@ var defaultConfig = ConfFromFile{
 			TTL:      600,
 			Domain:   "www.example.com",
 			Provider: "cloudflare",
-			Config: map[string]interface{}{
-				"zone":  "",
-				"token": "",
-			},
 		},
 		Reality: RealityConf{
 			Addr: "http://www.baidu.com",

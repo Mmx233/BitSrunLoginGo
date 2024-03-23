@@ -1,5 +1,11 @@
 package config
 
+import (
+	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/aliyun"
+	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/cloudflare"
+	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/dnspod"
+)
+
 type (
 	GuardianConf struct {
 		Enable   bool `json:"enable" yaml:"enable"`
@@ -20,12 +26,18 @@ type (
 		FileName   string `json:"log_name" yaml:"log_name"`
 	}
 
+	DdnsProviderConfigSum struct {
+		dnspod.DnsPod         `yaml:",inline"`
+		cloudflare.Cloudflare `yaml:",inline"`
+		aliyun.Aliyun         `yaml:",inline"`
+	}
+
 	DdnsConf struct {
-		Enable   bool                   `json:"enable" yaml:"enable"`
-		TTL      uint                   `json:"ttl" yaml:"ttl"`
-		Domain   string                 `json:"domain" yaml:"domain"`
-		Provider string                 `json:"provider" yaml:"provider"`
-		Config   map[string]interface{} `json:"config" yaml:"config"`
+		Enable   bool                  `json:"enable" yaml:"enable"`
+		TTL      uint                  `json:"ttl" yaml:"ttl"`
+		Domain   string                `json:"domain" yaml:"domain"`
+		Provider string                `json:"provider" yaml:"provider"`
+		Config   DdnsProviderConfigSum `json:"config" yaml:"config"`
 	}
 
 	RealityConf struct {
