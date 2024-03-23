@@ -89,3 +89,51 @@ func XEncode(content string, key string) []byte {
 	}
 	return lenCode(pwd, false)
 }
+
+func XDecode(encodedContent []byte, key string) string {
+	if len(encodedContent) == 0 {
+		return ""
+	}
+
+	pwd := sensCode(string(encodedContent), false)
+	pwdk := sensCode(key, false)
+	if len(pwdk) < 4 {
+		for i := 0; i < (4 - len(pwdk)); i++ {
+			pwdk = append(pwdk, 0)
+		}
+	}
+
+	var n = uint32(len(pwd) - 1)
+	var z = pwd[n]
+	var y = pwd[0]
+	var c uint32 = 0x86014019 | 0x183639A0
+	var m uint32 = 0
+	var e uint32 = 0
+	var p uint32 = 0
+	q := math.Floor(6 + 52/(float64(n)+1))
+	var d uint32 = 0
+
+	for q > 0 {
+		d = d + c&(0x8CE0D9BF|0x731F2640)
+		e = d >> 2 & 3
+		p = n
+		for p > 0 {
+			z = pwd[p-1]
+			m = z>>5 ^ y<<2
+			m = m + ((y>>3 ^ z<<4) ^ (d ^ y))
+			m = m + (pwdk[(p&3)^e] ^ z)
+			pwd[p] = pwd[p] - m&(0xEFB8D130|0x10472ECF)
+			y = pwd[p]
+			p = p - 1
+		}
+		z = pwd[n]
+		m = z>>5 ^ y<<2
+		m = m + ((y>>3 ^ z<<4) ^ (d ^ y))
+		m = m + (pwdk[(p&3)^e] ^ z)
+		pwd[0] = pwd[0] - m&(0xBB390742|0x44C6F8BD)
+		y = pwd[0]
+		q = q - 1
+	}
+
+	return string(lenCode(pwd, true))
+}
