@@ -17,6 +17,18 @@ type Conf struct {
 	CustomHeader map[string]interface{}
 }
 
+/*
+*
+创建结构体可以保持输出json的字段顺序不变
+*/
+type PrivateFieldInfo struct {
+	UserName string `json:"username"`
+	Password string `json:"password"`
+	Ip       string `json:"ip"`
+	Acid     string `json:"acid"`
+	EncVer   string `json:"enc_ver"`
+}
+
 func New(conf *Conf) *Srun {
 	srun := &Srun{
 		LoginInfo: conf.LoginInfo,
@@ -80,12 +92,19 @@ func (c Srun) DoLogin(clientIP string) error {
 
 	log.Debugln("发送登录请求")
 
-	info, err := json.Marshal(map[string]string{
-		"username": c.LoginInfo.Form.Username,
-		"password": c.LoginInfo.Form.Password,
-		"ip":       clientIP,
-		"acid":     c.LoginInfo.Meta.Acid,
-		"enc_ver":  c.LoginInfo.Meta.Enc,
+	// info, err := json.Marshal(map[string]string{
+	// 	"username": c.LoginInfo.Form.Username,
+	// 	"password": c.LoginInfo.Form.Password,
+	// 	"ip":       clientIP,
+	// 	"acid":     c.LoginInfo.Meta.Acid,
+	// 	"enc_ver":  c.LoginInfo.Meta.Enc,
+	// })
+	info, err := json.Marshal(PrivateFieldInfo{
+		UserName: c.LoginInfo.Form.Username,
+		Password: c.LoginInfo.Form.Password,
+		Ip:       clientIP,
+		Acid:     c.LoginInfo.Meta.Acid,
+		EncVer:   c.LoginInfo.Meta.Enc,
 	})
 	if err != nil {
 		return err
