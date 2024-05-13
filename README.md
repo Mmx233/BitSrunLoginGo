@@ -140,7 +140,7 @@ cd BitSrunLoginGo
 go build ./cmd/bitsrun
 
 #或者使用经过优化的构建命令：
-go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
+go build -trimpath -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
 
 ```
 
@@ -150,7 +150,7 @@ go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w 
 export CGO_ENABLED=0
 export GOOS=windows #系统
 export GOARCH=amd64 #架构
-go build -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
+go build -trimpath -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
 ```
 
 交叉编译（Powershell）：
@@ -162,7 +162,7 @@ $env:GOARCH='amd64' #架构
 go build -gcflags=-trimpath=$env:GOPATH -asmflags=-trimpath=$env:GOPATH -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
 
 #消除命令行窗口
-go build -gcflags=-trimpath=$env:GOPATH -asmflags=-trimpath=$env:GOPATH -ldflags "-s -w -extldflags '-static' -H windowsgui" ./cmd/bitsrun
+go build -trimpath -ldflags "-s -w -extldflags '-static' -H windowsgui" ./cmd/bitsrun
 ```
 
 golang 支持的系统与架构请自行查询
