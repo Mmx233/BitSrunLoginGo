@@ -3,6 +3,7 @@
 package tools
 
 import (
+	"crypto/tls"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
 	"github.com/Mmx233/tool"
 	"net"
@@ -14,12 +15,16 @@ func genHttpPack(eth *Eth) *Http {
 	if eth != nil {
 		addr = eth.Addr
 	}
-	tr := tool.GenHttpTransport(&tool.HttpTransportOptions{
-		Timeout:           config.Timeout,
-		LocalAddr:         addr,
-		SkipSslCertVerify: config.Settings.Basic.SkipCertVerify,
-	})
-	tr.Proxy = http.ProxyFromEnvironment
+	tr := &http.Transport{
+		DialContext: (&net.Dialer{
+			Timeout:   config.Timeout,
+			LocalAddr: addr,
+		}).DialContext,
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: config.Settings.Basic.SkipCertVerify,
+		},
+		Proxy: http.ProxyFromEnvironment,
+	}
 	return &Http{
 		Client: tool.GenHttpClient(&tool.HttpClientOptions{
 			Transport: tr,

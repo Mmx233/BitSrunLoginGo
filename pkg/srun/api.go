@@ -48,7 +48,7 @@ func (a *Api) Init(conf *ApiConfig) {
 
 func (a *Api) request(path string, query map[string]interface{}) (map[string]interface{}, error) {
 	log.Debugln("HTTP GET", a.BaseUrl+path)
-	callback := fmt.Sprintf("jQuery%s_%d", tool.NewRand(rand.NewSource(time.Now().UnixNano())).WithLetters("123456789").String(21), time.Now().UnixMilli())
+	callback := fmt.Sprintf("jQuery%s_%d", tool.RandMath(rand.NewSource(time.Now().UnixNano())).WithLetters("123456789").String(21), time.Now().UnixMilli())
 	if query == nil {
 		query = make(map[string]interface{}, 2)
 	}
