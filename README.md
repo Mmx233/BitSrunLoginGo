@@ -12,7 +12,7 @@ Openwrt 可以参考 [immortalwrt/packages/net/bitsrunlogin-go](https://github.c
 
 ## :gear:运行
 
-编译结果为可执行文件，下载 release 或编译后直接运行即可
+编译结果为可执行文件，下载 release 或编译后直接运行即可。如果你不知道 `windows_amd64_v4` 中的 `v4` 或 `linux_arm_hardfloat` 中的 `hardfloat` 意味着什么，选取没有这些后缀的有更高兼容性的默认版本即可
 
 首次运行将自动生成配置文件，首次使用建议开启调试日志（`settings.log.debug_level` 设为 `true` 或使用 flag `--debug`），可以通过添加启动参数 `--config` 指定配置文件路径，默认为当前目录的 `Config.yaml`
 
@@ -59,6 +59,15 @@ settings:
   guardian: #守护模式（后台常驻）
     enable: false 
     duration: 300 #网络检查周期（秒，正整数）
+  backoff: # 积分退避
+    enable: false # 开启后同时对所有运行模式生效，作用于登录失败的重试
+    max_retries: 0 # 0 意味着无限重试
+    initial_duration: 2 # 初始失败等待时间，秒
+    max_duration: 300 # 最大失败等待时间，秒
+    # 等待时间计算公式详见 https://github.com/Mmx233/BackoffCli
+    exponent_factor: 1 # 指数因子
+    inter_const_factor: 0 # 内常数因子，秒
+    outer_const_factor: 0 # 外常数因子，秒
   log:
     debug_level: false #打印调试日志
     write_file: false #写日志文件
@@ -77,6 +86,7 @@ settings:
     addr: http://www.baidu.com #初始地址，需要使用 http、域名
   custom_header: #这段配置是动态的，用于设置请求头，可以自由填写
     User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0
+  
 ```
 
 登录参数从原网页登陆时对 `/srun_portal` 的请求抓取，抓取时请把浏览器控制台的 `preserve log`（保留日志）启用。
