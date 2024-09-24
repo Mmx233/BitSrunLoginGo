@@ -1,12 +1,12 @@
 package config
 
 import (
+	nested "github.com/antonfisher/nested-logrus-formatter"
 	"io"
 	"os"
 	"strings"
 	"time"
 
-	nested "github.com/antonfisher/nested-logrus-formatter"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -41,12 +41,12 @@ func initLog() {
 		//设置双重输出
 		mw := io.MultiWriter(os.Stdout, f)
 		Logger.SetOutput(mw)
-
-		//设置输出格式
-		Logger.SetFormatter(&nested.Formatter{
-			HideKeys:        true,
-			NoColors:        Settings.Log.WriteFile,
-			TimestampFormat: "2006-01-02 15:04:05",
-		})
 	}
+
+	//设置输出格式
+	Logger.SetFormatter(&nested.Formatter{
+		HideKeys:        true,
+		NoColors:        Settings.Log.WriteFile,
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
 }
