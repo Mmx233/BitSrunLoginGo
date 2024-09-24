@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"context"
 	"errors"
+	"github.com/Mmx233/BackoffCli/backoff"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/flags"
 	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns"
@@ -13,6 +15,30 @@ import (
 
 // Login 登录逻辑
 func Login(eth *tools.Eth, debugOutput bool) error {
+	if config.Settings.Backoff.Enable {
+		return backoff.NewInstance(func(ctx context.Context) error {
+			return login(eth, debugOutput)
+		}, config.BackoffConfig).Run(context.TODO())
+	} else {
+		return login(eth, debugOutput)
+	}
+}
+
+var ipLast string
+
+func ddns(ip string, httpClient *http.Client) error {
+	return dns.Run(&dns.Config{
+		Logger:   config.Logger,
+		Provider: config.Settings.DDNS.Provider,
+		IP:       ip,
+		Domain:   config.Settings.DDNS.Domain,
+		TTL:      config.Settings.DDNS.TTL,
+		Conf:     config.Settings.DDNS.Config,
+		Http:     httpClient,
+	})
+}
+
+func login(eth *tools.Eth, debugOutput bool) error {
 	logger := config.Logger
 
 	// 登录配置初始化
@@ -124,18 +150,4 @@ func Login(eth *tools.Eth, debugOutput bool) error {
 	}
 
 	return nil
-}
-
-var ipLast string
-
-func ddns(ip string, httpClient *http.Client) error {
-	return dns.Run(&dns.Config{
-		Logger:   config.Logger,
-		Provider: config.Settings.DDNS.Provider,
-		IP:       ip,
-		Domain:   config.Settings.DDNS.Domain,
-		TTL:      config.Settings.DDNS.TTL,
-		Conf:     config.Settings.DDNS.Config,
-		Http:     httpClient,
-	})
 }
