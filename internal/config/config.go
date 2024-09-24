@@ -66,4 +66,5 @@ func init() {
 	}
 
 	initLog()
+	initBackoff()
 }

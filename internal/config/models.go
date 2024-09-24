@@ -8,8 +8,19 @@ import (
 
 type (
 	GuardianConf struct {
-		Enable   bool `json:"enable" yaml:"enable"`
-		Duration uint `json:"duration" yaml:"duration"`
+		Enable   bool        `json:"enable" yaml:"enable"`
+		Duration uint        `json:"duration" yaml:"duration"`
+		Backoff  BackoffConf `json:"backoff" yaml:"backoff"`
+	}
+
+	BackoffConf struct {
+		MaxRetries      uint `json:"max_retries" yaml:"max_retries"`
+		InitialDuration uint `json:"initial_duration" yaml:"initial_duration"`
+		MaxDuration     uint `json:"max_duration" yaml:"max_duration"`
+
+		ExponentFactor   uint `json:"exponent_factor" yaml:"exponent_factor"`
+		InterConstFactor uint `json:"inter_const_factor" yaml:"inter_const_factor"`
+		OuterConstFactor uint `json:"outer_const_factor" yaml:"outer_const_factor"`
 	}
 
 	BasicConf struct {
