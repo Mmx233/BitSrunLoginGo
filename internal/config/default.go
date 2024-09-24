@@ -41,5 +41,10 @@ var defaultConfig = ConfFromFile{
 		CustomHeader: map[string]interface{}{
 			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
 		},
+		Backoff: BackoffConf{
+			InitialDuration: 2,
+			MaxDuration:     300,
+			ExponentFactor:  1,
+		},
 	},
 }

@@ -18,7 +18,7 @@ func main() {
 			if err = controllers.Login(nil, false); err != nil {
 				logger.Errorln("登录出错: ", err)
 				if !config.Settings.Log.DebugLevel {
-					logger.Infoln("开启调试日志（debug_level）获取详细信息")
+					logger.Infoln("开启调试日志 (debug_level) 获取详细信息")
 				}
 				return
 			}
