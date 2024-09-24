@@ -2,6 +2,7 @@ package dns
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -16,4 +17,5 @@ type Config struct {
 	TTL      uint
 	Conf     config.DdnsProviderConfigSum
 	Http     *http.Client
+	Logger   *log.Logger
 }

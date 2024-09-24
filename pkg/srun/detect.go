@@ -21,12 +21,15 @@ func (a *Api) NewDetector() *Detector {
 	}
 
 	return &Detector{
+		Logger:      a.Logger,
 		api:         a,
 		redirectReg: redirectReg,
 	}
 }
 
 type Detector struct {
+	Logger *log.Logger
+
 	api *Api
 
 	redirectReg *regexp.Regexp
@@ -36,27 +39,27 @@ type Detector struct {
 	page    []byte
 }
 
-func (a *Detector) _GET(client *http.Client, addr string) (*http.Response, error) {
-	log.Debugln("HTTP GET", addr)
+func (d *Detector) _GET(client *http.Client, addr string) (*http.Response, error) {
+	d.Logger.Debugln("HTTP GET", addr)
 	req, err := http.NewRequest("GET", addr, nil)
 	if err != nil {
 		return nil, err
 	}
-	for k, v := range a.api.CustomHeader {
+	for k, v := range d.api.CustomHeader {
 		req.Header.Set(k, fmt.Sprint(v))
 	}
 	return client.Do(req)
 }
 
-func (a *Detector) _DirectGET(addr string) (*http.Response, error) {
-	return a._GET(a.api.Client, addr)
+func (d *Detector) _DirectGET(addr string) (*http.Response, error) {
+	return d._GET(d.api.Client, addr)
 }
 
-func (a *Detector) _NoDirectGET(addr string) (*http.Response, error) {
-	return a._GET(a.api.NoDirect, addr)
+func (d *Detector) _NoDirectGET(addr string) (*http.Response, error) {
+	return d._GET(d.api.NoDirect, addr)
 }
 
-func (a *Detector) _JoinRedirectLocation(addr *url.URL, loc string) (*url.URL, error) {
+func (d *Detector) _JoinRedirectLocation(addr *url.URL, loc string) (*url.URL, error) {
 	if loc == "" {
 		return nil, errors.New("目标跳转地址缺失")
 	}
@@ -79,7 +82,7 @@ type _FollowRedirectConfig struct {
 	onNextAddr func(addr *url.URL) error
 }
 
-func (a *Detector) _FollowRedirect(addr *url.URL, conf _FollowRedirectConfig) (*http.Response, []byte, error) {
+func (d *Detector) _FollowRedirect(addr *url.URL, conf _FollowRedirectConfig) (*http.Response, []byte, error) {
 	addrCopy := *addr
 	addr = &addrCopy
 
@@ -87,7 +90,7 @@ func (a *Detector) _FollowRedirect(addr *url.URL, conf _FollowRedirectConfig) (*
 	var res *http.Response
 	for {
 		var err error
-		res, err = a._NoDirectGET(addr.String())
+		res, err = d._NoDirectGET(addr.String())
 		if err != nil {
 			return nil, nil, err
 		}
@@ -98,12 +101,12 @@ func (a *Detector) _FollowRedirect(addr *url.URL, conf _FollowRedirectConfig) (*
 			if err != nil {
 				return nil, nil, err
 			}
-			locMatch := a.redirectReg.FindSubmatch(body)
+			locMatch := d.redirectReg.FindSubmatch(body)
 			if len(locMatch) >= 2 {
 				for i := 1; i < len(locMatch); i++ {
 					locBytes := locMatch[i]
 					if len(locBytes) != 0 {
-						addr, err = a._JoinRedirectLocation(addr, unsafe.String(unsafe.SliceData(locBytes), len(locBytes)))
+						addr, err = d._JoinRedirectLocation(addr, unsafe.String(unsafe.SliceData(locBytes), len(locBytes)))
 						if err != nil {
 							return nil, nil, err
 						}
@@ -118,7 +121,7 @@ func (a *Detector) _FollowRedirect(addr *url.URL, conf _FollowRedirectConfig) (*
 			_ = res.Body.Close()
 
 			if res.StatusCode < 400 {
-				addr, err = a._JoinRedirectLocation(addr, res.Header.Get("location"))
+				addr, err = d._JoinRedirectLocation(addr, res.Header.Get("location"))
 				if err != nil {
 					return nil, nil, err
 				}
@@ -136,15 +139,15 @@ func (a *Detector) _FollowRedirect(addr *url.URL, conf _FollowRedirectConfig) (*
 	return res, body, nil
 }
 
-func (a *Detector) _SearchAcid(query url.Values) (string, bool) {
+func (d *Detector) _SearchAcid(query url.Values) (string, bool) {
 	addr := query.Get(`ac_id`)
 	return addr, addr != ""
 }
 
 // 用于直接获取登录页数据
-func (a *Detector) _RequestPageBytes() ([]byte, error) {
-	if a.pageUrl != "" {
-		res, err := a._DirectGET(a.pageUrl)
+func (d *Detector) _RequestPageBytes() ([]byte, error) {
+	if d.pageUrl != "" {
+		res, err := d._DirectGET(d.pageUrl)
 		if err != nil {
 			return nil, err
 		}
@@ -153,25 +156,25 @@ func (a *Detector) _RequestPageBytes() ([]byte, error) {
 			_, _ = io.Copy(io.Discard, res.Body)
 			return nil, fmt.Errorf("server return http status: %d", res.StatusCode)
 		}
-		a.page, err = io.ReadAll(res.Body)
+		d.page, err = io.ReadAll(res.Body)
 		if err != nil {
 			return nil, err
 		}
 
-		return a.page, nil
+		return d.page, nil
 	}
 
-	baseUrl, err := url.Parse(a.api.BaseUrl)
+	baseUrl, err := url.Parse(d.api.BaseUrl)
 	if err != nil {
 		return nil, err
 	}
-	_, a.page, err = a._FollowRedirect(baseUrl, _FollowRedirectConfig{})
-	return a.page, err
+	_, d.page, err = d._FollowRedirect(baseUrl, _FollowRedirectConfig{})
+	return d.page, err
 }
 
-func (a *Detector) DetectEnc() (string, error) {
-	if a.page == nil {
-		_, err := a._RequestPageBytes()
+func (d *Detector) DetectEnc() (string, error) {
+	if d.page == nil {
+		_, err := d._RequestPageBytes()
 		if err != nil {
 			return "", err
 		}
@@ -181,17 +184,17 @@ func (a *Detector) DetectEnc() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	jsPathMatch := jsReg.FindSubmatch(a.page)
+	jsPathMatch := jsReg.FindSubmatch(d.page)
 	if len(jsPathMatch) == 3 {
 		jsPathBytes := jsPathMatch[1]
 		jsPath := unsafe.String(unsafe.SliceData(jsPathBytes), len(jsPathBytes))
-		jsUrl, err := url.Parse(a.api.BaseUrl)
+		jsUrl, err := url.Parse(d.api.BaseUrl)
 		if err != nil {
 			return "", err
 		}
 		jsUrl.Path = jsPath
 		jsAddr := jsUrl.String()
-		jsRes, err := a._DirectGET(jsAddr)
+		jsRes, err := d._DirectGET(jsAddr)
 		if err != nil {
 			return "", err
 		}
@@ -224,23 +227,23 @@ func (a *Detector) DetectEnc() (string, error) {
 }
 
 // DetectAcid err 为 nil 时 acid 一定存在
-func (a *Detector) DetectAcid() (string, error) {
-	if a.page == nil {
+func (d *Detector) DetectAcid() (string, error) {
+	if d.page == nil {
 		// page 有值时说明 reality 已进行过 query match，此部分可跳过
 		// 从入口地址 url query 寻找 acid
-		baseUrl, err := url.Parse(a.api.BaseUrl)
+		baseUrl, err := url.Parse(d.api.BaseUrl)
 		if err != nil {
 			return "", err
 		}
 
 		var AcidFound = errors.New("acid found")
 		var acid string
-		_, a.page, err = a._FollowRedirect(baseUrl, _FollowRedirectConfig{
+		_, d.page, err = d._FollowRedirect(baseUrl, _FollowRedirectConfig{
 			onNextAddr: func(addr *url.URL) error {
 				var ok bool
-				acid, ok = a._SearchAcid(addr.Query())
+				acid, ok = d._SearchAcid(addr.Query())
 				if ok {
-					a.pageUrl = addr.String()
+					d.pageUrl = addr.String()
 					return AcidFound
 				}
 				return nil
@@ -260,7 +263,7 @@ func (a *Detector) DetectAcid() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	result := reg.FindSubmatch(a.page)
+	result := reg.FindSubmatch(d.page)
 	if len(result) == 2 {
 		return string(result[1]), nil
 	}
@@ -269,19 +272,19 @@ func (a *Detector) DetectAcid() (string, error) {
 }
 
 // Reality acid 可能为空字符串
-func (a *Detector) Reality(addr string, getAcid bool) (acid string, online bool, err error) {
+func (d *Detector) Reality(addr string, getAcid bool) (acid string, online bool, err error) {
 	startUrl, err := url.Parse(addr)
 	if err != nil {
 		return "", false, err
 	}
 	var AlreadyOnline = errors.New("already online")
-	finalRes, pageBytes, err := a._FollowRedirect(startUrl, _FollowRedirectConfig{
+	finalRes, pageBytes, err := d._FollowRedirect(startUrl, _FollowRedirectConfig{
 		onNextAddr: func(addr *url.URL) error {
 			if addr.Host == startUrl.Host {
 				return AlreadyOnline
 			}
 			if getAcid {
-				acid, _ = a._SearchAcid(addr.Query())
+				acid, _ = d._SearchAcid(addr.Query())
 			}
 			return nil
 		},
@@ -295,11 +298,11 @@ func (a *Detector) Reality(addr string, getAcid bool) (acid string, online bool,
 		return
 	}
 	online = finalRes.Request.URL.Host == startUrl.Host
-	a.page = pageBytes
+	d.page = pageBytes
 	return
 }
 
-func (a *Detector) Reset() {
-	a.pageUrl = ""
-	a.page = nil
+func (d *Detector) Reset() {
+	d.pageUrl = ""
+	d.page = nil
 }

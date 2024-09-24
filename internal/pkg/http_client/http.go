@@ -1,9 +1,9 @@
-package tools
+package http_client
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/flags"
-	log "github.com/sirupsen/logrus"
+	"github.com/Mmx233/BitSrunLoginGo/tools"
 	"net"
 	"net/http"
 )
@@ -17,20 +17,21 @@ var HttpPack *Http
 var httpTools map[string]*Http
 
 func init() {
+	logger := config.Logger
 	if config.Settings.Basic.Interfaces == "" {
-		var eth *Eth
+		var eth *tools.Eth
 		if flags.Interface != "" {
 			netEth, err := net.InterfaceByName(flags.Interface)
 			if err != nil {
-				log.Warnf("获取指定网卡 %s 失败，使用默认网卡: %v", flags.Interface, err)
+				logger.Warnf("获取指定网卡 %s 失败，使用默认网卡: %v", flags.Interface, err)
 			} else {
-				eth, err = ConvertInterface(*netEth)
+				eth, err = tools.ConvertInterface(logger, *netEth)
 				if err != nil {
-					log.Warnf("获取指定网卡 %s ip 地址失败，使用默认网卡: %v", flags.Interface, err)
+					logger.Warnf("获取指定网卡 %s ip 地址失败，使用默认网卡: %v", flags.Interface, err)
 				} else if eth == nil {
-					log.Warnf("指定网卡 %s 无可用 ip 地址，使用默认网卡", flags.Interface)
+					logger.Warnf("指定网卡 %s 无可用 ip 地址，使用默认网卡", flags.Interface)
 				} else {
-					log.Debugf("使用指定网卡 %s ip: %s", eth.Name, eth.Addr.String())
+					logger.Debugf("使用指定网卡 %s ip: %s", eth.Name, eth.Addr.String())
 				}
 			}
 		}
@@ -41,7 +42,7 @@ func init() {
 	}
 }
 
-func HttpPackSelect(eth *Eth) *Http {
+func HttpPackSelect(eth *tools.Eth) *Http {
 	if HttpPack != nil {
 		return HttpPack
 	}

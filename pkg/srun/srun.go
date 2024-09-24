@@ -15,17 +15,25 @@ type Conf struct {
 	LoginInfo    LoginInfo
 	Client       *http.Client
 	CustomHeader map[string]interface{}
+
+	Logger *log.Logger
 }
 
 func New(conf *Conf) *Srun {
+	if conf.Logger == nil {
+		conf.Logger = log.New()
+	}
+
 	srun := &Srun{
 		LoginInfo: conf.LoginInfo,
+		Logger:    conf.Logger,
 	}
 	srun.Api.Init(&ApiConfig{
 		Https:        conf.Https,
 		Domain:       conf.LoginInfo.Form.Domain,
 		Client:       conf.Client,
 		CustomHeader: conf.CustomHeader,
+		Logger:       conf.Logger,
 	})
 	return srun
 }
@@ -34,6 +42,7 @@ type Srun struct {
 	//登录参数，不可缺省
 	LoginInfo LoginInfo
 	Api       Api
+	Logger    *log.Logger
 }
 
 func (c Srun) LoginStatus() (online bool, ip string, err error) {
@@ -61,7 +70,7 @@ func (c Srun) LoginStatus() (online bool, ip string, err error) {
 }
 
 func (c Srun) DoLogin(clientIP string) error {
-	log.Debugln("正在获取 Token")
+	c.Logger.Debugln("正在获取 Token")
 
 	if c.LoginInfo.Form.UserType != "" {
 		c.LoginInfo.Form.Username += "@" + c.LoginInfo.Form.UserType
@@ -76,9 +85,9 @@ func (c Srun) DoLogin(clientIP string) error {
 		return ErrResultCannotFound
 	}
 	tokenStr := token.(string)
-	log.Debugln("token: ", tokenStr)
+	c.Logger.Debugln("token: ", tokenStr)
 
-	log.Debugln("发送登录请求")
+	c.Logger.Debugln("发送登录请求")
 
 	info, err := json.Marshal(map[string]string{
 		"username": c.LoginInfo.Form.Username,

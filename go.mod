@@ -3,7 +3,7 @@ module github.com/Mmx233/BitSrunLoginGo
 go 1.23.1
 
 require (
-	github.com/Mmx233/BackoffCli/backoff v0.0.0-20240923161441-2cf9a65477c8
+	github.com/Mmx233/BackoffCli/backoff v0.0.0-20240924144324-7b288b13d4c6
 	github.com/Mmx233/tool v0.7.8
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
 	github.com/cloudflare/cloudflare-go v0.104.0
@@ -15,7 +15,7 @@ require (
 
 require (
 	github.com/goccy/go-json v0.10.3 // indirect
-	github.com/google/go-cmp v0.5.9 // indirect
+	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	golang.org/x/net v0.29.0 // indirect

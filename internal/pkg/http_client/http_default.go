@@ -1,16 +1,17 @@
 //go:build !linux
 
-package tools
+package http_client
 
 import (
 	"crypto/tls"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
+	"github.com/Mmx233/BitSrunLoginGo/tools"
 	"github.com/Mmx233/tool"
 	"net"
 	"net/http"
 )
 
-func genHttpPack(eth *Eth) *Http {
+func genHttpPack(eth *tools.Eth) *Http {
 	var addr net.Addr
 	if eth != nil {
 		addr = eth.Addr

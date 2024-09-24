@@ -14,11 +14,13 @@ import (
 
 type Api struct {
 	BaseUrl string
-	Client  *http.Client
-	// 禁用自动重定向
-	NoDirect *http.Client
 
+	Client *http.Client
+	// 禁用自动重定向
+	NoDirect     *http.Client
 	CustomHeader map[string]interface{}
+
+	Logger *log.Logger
 }
 
 type ApiConfig struct {
@@ -26,6 +28,7 @@ type ApiConfig struct {
 	Domain       string
 	Client       *http.Client
 	CustomHeader map[string]interface{}
+	Logger       *log.Logger
 }
 
 func (a *Api) Init(conf *ApiConfig) {
@@ -44,11 +47,16 @@ func (a *Api) Init(conf *ApiConfig) {
 	a.NoDirect.CheckRedirect = func(_ *http.Request, _ []*http.Request) error {
 		return http.ErrUseLastResponse
 	}
+
+	if conf.Logger == nil {
+		conf.Logger = log.New()
+	}
+	a.Logger = conf.Logger
 }
 
 func (a *Api) request(path string, query map[string]interface{}) (map[string]interface{}, error) {
-	log.Debugln("HTTP GET", a.BaseUrl+path)
-	callback := fmt.Sprintf("jQuery%s_%d", tool.RandMath(rand.NewSource(time.Now().UnixNano())).WithLetters("123456789").String(21), time.Now().UnixMilli())
+	a.Logger.Debugln("HTTP GET", a.BaseUrl+path)
+	callback := fmt.Sprintf("jQuery%s_%d", tool.RandMath(rand.NewSource(time.Now().UnixNano())).WithLetters("123456789").Text(21), time.Now().UnixMilli())
 	if query == nil {
 		query = make(map[string]interface{}, 2)
 	}
@@ -61,25 +69,25 @@ func (a *Api) request(path string, query map[string]interface{}) (map[string]int
 		Header: a.CustomHeader,
 	})
 	if err != nil {
-		log.Debugln(err)
+		a.Logger.Debugln(err)
 		return nil, err
 	}
 
 	resp, err := httpTool.Client.Do(req)
 	if err != nil {
-		log.Debugln(err)
+		a.Logger.Debugln(err)
 		return nil, err
 	}
 	defer resp.Body.Close()
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Debugln(err)
+		a.Logger.Debugln(err)
 		return nil, err
 	}
 	res := string(data)
 
-	log.Debugln(res)
+	a.Logger.Debugln(res)
 	res = strings.TrimPrefix(res, callback+"(")
 	res = strings.TrimSuffix(res, ")")
 

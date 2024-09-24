@@ -10,11 +10,14 @@ import (
 )
 
 func Run(c *Config) error {
-	log.Infof("开始 %s DDNS 流程", c.Provider)
-
+	if c.Logger == nil {
+		c.Logger = log.New()
+	}
 	if c.TTL == 0 {
 		c.TTL = 600
 	}
+
+	c.Logger.Infof("开始 %s DDNS 流程", c.Provider)
 
 	var dns Provider
 	var err error
@@ -32,22 +35,22 @@ func Run(c *Config) error {
 		} else {
 			msg = fmt.Sprintf("DDNS 模块 dns 运营商 %s 不支持", c.Provider)
 		}
-		log.Warnln(msg)
+		c.Logger.Warnln(msg)
 		return errors.New(msg)
 	}
 	if err != nil {
-		log.Warnf("解析 DDNS config 失败：%v", err)
+		c.Logger.Warnf("解析 DDNS config 失败：%v", err)
 		return err
 	}
 
 	// 修改 dns 记录
 
 	if err = dns.SetDomainRecord(c.Domain, c.IP); err != nil {
-		log.Warnf("设置 dns 解析记录失败：%v", err)
+		c.Logger.Warnf("设置 dns 解析记录失败：%v", err)
 		return err
 	}
 
-	log.Infof("DDNS 配置应用成功: %s | %s", c.Domain, c.IP)
+	c.Logger.Infof("DDNS 配置应用成功: %s | %s", c.Domain, c.IP)
 
 	return nil
 }
