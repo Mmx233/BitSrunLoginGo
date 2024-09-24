@@ -8,12 +8,12 @@ import (
 
 type (
 	GuardianConf struct {
-		Enable   bool        `json:"enable" yaml:"enable"`
-		Duration uint        `json:"duration" yaml:"duration"`
-		Backoff  BackoffConf `json:"backoff" yaml:"backoff"`
+		Enable   bool `json:"enable" yaml:"enable"`
+		Duration uint `json:"duration" yaml:"duration"`
 	}
 
 	BackoffConf struct {
+		Enable          bool `json:"enable" yaml:"enable"`
 		MaxRetries      uint `json:"max_retries" yaml:"max_retries"`
 		InitialDuration uint `json:"initial_duration" yaml:"initial_duration"`
 		MaxDuration     uint `json:"max_duration" yaml:"max_duration"`
@@ -60,6 +60,7 @@ type (
 type SettingsConf struct {
 	Basic        BasicConf              `json:"basic" yaml:"basic"`
 	Guardian     GuardianConf           `json:"guardian" yaml:"guardian"`
+	Backoff      BackoffConf            `json:"backoff" yaml:"backoff"`
 	Log          LogConf                `json:"log" yaml:"log"`
 	DDNS         DdnsConf               `json:"ddns" yaml:"ddns"`
 	Reality      RealityConf            `json:"reality" yaml:"reality"`

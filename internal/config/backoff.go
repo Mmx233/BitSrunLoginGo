@@ -8,7 +8,7 @@ import (
 var BackoffConfig backoff.Conf
 
 func initBackoff() {
-	setting := Settings.Guardian.Backoff
+	setting := Settings.Backoff
 	BackoffConfig = backoff.Conf{
 		Logger:           Logger,
 		DisableRecovery:  true,
