@@ -24,10 +24,11 @@ type (
 	}
 
 	BasicConf struct {
-		Https          bool   `json:"https" yaml:"https"`
-		SkipCertVerify bool   `json:"skip_cert_verify" yaml:"skip_cert_verify"`
-		Timeout        uint   `json:"timeout" yaml:"timeout"`
-		Interfaces     string `json:"interfaces" yaml:"interfaces"`
+		Https              bool   `json:"https" yaml:"https"`
+		SkipCertVerify     bool   `json:"skip_cert_verify" yaml:"skip_cert_verify"`
+		Timeout            uint   `json:"timeout" yaml:"timeout"`
+		Interfaces         string `json:"interfaces" yaml:"interfaces"`
+		InterfacesInterval uint   `json:"interfaces_interval" yaml:"interfaces_interval"`
 	}
 
 	LogConf struct {

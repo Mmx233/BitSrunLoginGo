@@ -12,6 +12,7 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/tools"
 	"net/http"
 	"sync"
+	"time"
 )
 
 var ipLast string
@@ -53,12 +54,16 @@ func LoginInterfaces() error {
 	if err != nil {
 		return err
 	}
+	var interval = time.Duration(config.Settings.Basic.InterfacesInterval) * time.Second
 	var errCount int
-	for _, eth := range interfaces {
+	for i, eth := range interfaces {
 		logger.Infoln("使用网卡: ", eth.Name)
 		if err := LoginSingle(&eth, false); err != nil {
 			config.Logger.Errorf("网卡 %s 登录出错: %v", eth.Name, err)
 			errCount++
+		}
+		if i != len(interfaces)-1 {
+			time.Sleep(interval)
 		}
 	}
 	if errCount > 0 {
