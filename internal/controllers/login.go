@@ -11,20 +11,29 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 	"github.com/Mmx233/BitSrunLoginGo/tools"
 	"net/http"
+	"sync"
 )
 
-// Login 登录逻辑
-func Login(eth *tools.Eth, debugOutput bool) error {
-	if config.Settings.Backoff.Enable {
-		return backoff.NewInstance(func(ctx context.Context) error {
-			return login(eth, debugOutput)
-		}, config.BackoffConfig).Run(context.TODO())
-	} else {
-		return login(eth, debugOutput)
+var ipLast string
+var debugTip sync.Once
+
+func Login() error {
+	logger := config.Logger
+	if config.Settings.Basic.Interfaces == "" { //单网卡
+		err := LoginSingle(nil, true)
+		if err != nil {
+			logger.Errorln("登录出错: ", err)
+			debugTip.Do(func() {
+				if !config.Settings.Log.DebugLevel {
+					logger.Infoln("开启调试日志 (debug_level) 获取详细信息")
+				}
+			})
+		}
+		return err
+	} else { //多网卡
+		return LoginInterfaces()
 	}
 }
-
-var ipLast string
 
 func ddns(ip string, httpClient *http.Client) error {
 	return dns.Run(&dns.Config{
@@ -38,7 +47,37 @@ func ddns(ip string, httpClient *http.Client) error {
 	})
 }
 
-func login(eth *tools.Eth, debugOutput bool) error {
+func LoginInterfaces() error {
+	logger := config.Logger
+	interfaces, err := tools.GetInterfaceAddr(logger, config.Settings.Basic.Interfaces)
+	if err != nil {
+		return err
+	}
+	var errCount int
+	for _, eth := range interfaces {
+		logger.Infoln("使用网卡: ", eth.Name)
+		if err := LoginSingle(&eth, false); err != nil {
+			config.Logger.Errorf("网卡 %s 登录出错: %v", eth.Name, err)
+			errCount++
+		}
+	}
+	if errCount > 0 {
+		return errors.New("multi interface login not completely succeed")
+	}
+	return nil
+}
+
+func LoginSingle(eth *tools.Eth, debugOutput bool) error {
+	if config.Settings.Backoff.Enable {
+		return backoff.NewInstance(func(ctx context.Context) error {
+			return doLogin(eth, debugOutput)
+		}, config.BackoffConfig).Run(context.TODO())
+	} else {
+		return doLogin(eth, debugOutput)
+	}
+}
+
+func doLogin(eth *tools.Eth, debugOutput bool) error {
 	logger := config.Logger
 
 	// 登录配置初始化
