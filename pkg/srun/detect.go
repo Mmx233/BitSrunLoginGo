@@ -28,7 +28,7 @@ func (a *Api) NewDetector() *Detector {
 }
 
 type Detector struct {
-	Logger *log.Logger
+	Logger log.FieldLogger
 
 	api *Api
 

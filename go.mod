@@ -3,13 +3,13 @@ module github.com/Mmx233/BitSrunLoginGo
 go 1.23.1
 
 require (
-	github.com/Mmx233/BackoffCli/backoff v0.0.0-20240924144324-7b288b13d4c6
+	github.com/Mmx233/BackoffCli/backoff v0.0.0-20240925131851-fca176afd6a4
 	github.com/Mmx233/tool v0.7.8
 	github.com/antonfisher/nested-logrus-formatter v1.3.1
-	github.com/cloudflare/cloudflare-go v0.104.0
+	github.com/cloudflare/cloudflare-go v0.105.0
 	github.com/sirupsen/logrus v1.9.3
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.1009
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.1009
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.1010
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.1010
 	gopkg.in/yaml.v3 v3.0.1
 )
 

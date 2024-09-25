@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/flags"
+	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
 	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 	"github.com/Mmx233/tool"
 	log "github.com/sirupsen/logrus"
@@ -24,33 +25,34 @@ var (
 )
 
 func init() {
+	logger := log.New().WithField(keys.LogComponent, "init")
 	reader := newReaderFromPath(flags.Path)
 
 	// 生成配置文件
 	exist, err := tool.File.Exists(flags.Path)
 	if err != nil {
-		log.Fatalln("[init] 读取配置文件失败：", err)
+		logger.Fatalln("读取配置文件失败：", err)
 	} else if !exist {
 		var data []byte
 		data, err = reader.Marshal(&defaultConfig)
 		if err != nil {
-			log.Fatalln("[init] 生成配置文件失败：", err)
+			logger.Fatalln("生成配置文件失败：", err)
 		}
 		if err = os.WriteFile(flags.Path, data, 0600); err != nil {
-			log.Fatalln("[init] 写入配置文件失败：", err)
+			logger.Fatalln("写入配置文件失败：", err)
 		}
-		log.Infoln("[init] 已生成配置文件，请编辑 '" + flags.Path + "' 然后重试")
+		logger.Infoln("已生成配置文件，请编辑 '" + flags.Path + "' 然后重试")
 		os.Exit(0)
 	}
 
 	// 读取配置文件
 	data, err := os.ReadFile(flags.Path)
 	if err != nil {
-		log.Fatalln("[init] 读取配置失败：", err)
+		logger.Fatalln("读取配置失败：", err)
 	}
 	var fileConf ConfFromFile
 	if err = reader.Unmarshal(data, &fileConf); err != nil {
-		log.Fatalln("[init] 解析配置失败：", err)
+		logger.Fatalln("解析配置失败：", err)
 	}
 	Form = &fileConf.Form
 	Meta = &fileConf.Meta

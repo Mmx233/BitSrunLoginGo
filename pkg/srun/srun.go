@@ -16,7 +16,7 @@ type Conf struct {
 	Client       *http.Client
 	CustomHeader map[string]interface{}
 
-	Logger *log.Logger
+	Logger log.FieldLogger
 }
 
 func New(conf *Conf) *Srun {
@@ -42,7 +42,7 @@ type Srun struct {
 	//登录参数，不可缺省
 	LoginInfo LoginInfo
 	Api       Api
-	Logger    *log.Logger
+	Logger    log.FieldLogger
 }
 
 func (c Srun) LoginStatus() (online bool, ip string, err error) {

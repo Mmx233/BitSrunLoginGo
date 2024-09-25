@@ -17,5 +17,5 @@ type Config struct {
 	TTL      uint
 	Conf     config.DdnsProviderConfigSum
 	Http     *http.Client
-	Logger   *log.Logger
+	Logger   log.FieldLogger
 }

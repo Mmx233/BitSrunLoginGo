@@ -13,7 +13,7 @@ type Eth struct {
 }
 
 // ConvertInterface 当没有 ipv4 地址时 eth 可能为 nil
-func ConvertInterface(logger *log.Logger, eth net.Interface) (*Eth, error) {
+func ConvertInterface(logger log.FieldLogger, eth net.Interface) (*Eth, error) {
 	addresses, err := eth.Addrs()
 	if err != nil {
 		return nil, err
@@ -35,7 +35,7 @@ func ConvertInterface(logger *log.Logger, eth net.Interface) (*Eth, error) {
 	return nil, nil
 }
 
-func GetInterfaceAddr(logger *log.Logger, regexpStr string) ([]Eth, error) {
+func GetInterfaceAddr(logger log.FieldLogger, regexpStr string) ([]Eth, error) {
 	var result []Eth
 
 	interfaces, err := net.Interfaces()

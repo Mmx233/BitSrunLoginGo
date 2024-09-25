@@ -3,6 +3,7 @@ package http_client
 import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/flags"
+	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
 	"github.com/Mmx233/BitSrunLoginGo/tools"
 	"net"
 	"net/http"
@@ -17,7 +18,7 @@ var HttpPack *Http
 var httpTools map[string]*Http
 
 func init() {
-	logger := config.Logger
+	logger := config.Logger.WithField(keys.LogComponent, "init http")
 	if config.Settings.Basic.Interfaces == "" {
 		var eth *tools.Eth
 		if flags.Interface != "" {

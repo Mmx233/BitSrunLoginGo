@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/Mmx233/BackoffCli/backoff"
+	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
 	"time"
 )
 
@@ -10,7 +11,7 @@ var BackoffConfig backoff.Conf
 func initBackoff() {
 	setting := Settings.Backoff
 	BackoffConfig = backoff.Conf{
-		Logger:           Logger,
+		Logger:           Logger.WithField(keys.LogComponent, "backoff"),
 		DisableRecovery:  true,
 		InitialDuration:  time.Duration(setting.InitialDuration) * time.Second,
 		MaxDuration:      time.Duration(setting.MaxDuration) * time.Second,

@@ -20,7 +20,7 @@ type Api struct {
 	NoDirect     *http.Client
 	CustomHeader map[string]interface{}
 
-	Logger *log.Logger
+	Logger log.FieldLogger
 }
 
 type ApiConfig struct {
@@ -28,7 +28,7 @@ type ApiConfig struct {
 	Domain       string
 	Client       *http.Client
 	CustomHeader map[string]interface{}
-	Logger       *log.Logger
+	Logger       log.FieldLogger
 }
 
 func (a *Api) Init(conf *ApiConfig) {

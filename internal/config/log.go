@@ -45,7 +45,6 @@ func initLog() {
 
 	//设置输出格式
 	Logger.SetFormatter(&nested.Formatter{
-		HideKeys:        true,
 		NoColors:        Settings.Log.WriteFile,
 		TimestampFormat: "2006-01-02 15:04:05",
 	})

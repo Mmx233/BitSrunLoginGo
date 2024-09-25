@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
+	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
 	"github.com/Mmx233/BitSrunLoginGo/internal/controllers"
 )
 
@@ -13,9 +14,12 @@ func main() {
 
 	if config.Settings.Guardian.Enable {
 		//进入守护模式
-		controllers.Guardian()
+		controllers.Guardian(logger.WithField(keys.LogComponent, "guard"))
 	} else {
 		//执行单次流程
-		_ = controllers.Login()
+		_ = controllers.Login(controllers.LoginConf{
+			Logger:                      logger.WithField(keys.LogComponent, "login"),
+			IsOnlineDetectLogDebugLevel: false,
+		})
 	}
 }
