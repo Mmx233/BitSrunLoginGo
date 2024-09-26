@@ -94,6 +94,10 @@ settings:
 
 运营商类型在原网页会被自动附加在账号后，请把 `@` 后面的部分填入 `user_type`，没有则留空（删掉默认的）
 
+## :minidisc: 运行时间线
+
+![Timeline](assets/timeline.png)
+
 ## :bow_and_arrow: DDNS
 
 将 `ddns.enable` 设为 `true` 后，将在登录成功时以及守护模式下首次启动已在线时设置指定域名的解析地址（ipv4，A 记录），用于校园网内网通信
