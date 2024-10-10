@@ -62,7 +62,7 @@ settings:
     duration: 300 #网络检查周期（秒，正整数）
   backoff: # 积分退避
     enable: false # 开启后同时对所有运行模式生效，作用于登录失败的重试
-    max_retries: 0 # 0 意味着无限重试
+    max_retries: 0 # 为 0 时无限重试直至成功
     initial_duration: 2 # 初始失败等待时间，秒
     max_duration: 300 # 最大失败等待时间，秒
     # 等待时间计算公式详见 https://github.com/Mmx233/BackoffCli
@@ -110,25 +110,25 @@ settings:
 | cloudflare | `zone` 区域 ID<br/>`token` API 令牌         |
 |   dnspod   | `secret_id`<br/>`secret_key`            |
 
-需要注意的是，应该避免在多网卡模式下使用 ddns，如有需要，可以每个网卡创建一个配置文件单独进行登录。此外，校园网内网通信并不是安全的，校方往往会对其施加监管
+如果多网卡模式下使用 ddns 存在问题，可以为个别网卡创建额外的配置文件单独进行登录。此外，校园网内网通信并不是安全的，校方往往会对其施加监管
 
 ## :shower: 多拨
 
-登录请求的网卡绑定在 Linux 下稳定生效，但在其它系统中可能无法成功绑定。如果要在 windows 等系统寻求稳定的多拨效果，可以考虑使用 docker 的网桥或系统层面的绑定。
+登录请求的网卡绑定在 Linux 下稳定生效，但在其它系统中可能无法成功绑定。如果要在 windows 等系统寻求稳定的多拨效果，可以考虑使用系统层面的绑定
 
-请注意，部分学校中在多拨中使用同一个账号时可能即使多拨成功，同一账号在同一个网关下的多个设备可能会共享带宽限制，这意味着多拨没有效果。
+请注意，少部分学校中在多拨中使用同一个账号时可能即使多拨成功，同一账号在同一个网关下的多个设备可能会共享带宽限制，这意味着多拨没有效果
 
-你可以通过配置文件中的 `settings.basic.interfaces` 指定网卡，也可以在将该配置留空的情况下使用 `--interface` 指定网卡。
+你可以通过配置文件中的 `settings.basic.interfaces` 指定网卡，也可以在将该配置留空的情况下使用 `--interface` 指定网卡
 
 ## :anchor: Docker / Kubernetes
 
 镜像：`mmx233/bitsrunlogin-go:latest`
 
-支持 linux/amd64、linux/386、linux/arm64、linux/arm/v7 架构，在集群中使用时建议使用固定 tag 而不是 latest 以锁定版本
+支持 `linux/amd64` ` linux/386` `linux/arm64` `linux/arm/v7` 架构，在集群中使用时建议使用固定 tag 而不是 latest 以锁定版本
 
 直接使用：
 
-配置文件挂载至 `/data/Config.yaml`，若需更改配置文件类型，可以使用 `--entrypoint` 覆写启动参数
+配置文件挂载至 `/data/Config.yaml`，若需更改配置文件类型，可以使用覆写启动参数以指定自定义路径和后缀
 
 ```shell
 docker run -v path_to_config:/data/Config.yaml mmx233/bitsrunlogin-go:latest
@@ -155,32 +155,30 @@ cd BitSrunLoginGo
 go build ./cmd/bitsrun
 
 #或者使用经过优化的构建命令：
-go build -trimpath -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
+go build -trimpath -ldflags "-s -w -extldflags '-static -fpic'" ./cmd/bitsrun
 
 ```
 
-交叉编译（Linux）：
+交叉编译（Linux -> Windows Binary）：
 
 ```shell
 export CGO_ENABLED=0
 export GOOS=windows #系统
 export GOARCH=amd64 #架构
-go build -trimpath -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
+go build -trimpath -ldflags "-s -w -extldflags '-static -fpic'" ./cmd/bitsrun
 ```
 
-交叉编译（Powershell）：
+交叉编译（Windows Powershel -> Linux Binary）：
 
 ```shell
 $env:CGO_ENABLED=0
 $env:GOOS='linux' #系统
 $env:GOARCH='amd64' #架构
-go build -gcflags=-trimpath=$env:GOPATH -asmflags=-trimpath=$env:GOPATH -ldflags "-s -w -extldflags '-static'" ./cmd/bitsrun
+go build -trimpath -ldflags "-s -w -extldflags '-static -fpic'" ./cmd/bitsrun
 
 #消除命令行窗口
-go build -trimpath -ldflags "-s -w -extldflags '-static' -H windowsgui" ./cmd/bitsrun
+go build -trimpath -ldflags "-s -w -extldflags '-static -fpic' -H windowsgui" ./cmd/bitsrun
 ```
-
-golang 支持的系统与架构请自行查询
 
 ## :jigsaw: 作为 module 使用
 
