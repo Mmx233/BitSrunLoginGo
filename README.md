@@ -87,7 +87,6 @@ settings:
     addr: http://www.baidu.com #初始地址，需要使用 http、域名
   custom_header: #这段配置是动态的，用于设置请求头，可以自由填写
     User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0
-  
 ```
 
 登录参数从原网页登陆时对 `/srun_portal` 的请求抓取，抓取时请把浏览器控制台的 `preserve log`（保留日志）启用。
@@ -124,7 +123,7 @@ settings:
 
 镜像：`mmx233/bitsrunlogin-go:latest`
 
-支持 `linux/amd64` ` linux/386` `linux/arm64` `linux/arm/v7` 架构，在集群中使用时建议使用固定 tag 而不是 latest 以锁定版本
+支持 `linux/amd64` `linux/386` `linux/arm64` `linux/arm/v7` 架构，在集群中使用时建议使用固定 tag 而不是 latest 以锁定版本
 
 直接使用：
 
@@ -156,7 +155,6 @@ go build ./cmd/bitsrun
 
 #或者使用经过优化的构建命令：
 go build -trimpath -ldflags "-s -w -extldflags '-static -fpic'" ./cmd/bitsrun
-
 ```
 
 交叉编译（Linux -> Windows Binary）：
