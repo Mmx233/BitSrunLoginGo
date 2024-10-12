@@ -104,7 +104,7 @@ func doLogin(conf LoginSingleConf) error {
 	logger := conf.Logger
 
 	// 登录配置初始化
-	httpClient := http_client.HttpPackSelect(conf.Eth).Client
+	httpClient := http_client.ClientSelect(conf.Eth)
 	srunClient := srun.New(&srun.Conf{
 		Logger: logger,
 		Https:  config.Settings.Basic.Https,

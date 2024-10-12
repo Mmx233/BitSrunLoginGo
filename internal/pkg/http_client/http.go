@@ -9,13 +9,9 @@ import (
 	"net/http"
 )
 
-type Http struct {
-	Client *http.Client
-}
+var _DefaultClient *http.Client
 
-var HttpPack *Http
-
-var httpTools map[string]*Http
+var _EthClientMap map[string]*http.Client
 
 func init() {
 	logger := config.Logger.WithField(keys.LogComponent, "init http")
@@ -37,21 +33,21 @@ func init() {
 			}
 		}
 
-		HttpPack = genHttpPack(eth)
+		_DefaultClient = CreateClientFromEth(eth)
 	} else {
-		httpTools = make(map[string]*Http)
+		_EthClientMap = make(map[string]*http.Client)
 	}
 }
 
-func HttpPackSelect(eth *tools.Eth) *Http {
-	if HttpPack != nil {
-		return HttpPack
+func ClientSelect(eth *tools.Eth) *http.Client {
+	if _DefaultClient != nil {
+		return _DefaultClient
 	}
-	if addrHttp, ok := httpTools[eth.Name]; ok {
-		return addrHttp
+	if client, ok := _EthClientMap[eth.Name]; ok {
+		return client
 	} else {
-		addrHttp = genHttpPack(eth)
-		httpTools[eth.Name] = addrHttp
-		return addrHttp
+		client = CreateClientFromEth(eth)
+		_EthClientMap[eth.Name] = client
+		return client
 	}
 }
