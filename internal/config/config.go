@@ -5,7 +5,6 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
 	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 	"github.com/Mmx233/tool"
-	log "github.com/sirupsen/logrus"
 	"os"
 	"time"
 )
@@ -25,7 +24,9 @@ var (
 )
 
 func init() {
-	logger := log.New().WithField(keys.LogComponent, "init")
+	initLogPre()
+
+	logger := Logger.WithField(keys.LogComponent, "init")
 	reader := newReaderFromPath(flags.Path)
 
 	// 生成配置文件
@@ -67,6 +68,6 @@ func init() {
 		Meta.Acid = flags.Acid
 	}
 
-	initLog()
+	initLogFinal()
 	initBackoff()
 }
