@@ -3,9 +3,9 @@ package dns
 import (
 	"errors"
 	"fmt"
-	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/aliyun"
-	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/cloudflare"
-	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/dnspod"
+	"github.com/Mmx233/BitSrunLoginGo/internal/dns/aliyun"
+	"github.com/Mmx233/BitSrunLoginGo/internal/dns/cloudflare"
+	"github.com/Mmx233/BitSrunLoginGo/internal/dns/dnspod"
 	log "github.com/sirupsen/logrus"
 )
 

@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	dnsUtil "github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/util"
+	"github.com/Mmx233/BitSrunLoginGo/internal/dns/util"
 	"github.com/Mmx233/tool"
 	"math/rand"
 	"net/http"

@@ -1,4 +1,4 @@
-package controllers
+package login
 
 import (
 	"context"
@@ -7,8 +7,8 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/flags"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
-	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns"
-	"github.com/Mmx233/BitSrunLoginGo/internal/pkg/http_client"
+	dns2 "github.com/Mmx233/BitSrunLoginGo/internal/dns"
+	"github.com/Mmx233/BitSrunLoginGo/internal/http_client"
 	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 	"github.com/Mmx233/BitSrunLoginGo/tools"
 	log "github.com/sirupsen/logrus"
@@ -20,17 +20,17 @@ import (
 var ipLast string
 var debugTip sync.Once
 
-type LoginConf struct {
+type Conf struct {
 	Logger                      log.FieldLogger
 	IsOnlineDetectLogDebugLevel bool
 }
 
-func Login(conf LoginConf) error {
+func Login(conf Conf) error {
 	logger := conf.Logger
 	if config.Settings.Basic.Interfaces == "" { //单网卡
-		err := LoginSingle(LoginSingleConf{
-			LoginConf: conf,
-			Eth:       nil,
+		err := Single(SingleConf{
+			Conf: conf,
+			Eth:  nil,
 		})
 		if err != nil {
 			logger.Errorln("登录出错: ", err)
@@ -42,12 +42,12 @@ func Login(conf LoginConf) error {
 		}
 		return err
 	} else { //多网卡
-		return LoginInterfaces(conf)
+		return Interfaces(conf)
 	}
 }
 
 func ddns(logger log.FieldLogger, ip string, httpClient *http.Client) error {
-	return dns.Run(&dns.Config{
+	return dns2.Run(&dns2.Config{
 		Logger:   logger.WithField(keys.LogLoginModule, "ddns"),
 		Provider: config.Settings.DDNS.Provider,
 		IP:       ip,
@@ -58,7 +58,7 @@ func ddns(logger log.FieldLogger, ip string, httpClient *http.Client) error {
 	})
 }
 
-func LoginInterfaces(conf LoginConf) error {
+func Interfaces(conf Conf) error {
 	logger := conf.Logger
 	interfaces, err := tools.GetInterfaceAddr(logger, config.Settings.Basic.Interfaces)
 	if err != nil {
@@ -68,9 +68,9 @@ func LoginInterfaces(conf LoginConf) error {
 	var errCount int
 	for i, eth := range interfaces {
 		logger.Infoln("使用网卡: ", eth.Name)
-		if err := LoginSingle(LoginSingleConf{
-			LoginConf: conf,
-			Eth:       &eth,
+		if err := Single(SingleConf{
+			Conf: conf,
+			Eth:  &eth,
 		}); err != nil {
 			logger.Errorf("网卡 %s 登录出错: %v", eth.Name, err)
 			errCount++
@@ -85,12 +85,12 @@ func LoginInterfaces(conf LoginConf) error {
 	return nil
 }
 
-type LoginSingleConf struct {
-	LoginConf
+type SingleConf struct {
+	Conf
 	Eth *tools.Eth
 }
 
-func LoginSingle(conf LoginSingleConf) error {
+func Single(conf SingleConf) error {
 	if config.Settings.Backoff.Enable {
 		return backoff.NewInstance(func(ctx context.Context) error {
 			return doLogin(conf)
@@ -100,7 +100,7 @@ func LoginSingle(conf LoginSingleConf) error {
 	}
 }
 
-func doLogin(conf LoginSingleConf) error {
+func doLogin(conf SingleConf) error {
 	logger := conf.Logger
 
 	// 登录配置初始化

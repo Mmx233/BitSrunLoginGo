@@ -1,4 +1,4 @@
-package controllers
+package login
 
 import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
@@ -11,7 +11,7 @@ import (
 func Guardian(logger log.FieldLogger) {
 	GuardianDuration := time.Duration(config.Settings.Guardian.Duration) * time.Second
 	for {
-		_ = Login(LoginConf{
+		_ = Login(Conf{
 			Logger:                      logger.WithField(keys.LogComponent, "login"),
 			IsOnlineDetectLogDebugLevel: true,
 		})

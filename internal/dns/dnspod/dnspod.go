@@ -1,7 +1,7 @@
 package dnspod
 
 import (
-	dnsUtil "github.com/Mmx233/BitSrunLoginGo/internal/pkg/dns/util"
+	"github.com/Mmx233/BitSrunLoginGo/internal/dns/util"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
