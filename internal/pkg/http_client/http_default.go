@@ -22,6 +22,7 @@ func CreateClientFromEth(eth *tools.Eth) *http.Client {
 				Timeout:   config.Timeout,
 				LocalAddr: addr,
 			}).DialContext,
+			TLSHandshakeTimeout: config.Timeout,
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: config.Settings.Basic.SkipCertVerify,
 			},

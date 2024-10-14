@@ -35,7 +35,6 @@ func CreateClientFromEth(eth *tools.Eth) *http.Client {
 		Transport: &http.Transport{
 			DialContext:         dialer.DialContext,
 			TLSHandshakeTimeout: config.Timeout,
-			IdleConnTimeout:     config.Timeout,
 			TLSClientConfig:     &tls.Config{InsecureSkipVerify: config.Settings.Basic.SkipCertVerify},
 			Proxy:               http.ProxyFromEnvironment,
 		},
