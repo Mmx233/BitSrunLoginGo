@@ -13,14 +13,16 @@ import (
 
 var Logger *log.Logger
 
+func newLogFormater(noColors bool) log.Formatter {
+	return &nested.Formatter{
+		NoColors:        noColors,
+		TimestampFormat: "2006-01-02 15:04:05",
+	}
+}
+
 func initLogPre() {
 	Logger = log.New()
-
-	//设置输出格式
-	Logger.SetFormatter(&nested.Formatter{
-		NoColors:        Settings.Log.WriteFile,
-		TimestampFormat: "2006-01-02 15:04:05",
-	})
+	Logger.SetFormatter(newLogFormater(false))
 }
 
 func initLogFinal() {
@@ -49,7 +51,10 @@ func initLogFinal() {
 			logger.Fatalln(err)
 		}
 
-		//设置双重输出
+		// Disable log colors
+		Logger.SetFormatter(newLogFormater(true))
+
+		// set multiple log output
 		mw := io.MultiWriter(os.Stdout, f)
 		Logger.SetOutput(mw)
 	}
