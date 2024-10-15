@@ -99,14 +99,14 @@ settings:
 
 ## :bow_and_arrow: DDNS
 
-将 `ddns.enable` 设为 `true` 后，将在登录成功时以及守护模式下首次启动已在线时设置指定域名的解析地址（ipv4，A 记录），用于校园网内网通信
+将 `ddns.enable` 设为 `true` 后，将在登录成功时以及守护模式（Guardian）下启动首次检测到已在线时设置指定域名的解析地址（A 记录），用于校园网内网通信。此功能的优点在于可以无视 Nat，即你可以在局域网的任何位置完成 DDNS 更新而不需要占用路由器资源。这在无法更换路由器系统时格外有用
 
 支持的 Provider 及其设置（将额外配置添加到配置文件 DDNS 配置内）：
 
 |  Provider  | 额外配置项                                   |
 |:----------:|-----------------------------------------|
+| cloudflare<br>(Recommended) | `zone` 区域 ID<br/>`token` API 令牌         |
 |   aliyun   | `access_key_id`<br/>`access_key_secret` |
-| cloudflare | `zone` 区域 ID<br/>`token` API 令牌         |
 |   dnspod   | `secret_id`<br/>`secret_key`            |
 
 如果多网卡模式下使用 ddns 存在问题，可以为个别网卡创建额外的配置文件单独进行登录。此外，校园网内网通信并不是安全的，校方往往会对其施加监管
