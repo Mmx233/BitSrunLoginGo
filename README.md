@@ -3,6 +3,7 @@
 [![Lisense](https://img.shields.io/github/license/Mmx233/BitSrunLoginGo)](https://github.com/Mmx233/BitSrunLoginGo/blob/main/LICENSE)
 [![Release](https://img.shields.io/github/v/release/Mmx233/BitSrunLoginGo?color=blueviolet&include_prereleases)](https://github.com/Mmx233/BitSrunLoginGo/releases)
 [![GoReport](https://goreportcard.com/badge/github.com/Mmx233/BitSrunLoginGo)](https://goreportcard.com/report/github.com/Mmx233/BitSrunLoginGo)
+[![Dockerhub](https://img.shields.io/docker/pulls/mmx233/bitsrunlogin-go)](https://hub.docker.com/repository/docker/mmx233/bitsrunlogin-go)
 
 深澜校园网登录脚本 Go 语言版。GO 语言可以直接交叉编译出 mips 架构可执行程序（路由器）（主流平台更不用说了），从而免除安装环境。
 
@@ -125,7 +126,7 @@ settings:
 
 支持架构：`linux/amd64` `linux/386` `linux/arm64` `linux/arm/v7` `linux/arm/v6` `linux/ppc64le` `linux/riscv64` `linux/s390x` 
 
-在集群中使用时建议使用固定 tag 而不是 latest 以锁定版本
+在集群中使用时建议使用固定 tag 而不是 latest 以锁定版本。你可以在 [Dockerhub](https://hub.docker.com/repository/docker/mmx233/bitsrunlogin-go) 找到现在最新的 Tag
 
 直接使用：
 
