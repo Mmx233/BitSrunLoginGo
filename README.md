@@ -121,9 +121,11 @@ settings:
 
 ## :anchor: Docker / Kubernetes
 
-镜像：`mmx233/bitsrunlogin-go:latest`
+镜像：`mmx233/bitsrunlogin-go`
 
-支持 `linux/amd64` `linux/386` `linux/arm64` `linux/arm/v7` 架构，在集群中使用时建议使用固定 tag 而不是 latest 以锁定版本
+支持架构：`linux/amd64` `linux/386` `linux/arm64` `linux/arm/v7` `linux/arm/v6` `linux/ppc64le` `linux/riscv64` `linux/s390x` 
+
+在集群中使用时建议使用固定 tag 而不是 latest 以锁定版本
 
 直接使用：
 
