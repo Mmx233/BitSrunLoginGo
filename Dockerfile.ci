@@ -9,4 +9,4 @@ RUN apk update && \
 COPY /build/output/${TARGETPLATFORM}/bitsrun /usr/bin/bitsrun
 WORKDIR /data
 
-ENTRYPOINT [ "/usr/bin/derper" ]
+ENTRYPOINT [ "/usr/bin/bitsrun" ]
