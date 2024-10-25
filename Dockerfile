@@ -10,20 +10,16 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -ldflags '-extldflags "-static" -s -w' -o runner ./cmd/bitsrun
+RUN go build -ldflags '-extldflags "-static -fpic" -s -w' -o runner ./cmd/bitsrun
 
 FROM alpine:latest
 
 RUN apk update && \
     apk upgrade --no-cache && \
-    apk add --no-cache tzdata && \
-    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    echo 'Asia/Shanghai' >/etc/timezone && \
+    apk add --no-cache ca-certificates &&\
     rm -rf /var/cache/apk/*
 
-COPY --from=builder /build/runner /usr/bin/runner
-RUN chmod +x /usr/bin/runner
-
+COPY --from=builder /build/runner /usr/bin/bitsrun
 WORKDIR /data
 
-ENTRYPOINT [ "/usr/bin/runner" ]
+ENTRYPOINT [ "/usr/bin/bitsrun" ]
