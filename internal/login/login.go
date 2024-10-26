@@ -7,7 +7,7 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/flags"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
-	dns2 "github.com/Mmx233/BitSrunLoginGo/internal/dns"
+	"github.com/Mmx233/BitSrunLoginGo/internal/dns"
 	"github.com/Mmx233/BitSrunLoginGo/internal/http_client"
 	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 	"github.com/Mmx233/BitSrunLoginGo/tools"
@@ -47,7 +47,7 @@ func Login(conf Conf) error {
 }
 
 func ddns(logger log.FieldLogger, ip string, httpClient *http.Client) error {
-	return dns2.Run(&dns2.Config{
+	return dns.Run(&dns.Config{
 		Logger:   logger.WithField(keys.LogLoginModule, "ddns"),
 		Provider: config.Settings.DDNS.Provider,
 		IP:       ip,
@@ -124,7 +124,7 @@ func doLogin(conf SingleConf) error {
 		logger := logger.WithField(keys.LogLoginModule, "reality")
 
 		logger.Debugln("开始 Reality 流程")
-		acid, _, err := srunDetector.Reality(config.Settings.Reality.Addr, flags.AutoAcid)
+		acid, _, err := srunDetector.WithLogger(logger).Reality(config.Settings.Reality.Addr, flags.AutoAcid)
 		if err != nil {
 			logger.Warnln("Reality 请求异常:", err)
 		} else if flags.AutoAcid && acid != "" {
@@ -137,7 +137,7 @@ func doLogin(conf SingleConf) error {
 		logger := logger.WithField(keys.LogLoginModule, "acid")
 
 		logger.Debugln("开始嗅探")
-		acid, err := srunDetector.DetectAcid()
+		acid, err := srunDetector.WithLogger(logger).DetectAcid()
 		if err != nil {
 			if errors.Is(err, srun.ErrAcidCannotFound) {
 				logger.Warnln("找不到 acid，使用配置 acid")
@@ -154,7 +154,7 @@ func doLogin(conf SingleConf) error {
 		logger := logger.WithField(keys.LogLoginModule, "enc")
 
 		logger.Debugln("开始嗅探")
-		enc, err := srunDetector.DetectEnc()
+		enc, err := srunDetector.WithLogger(logger).DetectEnc()
 		if err != nil {
 			if errors.Is(err, srun.ErrEnvCannotFound) {
 				logger.Warnln("找不到 enc，使用配置 enc")

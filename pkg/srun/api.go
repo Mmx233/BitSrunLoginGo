@@ -54,6 +54,12 @@ func (a *Api) Init(conf *ApiConfig) {
 	a.Logger = conf.Logger
 }
 
+func (a *Api) WithLogger(logger log.FieldLogger) *Api {
+	api := *a
+	api.Logger = logger
+	return &api
+}
+
 func (a *Api) request(path string, query map[string]interface{}) (map[string]interface{}, error) {
 	a.Logger.Debugln("HTTP GET", a.BaseUrl+path)
 	callback := fmt.Sprintf("jQuery%s_%d", tool.RandMath(rand.NewSource(time.Now().UnixNano())).WithLetters("123456789").Text(21), time.Now().UnixMilli())

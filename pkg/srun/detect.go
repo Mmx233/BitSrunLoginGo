@@ -21,22 +21,30 @@ func (a *Api) NewDetector() *Detector {
 	}
 
 	return &Detector{
-		Logger:      a.Logger,
-		api:         a,
-		redirectReg: redirectReg,
+		Logger:        a.Logger,
+		api:           a,
+		redirectReg:   redirectReg,
+		_DetectorData: &_DetectorData{},
 	}
+}
+
+type _DetectorData struct {
+	pageUrl string
+	page    []byte
 }
 
 type Detector struct {
 	Logger log.FieldLogger
 
-	api *Api
-
+	api         *Api
 	redirectReg *regexp.Regexp
+	*_DetectorData
+}
 
-	// 登录页 html data
-	pageUrl string
-	page    []byte
+func (d *Detector) WithLogger(logger log.FieldLogger) *Detector {
+	detector := *d
+	detector.api = d.api.WithLogger(logger)
+	return &detector
 }
 
 func (d *Detector) _GET(client *http.Client, addr string) (*http.Response, error) {
