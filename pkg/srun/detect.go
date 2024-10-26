@@ -146,6 +146,10 @@ func (d *Detector) _SearchAcid(query url.Values) (string, bool) {
 
 // 用于直接获取登录页数据
 func (d *Detector) _RequestPageBytes() ([]byte, error) {
+	if d.page != nil {
+		return d.page, nil
+	}
+
 	if d.pageUrl != "" {
 		res, err := d._DirectGET(d.pageUrl)
 		if err != nil {
@@ -173,11 +177,9 @@ func (d *Detector) _RequestPageBytes() ([]byte, error) {
 }
 
 func (d *Detector) DetectEnc() (string, error) {
-	if d.page == nil {
-		_, err := d._RequestPageBytes()
-		if err != nil {
-			return "", err
-		}
+	_, err := d._RequestPageBytes()
+	if err != nil {
+		return "", err
 	}
 
 	jsReg, err := regexp.Compile(`(?i)<script src="\.?(.+[./]portal[0-9]*\.js)(\?.*)?">`)
@@ -300,6 +302,29 @@ func (d *Detector) Reality(addr string, getAcid bool) (acid string, online bool,
 	online = finalRes.Request.URL.Host == startUrl.Host
 	d.page = pageBytes
 	return
+}
+
+func (d *Detector) DetectIp() (string, error) {
+	_, err := d._RequestPageBytes()
+	if err != nil {
+		return "", err
+	}
+
+	reg, err := regexp.Compile(`ip\s*:\s*"(.+)"`)
+	if err != nil {
+		return "", err
+	}
+
+	result := reg.FindSubmatch(d.page)
+	if len(result) == 2 {
+		ip := string(result[1])
+		_, err = url.Parse(ip)
+		if err != nil {
+			return "", err
+		}
+		return ip, nil
+	}
+	return "", ErrResultCannotFound
 }
 
 func (d *Detector) Reset() {
