@@ -177,28 +177,39 @@ func doLogin(conf SingleConf) error {
 
 	_Println("正在获取登录状态")
 
+	var clientIp, loginIp string
+
+	isClientIpRequired := !config.Meta.DoubleStack || config.Settings.DDNS.Enable
 	online, ip, err := srunClient.LoginStatus()
 	if err != nil {
-		return err
+		if isClientIpRequired && online != nil {
+			logger.Debugln("响应体缺失客户端 ip，尝试从页面匹配")
+			clientIp, err = srunDetector.DetectIp()
+			if err != nil {
+				return err
+			}
+		} else {
+			return err
+		}
+	} else {
+		clientIp = *ip
 	}
-
-	var loginIp string
 
 	if config.Meta.DoubleStack {
 		logger.Debugln("使用双栈网络时认证 ip 为空")
 	} else {
-		loginIp = ip
-		logger.Debugln("认证客户端 ip: ", ip)
+		loginIp = clientIp
+		logger.Debugln("认证客户端 ip: ", loginIp)
 	}
 
 	// 登录执行
 
-	if online {
+	if *online {
 		_Println("已登录~")
 
-		if config.Settings.DDNS.Enable && config.Settings.Guardian.Enable && ipLast != ip {
-			if ddns(logger, ip, httpClient) == nil {
-				ipLast = ip
+		if config.Settings.DDNS.Enable && config.Settings.Guardian.Enable && ipLast != clientIp {
+			if ddns(logger, clientIp, httpClient) == nil {
+				ipLast = clientIp
 			}
 		}
 
@@ -213,7 +224,7 @@ func doLogin(conf SingleConf) error {
 		logger.Infoln("登录成功~")
 
 		if config.Settings.DDNS.Enable {
-			_ = ddns(logger, ip, httpClient)
+			_ = ddns(logger, clientIp, httpClient)
 		}
 	}
 

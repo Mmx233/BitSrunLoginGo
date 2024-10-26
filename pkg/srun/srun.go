@@ -45,27 +45,35 @@ type Srun struct {
 	Logger    log.FieldLogger
 }
 
-func (c Srun) LoginStatus() (online bool, ip string, err error) {
+// LoginStatus err will not be nil only when both online and ip is found.
+func (c Srun) LoginStatus() (online *bool, ip *string, err error) {
 	res, err := c.Api.GetUserInfo()
 	if err != nil {
-		return false, "", err
+		return nil, nil, err
 	}
 
 	errRes, ok := res["error"]
-	if !ok {
-		return false, "", ErrResultCannotFound
+	if ok {
+		isOnlineStr, ok := errRes.(string)
+		if ok && isOnlineStr == "ok" {
+			online = &ok
+		}
 	}
 
 	ipInterface, ok := res["client_ip"]
 	if !ok {
 		ipInterface, ok = res["online_ip"]
-		if !ok {
-			return false, "", ErrResultCannotFound
+	}
+	if ipInterface != nil {
+		ipStr, ok := ipInterface.(string)
+		if ok {
+			ip = &ipStr
 		}
 	}
 
-	ip = ipInterface.(string)
-	online = errRes.(string) == "ok"
+	if online == nil || ip == nil {
+		err = ErrResultCannotFound
+	}
 	return
 }
 
