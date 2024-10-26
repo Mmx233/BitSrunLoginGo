@@ -182,14 +182,14 @@ func doLogin(conf SingleConf) error {
 	isClientIpRequired := !config.Meta.DoubleStack || config.Settings.DDNS.Enable
 	online, ip, err := srunClient.LoginStatus()
 	if err != nil {
-		if isClientIpRequired && online != nil {
+		if online == nil {
+			return err
+		} else if isClientIpRequired {
 			logger.Debugln("响应体缺失客户端 ip，尝试从页面匹配")
 			clientIp, err = srunDetector.DetectIp()
 			if err != nil {
 				return err
 			}
-		} else {
-			return err
 		}
 	} else {
 		clientIp = *ip
