@@ -55,8 +55,9 @@ func (c Srun) LoginStatus() (online *bool, ip *string, err error) {
 	errRes, ok := res["error"]
 	if ok {
 		isOnlineStr, ok := errRes.(string)
-		if ok && isOnlineStr == "ok" {
-			online = &ok
+		if ok {
+			isOnline := isOnlineStr == "ok"
+			online = &isOnline
 		}
 	}
 
