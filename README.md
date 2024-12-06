@@ -169,7 +169,7 @@ export GOARCH=amd64 #架构
 go build -trimpath -ldflags "-s -w -extldflags '-static -fpic'" ./cmd/bitsrun
 ```
 
-交叉编译（Windows Powershel -> Linux Binary）：
+交叉编译（Windows Powershell -> Linux Binary）：
 
 ```shell
 $env:CGO_ENABLED=0
