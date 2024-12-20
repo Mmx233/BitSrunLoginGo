@@ -125,6 +125,12 @@ type (
 		Enable bool   `json:"enable" yaml:"enable"`
 		Addr   string `json:"addr" yaml:"addr"`
 	}
+
+	WebhookConf struct {
+		Enable  bool   `json:"enable" yaml:"enable"`
+		Url     string `json:"url" yaml:"url"`
+		Timeout uint   `json:"timeout" yaml:"timeout"`
+	}
 )
 
 type SettingsConf struct {
@@ -134,5 +140,6 @@ type SettingsConf struct {
 	Log          LogConf                `json:"log" yaml:"log"`
 	DDNS         DdnsConf               `json:"ddns" yaml:"ddns"`
 	Reality      RealityConf            `json:"reality" yaml:"reality"`
+	Webhook      WebhookConf            `json:"webhook" yaml:"webhook"`
 	CustomHeader map[string]interface{} `json:"custom_header" yaml:"custom_header"`
 }
