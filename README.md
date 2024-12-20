@@ -61,7 +61,7 @@ settings:
   guardian: #守护模式（后台常驻）
     enable: false 
     duration: 300 #网络检查周期（秒，正整数）
-  backoff: # 积分退避
+  backoff: # 积分/指数退避
     enable: false # 开启后同时对所有运行模式生效，作用于登录失败的重试
     max_retries: 0 # 为 0 时无限重试直至成功
     initial_duration: 2 # 初始失败等待时间，秒
