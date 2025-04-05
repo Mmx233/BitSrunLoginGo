@@ -9,39 +9,40 @@ import (
 	"net/http"
 )
 
-var _DefaultClient *http.Client
+var DefaultClient *http.Client
 
 var _EthClientMap map[string]*http.Client
 
 func init() {
 	logger := config.Logger.WithField(keys.LogComponent, "init http")
-	if config.Settings.Basic.Interfaces == "" {
-		var eth *tools.Eth
-		if flags.Interface != "" {
-			netEth, err := net.InterfaceByName(flags.Interface)
+
+	var eth *tools.Eth
+	if flags.Interface != "" {
+		netEth, err := net.InterfaceByName(flags.Interface)
+		if err != nil {
+			logger.Warnf("获取指定网卡 %s 失败，使用默认网卡: %v", flags.Interface, err)
+		} else {
+			eth, err = tools.ConvertInterface(logger, *netEth)
 			if err != nil {
-				logger.Warnf("获取指定网卡 %s 失败，使用默认网卡: %v", flags.Interface, err)
+				logger.Warnf("获取指定网卡 %s ip 地址失败，使用默认网卡: %v", flags.Interface, err)
+			} else if eth == nil {
+				logger.Warnf("指定网卡 %s 无可用 ip 地址，使用默认网卡", flags.Interface)
 			} else {
-				eth, err = tools.ConvertInterface(logger, *netEth)
-				if err != nil {
-					logger.Warnf("获取指定网卡 %s ip 地址失败，使用默认网卡: %v", flags.Interface, err)
-				} else if eth == nil {
-					logger.Warnf("指定网卡 %s 无可用 ip 地址，使用默认网卡", flags.Interface)
-				} else {
-					logger.Debugf("使用指定网卡 %s ip: %s", eth.Name, eth.Addr.String())
-				}
+				logger.Debugf("使用指定网卡 %s ip: %s", eth.Name, eth.Addr.String())
 			}
 		}
+	}
 
-		_DefaultClient = CreateClientFromEth(eth)
-	} else {
+	DefaultClient = CreateClientFromEth(eth)
+
+	if config.Settings.Basic.Interfaces != "" {
 		_EthClientMap = make(map[string]*http.Client)
 	}
 }
 
 func ClientSelect(eth *tools.Eth) *http.Client {
-	if _DefaultClient != nil {
-		return _DefaultClient
+	if DefaultClient != nil {
+		return DefaultClient
 	}
 	if client, ok := _EthClientMap[eth.Name]; ok {
 		return client
