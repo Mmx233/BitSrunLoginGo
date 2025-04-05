@@ -63,6 +63,33 @@ func NewBaseEvent(evName EventName, _type EventType, evContext string) BaseEvent
 	}
 }
 
+type Property []PropertyElement
+
+func NewProperty(el ...PropertyElement) Property {
+	return el
+}
+
+type PropertyElement struct {
+	Name  string `json:"name"`
+	Value any    `json:"value"`
+}
+
+func (prop Property) Add(val PropertyElement) Property {
+	return append(prop, val)
+}
+
+type DataEvent struct {
+	BaseEvent
+	Property Property `json:"property,omitempty"`
+}
+
+func NewDataEvent(eventName EventName, evContext string, property Property) DataEvent {
+	return DataEvent{
+		BaseEvent: NewBaseEvent(eventName, TypeDataEvent, evContext),
+		Property:  property,
+	}
+}
+
 type ActionEventStatus string
 
 const (
@@ -74,40 +101,28 @@ type ActionName string
 
 type ActionEvent struct {
 	BaseEvent
-	Status     ActionEventStatus `json:"status"`
-	ActionName string            `json:"action_name"`
+	Status   ActionEventStatus `json:"status"`
+	Property Property          `json:"property,omitempty"`
 
 	// existence determined by status
 	Value        string `json:"value,omitempty"`
 	ErrorMessage string `json:"error_message,omitempty"`
 }
 
-func NewActionSuccessEvent(evName EventName, evContext, actionName, value string) ActionEvent {
+func NewActionSuccessEvent(evName EventName, evContext string, property Property, value string) ActionEvent {
 	return ActionEvent{
-		BaseEvent:  NewBaseEvent(evName, TypeActionEvent, evContext),
-		Status:     ActionEventStatusSuccess,
-		ActionName: actionName,
-		Value:      value,
+		BaseEvent: NewBaseEvent(evName, TypeActionEvent, evContext),
+		Status:    ActionEventStatusSuccess,
+		Property:  property,
+		Value:     value,
 	}
 }
 
-func NewActionFailureEvent(eventName EventName, evContext, actionName, errMsg string) ActionEvent {
+func NewActionFailureEvent(eventName EventName, evContext string, property Property, errMsg string) ActionEvent {
 	return ActionEvent{
 		BaseEvent:    NewBaseEvent(eventName, TypeActionEvent, evContext),
 		Status:       ActionEventStatusFailure,
-		ActionName:   actionName,
+		Property:     property,
 		ErrorMessage: errMsg,
-	}
-}
-
-type DataEvent struct {
-	BaseEvent
-	Property interface{} `json:"property"`
-}
-
-func NewDataEvent(eventName EventName, evContext string, property any) DataEvent {
-	return DataEvent{
-		BaseEvent: NewBaseEvent(eventName, TypeDataEvent, evContext),
-		Property:  property,
 	}
 }
