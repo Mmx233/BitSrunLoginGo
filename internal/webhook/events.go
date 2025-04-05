@@ -28,6 +28,7 @@ const (
 
 type Event interface {
 	implementWebhookEvent()
+	GetID() uint
 }
 
 type EventType string
@@ -45,6 +46,10 @@ type BaseEvent struct {
 }
 
 func (BaseEvent) implementWebhookEvent() {}
+
+func (ev BaseEvent) GetID() uint {
+	return ev.ID
+}
 
 var EventID atomic.Uint64
 

@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"time"
 )
@@ -23,17 +24,22 @@ type PostWebhook struct {
 	Url     string
 	Timeout time.Duration
 	Client  *http.Client
+	Logger  log.FieldLogger
 }
 
 func (wh PostWebhook) Send(ev Event) error {
 	data, err := json.Marshal(ev)
 	if err != nil {
+		wh.Logger.Errorf("marshal event failed: %v", err)
 		return err
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), wh.Timeout)
 	defer cancel()
 
+	wh.Logger.WithFields(log.Fields{
+		"eventID": ev.GetID(),
+	}).Debugf("posting webhook event: %s", data)
 	req, err := http.NewRequestWithContext(ctx, "POST", wh.Url, bytes.NewBuffer(data))
 	if err != nil {
 		return err
