@@ -46,5 +46,8 @@ var defaultConfig = ConfFromFile{
 			MaxDuration:     300,
 			ExponentFactor:  1,
 		},
+		Webhook: WebhookConf{
+			Timeout: 30,
+		},
 	},
 }
