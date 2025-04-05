@@ -24,6 +24,8 @@ const (
 
 	LoginStart  EventName = "login_start"
 	LoginFailed EventName = "login_failed"
+
+	ClientIPDetected EventName = "client_ip_detected"
 )
 
 type Event interface {

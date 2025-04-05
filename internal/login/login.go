@@ -276,6 +276,13 @@ func doLogin(conf SingleConf) error {
 		clientIp = *ip
 	}
 
+	if clientIp != "" {
+		conf.SendDataEvent(webhook.ClientIPDetected, webhook.PropertyElement{
+			Name:  "ip",
+			Value: clientIp,
+		})
+	}
+
 	if config.Meta.DoubleStack {
 		logger.Debugln("使用双栈网络时认证 ip 为空")
 	} else {
