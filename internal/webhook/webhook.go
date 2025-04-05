@@ -27,14 +27,14 @@ type PostWebhook struct {
 	Logger  log.FieldLogger
 }
 
-func (wh PostWebhook) Send(ev Event) error {
+func (wh PostWebhook) Send(ctx context.Context, ev Event) error {
 	data, err := json.Marshal(ev)
 	if err != nil {
 		wh.Logger.Errorf("marshal event failed: %v", err)
 		return err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), wh.Timeout)
+	ctx, cancel := context.WithTimeout(ctx, wh.Timeout)
 	defer cancel()
 
 	wh.Logger.WithFields(log.Fields{

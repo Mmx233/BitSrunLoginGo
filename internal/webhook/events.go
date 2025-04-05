@@ -11,6 +11,7 @@ type EventName string
 const (
 	SettingsAcidDetected EventName = "settings_acid_detected"
 	SettingsEncDetected  EventName = "settings_enc_detected"
+	Reality              EventName = "reality"
 
 	Login     EventName = "login"
 	DNSUpdate EventName = "dns_update"
@@ -74,8 +75,8 @@ type PropertyElement struct {
 	Value any    `json:"value"`
 }
 
-func (prop Property) Add(val PropertyElement) Property {
-	return append(prop, val)
+func (prop Property) Add(val ...PropertyElement) Property {
+	return append(prop, val...)
 }
 
 type DataEvent struct {
