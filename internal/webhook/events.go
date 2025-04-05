@@ -12,6 +12,7 @@ const (
 	SettingsAcidDetected EventName = "settings_acid_detected"
 	SettingsEncDetected  EventName = "settings_enc_detected"
 
+	Login     EventName = "login"
 	DNSUpdate EventName = "dns_update"
 )
 
@@ -20,10 +21,8 @@ const (
 	ProcessBegin  EventName = "process_begin"
 	ProcessFinish EventName = "process_finish"
 
-	LoginStart   EventName = "login_start"
-	LoginError   EventName = "login_error"
-	LoginSuccess EventName = "login_success"
-	LoginFailed  EventName = "login_failed"
+	LoginStart  EventName = "login_start"
+	LoginFailed EventName = "login_failed"
 )
 
 type Event interface {
@@ -39,10 +38,11 @@ const (
 )
 
 type BaseEvent struct {
-	ID        uint      `json:"id"`
-	Timestamp int64     `json:"timestamp"` // unix milli
-	Name      EventName `json:"name"`
-	EventType EventType `json:"event_type"`
+	ID           uint      `json:"id"`
+	Timestamp    int64     `json:"timestamp"` // unix milli
+	Name         EventName `json:"name"`
+	EventType    EventType `json:"event_type"`
+	EventContext string    `json:"event_context,omitempty"`
 }
 
 func (BaseEvent) implementWebhookEvent() {}
@@ -53,12 +53,13 @@ func (ev BaseEvent) GetID() uint {
 
 var EventID atomic.Uint64
 
-func NewBaseEvent(name EventName, _type EventType) BaseEvent {
+func NewBaseEvent(evName EventName, _type EventType, evContext string) BaseEvent {
 	return BaseEvent{
-		ID:        uint(EventID.Add(1)),
-		Timestamp: time.Now().UnixMilli(),
-		Name:      name,
-		EventType: _type,
+		ID:           uint(EventID.Add(1)),
+		Timestamp:    time.Now().UnixMilli(),
+		Name:         evName,
+		EventType:    _type,
+		EventContext: evContext,
 	}
 }
 
@@ -81,18 +82,18 @@ type ActionEvent struct {
 	ErrorMessage string `json:"error_message,omitempty"`
 }
 
-func NewActionSuccessEvent(eventName EventName, actionName, value string) ActionEvent {
+func NewActionSuccessEvent(evName EventName, evContext, actionName, value string) ActionEvent {
 	return ActionEvent{
-		BaseEvent:  NewBaseEvent(eventName, TypeActionEvent),
+		BaseEvent:  NewBaseEvent(evName, TypeActionEvent, evContext),
 		Status:     ActionEventStatusSuccess,
 		ActionName: actionName,
 		Value:      value,
 	}
 }
 
-func NewActionFailureEvent(eventName EventName, actionName, errMsg string) ActionEvent {
+func NewActionFailureEvent(eventName EventName, evContext, actionName, errMsg string) ActionEvent {
 	return ActionEvent{
-		BaseEvent:    NewBaseEvent(eventName, TypeActionEvent),
+		BaseEvent:    NewBaseEvent(eventName, TypeActionEvent, evContext),
 		Status:       ActionEventStatusFailure,
 		ActionName:   actionName,
 		ErrorMessage: errMsg,
@@ -104,9 +105,9 @@ type DataEvent struct {
 	Property interface{} `json:"property"`
 }
 
-func NewDataEvent(eventName EventName, property any) DataEvent {
+func NewDataEvent(eventName EventName, evContext string, property any) DataEvent {
 	return DataEvent{
-		BaseEvent: NewBaseEvent(eventName, TypeDataEvent),
+		BaseEvent: NewBaseEvent(eventName, TypeDataEvent, evContext),
 		Property:  property,
 	}
 }
