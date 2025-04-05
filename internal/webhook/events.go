@@ -22,7 +22,7 @@ const (
 )
 
 type Event interface {
-	isWebhookEvent()
+	implementWebhookEvent()
 }
 
 type BaseEvent struct {
@@ -31,7 +31,7 @@ type BaseEvent struct {
 	Name      EventName `json:"name"`
 }
 
-func (BaseEvent) isWebhookEvent() {}
+func (BaseEvent) implementWebhookEvent() {}
 
 type ActionEventStatus string
 
