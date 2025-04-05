@@ -33,12 +33,10 @@ func main() {
 		login.Guardian(logger.WithField(keys.LogComponent, "guard"), eventQueue)
 	} else {
 		//执行单次流程
-		eventQueue.AddEvent(webhook.NewDataEvent(webhook.ProcessBegin, "", nil))
 		_ = login.Login(login.Conf{
 			Logger:                      logger.WithField(keys.LogComponent, "login"),
 			IsOnlineDetectLogDebugLevel: false,
 			EventQueue:                  eventQueue,
 		})
-		eventQueue.AddEvent(webhook.NewDataEvent(webhook.ProcessFinish, "", nil))
 	}
 }
