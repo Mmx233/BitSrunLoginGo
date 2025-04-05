@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
 	"github.com/Mmx233/BitSrunLoginGo/internal/http_client"
@@ -38,5 +39,12 @@ func main() {
 			IsOnlineDetectLogDebugLevel: false,
 			EventQueue:                  eventQueue,
 		})
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(config.Settings.Webhook.Timeout)*time.Second)
+	defer cancel()
+	err := eventQueue.Close(ctx)
+	if err != nil {
+		logger.Errorf("event queue ended with error: %v", err)
 	}
 }

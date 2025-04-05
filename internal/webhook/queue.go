@@ -7,6 +7,7 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
 	log "github.com/sirupsen/logrus"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -16,6 +17,7 @@ func NewEventQueue(logger log.FieldLogger, webhook Webhook) EventQueue {
 		list:     list.New(),
 		evChan:   make(chan Event),
 		activate: make(chan struct{}),
+		running:  &atomic.Bool{},
 		webhook:  webhook,
 		Logger:   logger,
 	}
@@ -32,6 +34,7 @@ type EventQueue struct {
 
 	evChan   chan Event
 	activate chan struct{}
+	running  *atomic.Bool
 
 	webhook Webhook
 	Logger  log.FieldLogger
@@ -56,13 +59,18 @@ func (q EventQueue) _PopList() Event {
 		return q._PopList()
 	}
 	q.list.Remove(el)
+	q.running.Store(true)
 	q.lock.Unlock()
 	return el.Value.(Event)
 }
 
 func (q EventQueue) _LoopReceive() {
 	for {
-		q._PushList(<-q.evChan)
+		ev, ok := <-q.evChan
+		if !ok {
+			return
+		}
+		q._PushList(ev)
 	}
 }
 
@@ -86,9 +94,27 @@ func (q EventQueue) _LoopConsume() {
 			// should always be nil
 			panic(err)
 		}
+		q.running.Store(false)
 	}
 }
 
 func (q EventQueue) AddEvent(ev Event) {
 	q.evChan <- ev
+}
+
+func (q EventQueue) Close(ctx context.Context) error {
+	close(q.evChan)
+wait:
+	select {
+	case q.activate <- struct{}{}:
+		q.lock.Lock()
+		isClosed := q.list.Len() == 0 && !q.running.Load()
+		q.lock.Unlock()
+		if isClosed {
+			return nil
+		}
+		goto wait
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 }
