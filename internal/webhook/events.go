@@ -7,7 +7,7 @@ import (
 
 type EventName string
 
-// Action Events
+// ActionEvent
 const (
 	SettingsAcidDetected EventName = "settings_acid_detected"
 	SettingsEncDetected  EventName = "settings_enc_detected"
@@ -15,7 +15,7 @@ const (
 	DNSUpdate EventName = "dns_update"
 )
 
-// Data Events
+// DataEvent
 const (
 	ProcessBegin  EventName = "process_begin"
 	ProcessFinish EventName = "process_finish"
@@ -30,21 +30,30 @@ type Event interface {
 	implementWebhookEvent()
 }
 
+type EventType string
+
+const (
+	TypeActionEvent EventType = "action"
+	TypeDataEvent   EventType = "data"
+)
+
 type BaseEvent struct {
 	ID        uint      `json:"id"`
 	Timestamp int64     `json:"timestamp"` // unix milli
 	Name      EventName `json:"name"`
+	EventType EventType `json:"event_type"`
 }
 
 func (BaseEvent) implementWebhookEvent() {}
 
 var EventID atomic.Uint64
 
-func NewBaseEvent(name EventName) BaseEvent {
+func NewBaseEvent(name EventName, _type EventType) BaseEvent {
 	return BaseEvent{
 		ID:        uint(EventID.Add(1)),
 		Timestamp: time.Now().UnixMilli(),
 		Name:      name,
+		EventType: _type,
 	}
 }
 
@@ -69,7 +78,7 @@ type ActionEvent struct {
 
 func NewActionSuccessEvent(eventName EventName, actionName, value string) ActionEvent {
 	return ActionEvent{
-		BaseEvent:  NewBaseEvent(eventName),
+		BaseEvent:  NewBaseEvent(eventName, TypeActionEvent),
 		Status:     ActionEventStatusSuccess,
 		ActionName: actionName,
 		Value:      value,
@@ -78,7 +87,7 @@ func NewActionSuccessEvent(eventName EventName, actionName, value string) Action
 
 func NewActionFailureEvent(eventName EventName, actionName, errMsg string) ActionEvent {
 	return ActionEvent{
-		BaseEvent:    NewBaseEvent(eventName),
+		BaseEvent:    NewBaseEvent(eventName, TypeActionEvent),
 		Status:       ActionEventStatusFailure,
 		ActionName:   actionName,
 		ErrorMessage: errMsg,
@@ -92,7 +101,7 @@ type DataEvent struct {
 
 func NewDataEvent(eventName EventName, property any) DataEvent {
 	return DataEvent{
-		BaseEvent: NewBaseEvent(eventName),
+		BaseEvent: NewBaseEvent(eventName, TypeDataEvent),
 		Property:  property,
 	}
 }
