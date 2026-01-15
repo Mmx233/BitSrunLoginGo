@@ -1,9 +1,10 @@
 package config
 
 import (
+	"time"
+
 	"github.com/Mmx233/BackoffCli/backoff"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
-	"time"
 )
 
 var BackoffConfig backoff.Conf

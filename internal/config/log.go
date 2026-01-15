@@ -1,12 +1,13 @@
 package config
 
 import (
-	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
-	nested "github.com/antonfisher/nested-logrus-formatter"
 	"io"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
+	nested "github.com/antonfisher/nested-logrus-formatter"
 
 	log "github.com/sirupsen/logrus"
 )

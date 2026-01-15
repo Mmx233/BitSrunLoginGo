@@ -3,9 +3,10 @@ package config
 import (
 	"bytes"
 	"encoding/json"
+	"path"
+
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
-	"path"
 )
 
 func newReaderFromPath(pathname string) Reader {

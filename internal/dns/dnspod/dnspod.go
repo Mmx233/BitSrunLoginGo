@@ -1,13 +1,14 @@
 package dnspod
 
 import (
+	"net/http"
+	"strings"
+
 	"github.com/Mmx233/BitSrunLoginGo/internal/dns/util"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
-	"net/http"
-	"strings"
 )
 
 type DnsPod struct {

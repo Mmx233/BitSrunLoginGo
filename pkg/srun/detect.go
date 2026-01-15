@@ -3,13 +3,14 @@ package srun
 import (
 	"errors"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"io"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strings"
 	"unsafe"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func (a *Api) NewDetector() *Detector {

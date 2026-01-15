@@ -1,10 +1,11 @@
 package tools
 
 import (
-	log "github.com/sirupsen/logrus"
 	"net"
 	"regexp"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type Eth struct {

@@ -3,8 +3,9 @@ package cloudflare
 import (
 	"context"
 	"errors"
-	"github.com/cloudflare/cloudflare-go"
 	"net/http"
+
+	"github.com/cloudflare/cloudflare-go"
 )
 
 type Cloudflare struct {

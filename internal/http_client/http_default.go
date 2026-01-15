@@ -4,10 +4,11 @@ package http_client
 
 import (
 	"crypto/tls"
-	"github.com/Mmx233/BitSrunLoginGo/internal/config"
-	"github.com/Mmx233/BitSrunLoginGo/tools"
 	"net"
 	"net/http"
+
+	"github.com/Mmx233/BitSrunLoginGo/internal/config"
+	"github.com/Mmx233/BitSrunLoginGo/tools"
 )
 
 func CreateClientFromEth(eth *tools.Eth) *http.Client {

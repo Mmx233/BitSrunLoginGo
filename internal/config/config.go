@@ -1,6 +1,9 @@
 package config
 
 import (
+	"os"
+	"time"
+
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/flags"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
 	"github.com/Mmx233/BitSrunLoginGo/internal/dns/aliyun"
@@ -8,8 +11,6 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/internal/dns/dnspod"
 	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 	"github.com/Mmx233/tool"
-	"os"
-	"time"
 )
 
 type ConfFromFile struct {

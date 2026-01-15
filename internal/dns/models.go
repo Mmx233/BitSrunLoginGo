@@ -1,9 +1,10 @@
 package dns
 
 import (
+	"net/http"
+
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
 	log "github.com/sirupsen/logrus"
-	"net/http"
 )
 
 type Provider interface {

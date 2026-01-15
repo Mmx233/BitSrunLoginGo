@@ -7,13 +7,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/Mmx233/BitSrunLoginGo/internal/dns/util"
-	"github.com/Mmx233/tool"
 	"math/rand"
 	"net/http"
 	"net/url"
 	"sort"
 	"time"
+
+	"github.com/Mmx233/BitSrunLoginGo/internal/dns/util"
+	"github.com/Mmx233/tool"
 )
 
 type Aliyun struct {

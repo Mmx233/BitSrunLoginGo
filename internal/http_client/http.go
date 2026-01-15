@@ -1,12 +1,13 @@
 package http_client
 
 import (
+	"net"
+	"net/http"
+
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/flags"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
 	"github.com/Mmx233/BitSrunLoginGo/tools"
-	"net"
-	"net/http"
 )
 
 var _DefaultClient *http.Client

@@ -3,6 +3,10 @@ package login
 import (
 	"context"
 	"errors"
+	"net/http"
+	"sync"
+	"time"
+
 	"github.com/Mmx233/BackoffCli/backoff"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config"
 	"github.com/Mmx233/BitSrunLoginGo/internal/config/flags"
@@ -12,9 +16,6 @@ import (
 	"github.com/Mmx233/BitSrunLoginGo/pkg/srun"
 	"github.com/Mmx233/BitSrunLoginGo/tools"
 	log "github.com/sirupsen/logrus"
-	"net/http"
-	"sync"
-	"time"
 )
 
 var ipLast string
