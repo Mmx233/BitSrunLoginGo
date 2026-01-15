@@ -17,9 +17,12 @@ func main() {
 		login.Guardian(logger.WithField(keys.LogComponent, "guard"))
 	} else {
 		//执行单次流程
-		_ = login.Login(login.Conf{
+		err := login.Login(login.Conf{
 			Logger:                      logger.WithField(keys.LogComponent, "login"),
 			IsOnlineDetectLogDebugLevel: false,
 		})
+		if err != nil {
+			logger.Fatalln("login failed with error:", err)
+		}
 	}
 }

@@ -96,9 +96,8 @@ func Single(conf SingleConf) error {
 		return backoff.NewInstance(func(ctx context.Context) error {
 			return doLogin(conf)
 		}, config.BackoffConfig).Run(context.TODO())
-	} else {
-		return doLogin(conf)
 	}
+	return doLogin(conf)
 }
 
 func doLogin(conf SingleConf) error {
@@ -192,7 +191,7 @@ func doLogin(conf SingleConf) error {
 				return err
 			}
 		}
-	} else {
+	} else if ip != nil {
 		clientIp = *ip
 	}
 
@@ -215,18 +214,18 @@ func doLogin(conf SingleConf) error {
 		}
 
 		return nil
-	} else {
-		logger.Infoln("检测到用户未登录，开始尝试登录...")
+	}
 
-		if err = srunClient.DoLogin(loginIp); err != nil {
-			return err
-		}
+	logger.Infoln("检测到用户未登录，开始尝试登录...")
 
-		logger.Infoln("登录成功~")
+	if err = srunClient.DoLogin(loginIp); err != nil {
+		return err
+	}
 
-		if config.Settings.DDNS.Enable {
-			_ = ddns(logger, clientIp, httpClient)
-		}
+	logger.Infoln("登录成功~")
+
+	if config.Settings.DDNS.Enable {
+		_ = ddns(logger, clientIp, httpClient)
 	}
 
 	return nil
