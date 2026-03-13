@@ -59,7 +59,7 @@ settings:
     interfaces: "" #网卡名称正则（注意转义），如：eth0\.[2-3]，不为空时为多网卡模式
     interfaces_interval: 0 # 秒，多网卡模式切换网卡时触发的等待时间
   guardian: #守护模式（后台常驻）
-    enable: false 
+    enable: false
     duration: 300 #网络检查周期（秒，正整数）
   backoff: # 积分退避
     enable: false # 开启后同时对所有运行模式生效，作用于登录失败的重试
@@ -94,6 +94,11 @@ settings:
 
 运营商类型在原网页会被自动附加在账号后，请把 `@` 后面的部分填入 `user_type`，没有则留空（删掉默认的）
 
+如果您是新手，对以上内容仍有疑问，欢迎访问以下文章⬇️
+
+[面向新手的 yaml 文件配置教程](./新手yaml配置.md)
+
+
 ## :minidisc: 运行时间线
 
 ![Timeline](assets/timeline.png)
@@ -124,7 +129,7 @@ settings:
 
 镜像：`mmx233/bitsrunlogin-go`
 
-支持架构：`linux/amd64` `linux/386` `linux/arm64` `linux/arm/v7` `linux/arm/v6` `linux/ppc64le` `linux/riscv64` `linux/s390x` 
+支持架构：`linux/amd64` `linux/386` `linux/arm64` `linux/arm/v7` `linux/arm/v6` `linux/ppc64le` `linux/riscv64` `linux/s390x`
 
 在集群中使用时建议使用固定 tag 而不是 latest 以锁定版本。你可以在 [Dockerhub](https://hub.docker.com/repository/docker/mmx233/bitsrunlogin-go) 找到现在最新的 Tag
 
@@ -219,12 +224,12 @@ func main() {
     if err != nil {
         panic(err)
     }
-	
+
     if !online {
         err = client.DoLogin(ip)
         if err != nil {
             panic(err)
-        }	
+        }
     }
 }
 ```
