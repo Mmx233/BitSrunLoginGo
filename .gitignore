@@ -1,0 +1,21 @@
+# IDE and editor local settings
+.idea/
+.vscode/
+.fleet/
+.zed/
+
+# Visual Studio
+.vs/
+
+# JetBrains project files
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# NetBeans
+nbproject/private/
