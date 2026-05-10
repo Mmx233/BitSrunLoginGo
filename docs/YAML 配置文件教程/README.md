@@ -1,25 +1,25 @@
-## 📄 yaml 文件配置
+## YAML 配置文件教程
 
 > 本教程面向新手，如果对相关概念非常熟悉请跳过。
 > 如果仍有问题，可以利用 AI 撰写配置文件，注意**不要上传个人密码并做好文件备份**。
 
 ### 创建配置文件
 
-首先新建一个配置文件【Config.yaml】
-如果是 Windows 中，双击运行 bitsrun.exe 可以自动创建 yaml 文件。
-如果是 docker，则需要配置文件挂载至 `/data/Config.yaml`
+首先新建一个配置文件 `Config.yaml`。
+如果是 Windows，双击运行 `bitsrun.exe` 可以自动创建 YAML 文件。
+如果是 Docker，则需要将配置文件挂载至 `/data/Config.yaml`。
 
-``` yaml
+```yaml
 form:
-  domain: www.msftconnecttest.com #登录地址 ip 或域名
-  username: "" #账号
-  user_type: cmcc #运营商类型，详情看下方文字说明
-  password: "" #密码
-meta: #登录参数
+  domain: www.msftconnecttest.com # 登录地址 IP 或域名
+  username: "" # 账号
+  user_type: cmcc # 运营商类型，详情看下方文字说明
+  password: "" # 密码
+meta: # 登录参数
   "n": "200"
   type: "1"
   acid: "5"
-  enc: srun_bx1 # enc 不在表单中，但一般都是默认值。你可以使用 --auto-enc 或在 js 中搜索 enc 来找到真实值
+  enc: srun_bx1 # enc 不在表单中，但一般都是默认值。你可以使用 --auto-enc 或在 JS 中搜索 enc 来找到真实值
   os: Windows 10
   name: windows
   info_prefix: SRBX1 # info 字段前缀括号中的值
@@ -44,11 +44,11 @@ settings:
     inter_const_factor: 0 # 内常数因子，秒
     outer_const_factor: 0 # 外常数因子，秒
   log:
-    debug_level: false #打印调试日志
-    write_file: false #写日志文件
+    debug_level: false # 打印调试日志
+    write_file: false # 写日志文件
     log_path: ./ #日志文件存放目录路径
     log_name: "" #指定日志文件名
-  ddns: #校园网内网 ip ddns
+  ddns: # 校园网内网 IP DDNS
     enable: false
     domain: www.example.com
     ttl: 600
@@ -67,9 +67,9 @@ settings:
 
 先设置以下参数
 
-``` yaml
+```yaml
 form:
-  domain: 10.0.0.55 # 校园网的登录ip
+  domain: 10.0.0.55 # 校园网的登录 IP
   username: "1120XXXXXX" # 学号
   user_type:  # 对于校园网，这里应该留空
   password: "passward" # 填写你的校园网账号密码
@@ -79,8 +79,8 @@ form:
 
 这些参数需要抓包获取
 
-``` yaml
-meta: #登录参数
+```yaml
+meta: # 登录参数
   "n": "200"
   type: "1"
   acid: "5"
@@ -91,31 +91,31 @@ meta: #登录参数
   double_stack: false # 这个也不用改
 ```
 
-1. 访问10.0.0.55，填入用户名和密码
-![](assets/YamlConfig/IMG-2026-03-12-10-58-00.jpg)
+1. 访问 10.0.0.55，填入用户名和密码
+![](assets/IMG-2026-03-12-10-58-00.jpg)
 
 2. 按下【F12】，打开【开发者模式】
-![](assets/YamlConfig/IMG-2026-03-12-10-59-40.jpg)
+![](assets/IMG-2026-03-12-10-59-40.jpg)
 
 3. 选择【网络】，并勾选【保留日志】
-![](assets/YamlConfig/IMG-2026-03-12-11-00-49.jpg)
+![](assets/IMG-2026-03-12-11-00-49.jpg)
 
 4. 按下【登录】
-![](assets/YamlConfig/IMG-2026-03-12-11-01-55.jpg)
+![](assets/IMG-2026-03-12-11-01-55.jpg)
 
 5. 选择【Fetch/XHR】进行筛选，找到【srun_portal?........】的请求
-![](assets/YamlConfig/IMG-2026-03-12-11-03-31.jpg)
+![](assets/IMG-2026-03-12-11-03-31.jpg)
 
 6. 找到各个参数对应的值
-![](assets/YamlConfig/IMG-2026-03-12-11-05-32.jpg)
+![](assets/IMG-2026-03-12-11-05-32.jpg)
 可以从图中一大坨里找，也可以从下方【载荷】里找
-![](assets/YamlConfig/IMG-2026-03-12-11-06-13.jpg)
+![](assets/IMG-2026-03-12-11-06-13.jpg)
 
 ### 其他参数
 
 对于新手，以下两个参数可以打开
 
-``` yaml
+```yaml
 settings:
   guardian: #守护模式（后台常驻）
     enable: true  # 可以打开，以提高稳定性
@@ -127,4 +127,3 @@ settings:
     log_path: ./ #日志文件存放目录路径
     log_name: "" #指定日志文件名
 ```
-
