@@ -99,6 +99,7 @@ type (
 		Timeout            uint   `json:"timeout" yaml:"timeout"`
 		Interfaces         string `json:"interfaces" yaml:"interfaces"`
 		InterfacesInterval uint   `json:"interfaces_interval" yaml:"interfaces_interval"`
+		DNSServer          string `json:"dns_server" yaml:"dns_server"`
 	}
 
 	LogConf struct {

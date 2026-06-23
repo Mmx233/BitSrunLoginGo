@@ -11,7 +11,8 @@ import (
 
 func CreateClientFromEth(eth *tools.Eth) *http.Client {
 	dialer := net.Dialer{
-		Timeout: config.Timeout,
+		Timeout:  config.Timeout,
+		Resolver: newResolver(),
 	}
 	if eth != nil {
 		dialer.LocalAddr = eth.Addr

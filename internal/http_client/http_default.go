@@ -22,6 +22,7 @@ func CreateClientFromEth(eth *tools.Eth) *http.Client {
 			DialContext: (&net.Dialer{
 				Timeout:   config.Timeout,
 				LocalAddr: addr,
+				Resolver:  newResolver(),
 			}).DialContext,
 			TLSHandshakeTimeout: config.Timeout,
 			TLSClientConfig: &tls.Config{
