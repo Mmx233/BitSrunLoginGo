@@ -1,54 +1,42 @@
 package http_client
 
 import (
-	"net"
 	"net/http"
 
-	"github.com/Mmx233/BitSrunLoginGo/internal/config"
-	"github.com/Mmx233/BitSrunLoginGo/internal/config/flags"
-	"github.com/Mmx233/BitSrunLoginGo/internal/config/keys"
 	"github.com/Mmx233/BitSrunLoginGo/tools"
 )
 
+// _DefaultClient 无网卡绑定的客户端，用于未指定网卡的情况
 var _DefaultClient *http.Client
 
-var _EthClientMap map[string]*http.Client
+// ethClient 记录某个网卡当前绑定的 IP 及对应客户端
+type ethClient struct {
+	addr   string
+	client *http.Client
+}
+
+// _EthClientMap 以网卡名为 key 缓存绑定了具体网卡的客户端。
+// 每个网卡仅保留一个条目，IP 变化时重建，避免继续绑定已失效的旧地址。
+var _EthClientMap map[string]*ethClient
 
 func init() {
-	logger := config.Logger.WithField(keys.LogComponent, "init http")
-	if config.Settings.Basic.Interfaces == "" {
-		var eth *tools.Eth
-		if flags.Interface != "" {
-			netEth, err := net.InterfaceByName(flags.Interface)
-			if err != nil {
-				logger.Warnf("获取指定网卡 %s 失败，使用默认网卡: %v", flags.Interface, err)
-			} else {
-				eth, err = tools.ConvertInterface(logger, *netEth)
-				if err != nil {
-					logger.Warnf("获取指定网卡 %s ip 地址失败，使用默认网卡: %v", flags.Interface, err)
-				} else if eth == nil {
-					logger.Warnf("指定网卡 %s 无可用 ip 地址，使用默认网卡", flags.Interface)
-				} else {
-					logger.Debugf("使用指定网卡 %s ip: %s", eth.Name, eth.Addr.String())
-				}
-			}
-		}
-
-		_DefaultClient = CreateClientFromEth(eth)
-	} else {
-		_EthClientMap = make(map[string]*http.Client)
-	}
+	_DefaultClient = CreateClientFromEth(nil)
+	_EthClientMap = make(map[string]*ethClient)
 }
 
 func ClientSelect(eth *tools.Eth) *http.Client {
-	if _DefaultClient != nil {
+	if eth == nil {
 		return _DefaultClient
 	}
-	if client, ok := _EthClientMap[eth.Name]; ok {
-		return client
-	} else {
-		client = CreateClientFromEth(eth)
-		_EthClientMap[eth.Name] = client
-		return client
+	addr := eth.Addr.String()
+	if c, ok := _EthClientMap[eth.Name]; ok {
+		if c.addr == addr {
+			return c.client
+		}
+		// 网卡 IP 已变化，关闭旧连接并重建客户端
+		c.client.CloseIdleConnections()
 	}
+	client := CreateClientFromEth(eth)
+	_EthClientMap[eth.Name] = &ethClient{addr: addr, client: client}
+	return client
 }

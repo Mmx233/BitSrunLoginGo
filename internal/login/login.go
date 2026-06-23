@@ -3,6 +3,7 @@ package login
 import (
 	"context"
 	"errors"
+	"net"
 	"net/http"
 	"sync"
 	"time"
@@ -26,12 +27,37 @@ type Conf struct {
 	IsOnlineDetectLogDebugLevel bool
 }
 
+// resolveInterface 解析 -i 指定的网卡，失败时返回 nil 以回退到默认网卡。
+// 每个登录周期都重新解析，保证网卡 IP 变化后能被感知。
+func resolveInterface(logger log.FieldLogger, name string) *tools.Eth {
+	netEth, err := net.InterfaceByName(name)
+	if err != nil {
+		logger.Warnf("获取指定网卡 %s 失败，使用默认网卡: %v", name, err)
+		return nil
+	}
+	eth, err := tools.ConvertInterface(logger, *netEth)
+	if err != nil {
+		logger.Warnf("获取指定网卡 %s ip 地址失败，使用默认网卡: %v", name, err)
+		return nil
+	}
+	if eth == nil {
+		logger.Warnf("指定网卡 %s 无可用 ip 地址，使用默认网卡", name)
+		return nil
+	}
+	logger.Debugf("使用指定网卡 %s ip: %s", eth.Name, eth.Addr.String())
+	return eth
+}
+
 func Login(conf Conf) error {
 	logger := conf.Logger
 	if config.Settings.Basic.Interfaces == "" { //单网卡
+		var eth *tools.Eth
+		if flags.Interface != "" {
+			eth = resolveInterface(logger, flags.Interface)
+		}
 		err := Single(SingleConf{
 			Conf: conf,
-			Eth:  nil,
+			Eth:  eth,
 		})
 		if err != nil {
 			logger.Errorln("登录出错: ", err)
@@ -42,9 +68,9 @@ func Login(conf Conf) error {
 			})
 		}
 		return err
-	} else { //多网卡
-		return Interfaces(conf)
 	}
+	//多网卡
+	return Interfaces(conf)
 }
 
 func ddns(logger log.FieldLogger, ip string, httpClient *http.Client) error {
