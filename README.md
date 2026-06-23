@@ -60,6 +60,7 @@ settings:
     timeout: 5 #网络请求超时时间（秒，正整数）
     interfaces: "" #网卡名称正则（注意转义），如：eth0\.[2-3]，不为空时为多网卡模式
     interfaces_interval: 0 # 秒，多网卡模式切换网卡时触发的等待时间
+    dns_server: "" # 指定 DNS 服务器（如 114.114.114.114），留空使用系统默认
   guardian: #守护模式（后台常驻）
     enable: false 
     duration: 300 #网络检查周期（秒，正整数）
