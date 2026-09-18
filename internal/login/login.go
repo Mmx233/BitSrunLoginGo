@@ -98,8 +98,10 @@ func Interfaces(conf Conf) error {
 	for i, eth := range interfaces {
 		logger.Infoln("使用网卡: ", eth.Name)
 
-		form := config.Form
-		meta := config.Meta
+		formVal := *config.Form
+		metaVal := *config.Meta
+		form := &formVal
+		meta := &metaVal
 
 		if ifaceConf, ok := config.Settings.InterfacesConfig[eth.Name]; ok {
 			if ifaceConf.Form != nil {
@@ -123,6 +125,24 @@ func Interfaces(conf Conf) error {
 				}
 				if ifaceConf.Meta.Enc != "" {
 					meta.Enc = ifaceConf.Meta.Enc
+				}
+				if ifaceConf.Meta.N != "" {
+					meta.N = ifaceConf.Meta.N
+				}
+				if ifaceConf.Meta.Type != "" {
+					meta.Type = ifaceConf.Meta.Type
+				}
+				if ifaceConf.Meta.OS != "" {
+					meta.OS = ifaceConf.Meta.OS
+				}
+				if ifaceConf.Meta.Name != "" {
+					meta.Name = ifaceConf.Meta.Name
+				}
+				if ifaceConf.Meta.InfoPrefix != "" {
+					meta.InfoPrefix = ifaceConf.Meta.InfoPrefix
+				}
+				if ifaceConf.Meta.DoubleStack {
+					meta.DoubleStack = true
 				}
 				logger.Debugf("网卡 %s 使用专属元数据配置", eth.Name)
 			}
@@ -242,7 +262,7 @@ func doLogin(conf SingleConf) error {
 
 	var clientIp, loginIp string
 
-	isClientIpRequired := !config.Meta.DoubleStack || config.Settings.DDNS.Enable
+	isClientIpRequired := !conf.Meta.DoubleStack || config.Settings.DDNS.Enable
 	online, ip, err := srunClient.LoginStatus()
 	if err != nil {
 		if online == nil {
@@ -258,7 +278,7 @@ func doLogin(conf SingleConf) error {
 		clientIp = *ip
 	}
 
-	if config.Meta.DoubleStack {
+	if conf.Meta.DoubleStack {
 		logger.Debugln("使用双栈网络时认证 ip 为空")
 	} else {
 		loginIp = clientIp
