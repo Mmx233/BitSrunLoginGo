@@ -105,44 +105,44 @@ func Interfaces(conf Conf) error {
 
 		if ifaceConf, ok := config.Settings.InterfacesConfig[eth.Name]; ok {
 			if ifaceConf.Form != nil {
-				if ifaceConf.Form.Username != "" {
-					form.Username = ifaceConf.Form.Username
+				if ifaceConf.Form.Username != nil {
+					form.Username = *ifaceConf.Form.Username
 				}
-				if ifaceConf.Form.Password != "" {
-					form.Password = ifaceConf.Form.Password
+				if ifaceConf.Form.Password != nil {
+					form.Password = *ifaceConf.Form.Password
 				}
-				if ifaceConf.Form.UserType != "" {
-					form.UserType = ifaceConf.Form.UserType
+				if ifaceConf.Form.UserType != nil {
+					form.UserType = *ifaceConf.Form.UserType
 				}
-				if ifaceConf.Form.Domain != "" {
-					form.Domain = ifaceConf.Form.Domain
+				if ifaceConf.Form.Domain != nil {
+					form.Domain = *ifaceConf.Form.Domain
 				}
 				logger.Debugf("网卡 %s 使用专属账号配置", eth.Name)
 			}
 			if ifaceConf.Meta != nil {
-				if ifaceConf.Meta.Acid != "" {
-					meta.Acid = ifaceConf.Meta.Acid
+				if ifaceConf.Meta.Acid != nil {
+					meta.Acid = *ifaceConf.Meta.Acid
 				}
-				if ifaceConf.Meta.Enc != "" {
-					meta.Enc = ifaceConf.Meta.Enc
+				if ifaceConf.Meta.Enc != nil {
+					meta.Enc = *ifaceConf.Meta.Enc
 				}
-				if ifaceConf.Meta.N != "" {
-					meta.N = ifaceConf.Meta.N
+				if ifaceConf.Meta.N != nil {
+					meta.N = *ifaceConf.Meta.N
 				}
-				if ifaceConf.Meta.Type != "" {
-					meta.Type = ifaceConf.Meta.Type
+				if ifaceConf.Meta.Type != nil {
+					meta.Type = *ifaceConf.Meta.Type
 				}
-				if ifaceConf.Meta.OS != "" {
-					meta.OS = ifaceConf.Meta.OS
+				if ifaceConf.Meta.OS != nil {
+					meta.OS = *ifaceConf.Meta.OS
 				}
-				if ifaceConf.Meta.Name != "" {
-					meta.Name = ifaceConf.Meta.Name
+				if ifaceConf.Meta.Name != nil {
+					meta.Name = *ifaceConf.Meta.Name
 				}
-				if ifaceConf.Meta.InfoPrefix != "" {
-					meta.InfoPrefix = ifaceConf.Meta.InfoPrefix
+				if ifaceConf.Meta.InfoPrefix != nil {
+					meta.InfoPrefix = *ifaceConf.Meta.InfoPrefix
 				}
-				if ifaceConf.Meta.DoubleStack {
-					meta.DoubleStack = true
+				if ifaceConf.Meta.DoubleStack != nil {
+					meta.DoubleStack = *ifaceConf.Meta.DoubleStack
 				}
 				logger.Debugf("网卡 %s 使用专属元数据配置", eth.Name)
 			}

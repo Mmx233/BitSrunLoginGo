@@ -128,9 +128,27 @@ type (
 		Addr   string `json:"addr" yaml:"addr"`
 	}
 
+	InterfaceForm struct {
+		Domain   *string `json:"domain,omitempty" yaml:"domain,omitempty"`
+		Username *string `json:"username,omitempty" yaml:"username,omitempty"`
+		UserType *string `json:"user_type,omitempty" yaml:"user_type,omitempty"`
+		Password *string `json:"password,omitempty" yaml:"password,omitempty"`
+	}
+
+	InterfaceMeta struct {
+		N           *string `json:"n,omitempty" yaml:"n,omitempty"`
+		Type        *string `json:"type,omitempty" yaml:"type,omitempty"`
+		Acid        *string `json:"acid,omitempty" yaml:"acid,omitempty"`
+		Enc         *string `json:"enc,omitempty" yaml:"enc,omitempty"`
+		OS          *string `json:"os,omitempty" yaml:"os,omitempty"`
+		Name        *string `json:"name,omitempty" yaml:"name,omitempty"`
+		InfoPrefix  *string `json:"info_prefix,omitempty" yaml:"info_prefix,omitempty"`
+		DoubleStack *bool   `json:"double_stack,omitempty" yaml:"double_stack,omitempty"`
+	}
+
 	InterfaceConf struct {
-		Form *srun.LoginForm `json:"form,omitempty" yaml:"form,omitempty"`
-		Meta *srun.LoginMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+		Form *InterfaceForm `json:"form,omitempty" yaml:"form,omitempty"`
+		Meta *InterfaceMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
 	}
 )
 
