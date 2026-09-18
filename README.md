@@ -90,6 +90,13 @@ settings:
     addr: http://www.baidu.com #初始地址，需要使用 http、域名
   custom_header: #这段配置是动态的，用于设置请求头，可以自由填写
     User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0
+  interfaces_config: # (可选) 独立网卡专属配置。在多网卡模式下，如果需要为不同网卡指定不同的账号或参数，可在此以网卡名为键进行配置。未指定的网卡将默认使用全局 `form` 和 `meta`。
+    eth1:
+      form:
+        username: "user_for_eth1"
+        password: "password123"
+      meta:
+        acid: "5"
 ```
 
 登录参数从原网页登陆时对 `/srun_portal` 的请求抓取，抓取时请把浏览器控制台的 `preserve log`（保留日志）启用。
@@ -120,7 +127,9 @@ settings:
 
 请注意，少部分学校中在多拨中使用同一个账号时可能即使多拨成功，同一账号在同一个网关下的多个设备可能会共享带宽限制，这意味着多拨没有效果
 
-你可以通过配置文件中的 `settings.basic.interfaces` 指定网卡，也可以在将该配置留空的情况下使用 `--interface` 指定网卡
+你可以通过配置文件中的 `settings.basic.interfaces` 指定网卡，也可以在将该配置留空的情况下使用 `--interface` 指定网卡。
+
+**多网卡多账号支持**：如果你需要在多网卡拨号模式下为不同网卡分别拨不同的账号，可以在配置文件的 `settings.interfaces_config` 中为特定的网卡名称添加独立的 `form` 和 `meta` 参数。
 
 ## :anchor: Docker / Kubernetes
 

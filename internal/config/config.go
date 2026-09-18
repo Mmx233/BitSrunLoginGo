@@ -127,14 +127,20 @@ type (
 		Enable bool   `json:"enable" yaml:"enable"`
 		Addr   string `json:"addr" yaml:"addr"`
 	}
+
+	InterfaceConf struct {
+		Form *srun.LoginForm `json:"form,omitempty" yaml:"form,omitempty"`
+		Meta *srun.LoginMeta `json:"meta,omitempty" yaml:"meta,omitempty"`
+	}
 )
 
 type SettingsConf struct {
-	Basic        BasicConf              `json:"basic" yaml:"basic"`
-	Guardian     GuardianConf           `json:"guardian" yaml:"guardian"`
-	Backoff      BackoffConf            `json:"backoff" yaml:"backoff"`
-	Log          LogConf                `json:"log" yaml:"log"`
-	DDNS         DdnsConf               `json:"ddns" yaml:"ddns"`
-	Reality      RealityConf            `json:"reality" yaml:"reality"`
-	CustomHeader map[string]interface{} `json:"custom_header" yaml:"custom_header"`
+	Basic            BasicConf                `json:"basic" yaml:"basic"`
+	Guardian         GuardianConf             `json:"guardian" yaml:"guardian"`
+	Backoff          BackoffConf              `json:"backoff" yaml:"backoff"`
+	Log              LogConf                  `json:"log" yaml:"log"`
+	DDNS             DdnsConf                 `json:"ddns" yaml:"ddns"`
+	Reality          RealityConf              `json:"reality" yaml:"reality"`
+	CustomHeader     map[string]interface{}   `json:"custom_header" yaml:"custom_header"`
+	InterfacesConfig map[string]InterfaceConf `json:"interfaces_config,omitempty" yaml:"interfaces_config,omitempty"`
 }

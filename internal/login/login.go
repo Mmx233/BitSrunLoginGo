@@ -58,6 +58,8 @@ func Login(conf Conf) error {
 		err := Single(SingleConf{
 			Conf: conf,
 			Eth:  eth,
+			Form: config.Form,
+			Meta: config.Meta,
 		})
 		if err != nil {
 			logger.Errorln("登录出错: ", err)
@@ -95,9 +97,42 @@ func Interfaces(conf Conf) error {
 	var errCount int
 	for i, eth := range interfaces {
 		logger.Infoln("使用网卡: ", eth.Name)
+
+		form := config.Form
+		meta := config.Meta
+
+		if ifaceConf, ok := config.Settings.InterfacesConfig[eth.Name]; ok {
+			if ifaceConf.Form != nil {
+				if ifaceConf.Form.Username != "" {
+					form.Username = ifaceConf.Form.Username
+				}
+				if ifaceConf.Form.Password != "" {
+					form.Password = ifaceConf.Form.Password
+				}
+				if ifaceConf.Form.UserType != "" {
+					form.UserType = ifaceConf.Form.UserType
+				}
+				if ifaceConf.Form.Domain != "" {
+					form.Domain = ifaceConf.Form.Domain
+				}
+				logger.Debugf("网卡 %s 使用专属账号配置", eth.Name)
+			}
+			if ifaceConf.Meta != nil {
+				if ifaceConf.Meta.Acid != "" {
+					meta.Acid = ifaceConf.Meta.Acid
+				}
+				if ifaceConf.Meta.Enc != "" {
+					meta.Enc = ifaceConf.Meta.Enc
+				}
+				logger.Debugf("网卡 %s 使用专属元数据配置", eth.Name)
+			}
+		}
+
 		if err := Single(SingleConf{
 			Conf: conf,
 			Eth:  &eth,
+			Form: form,
+			Meta: meta,
 		}); err != nil {
 			logger.Errorf("网卡 %s 登录出错: %v", eth.Name, err)
 			errCount++
@@ -114,7 +149,9 @@ func Interfaces(conf Conf) error {
 
 type SingleConf struct {
 	Conf
-	Eth *tools.Eth
+	Eth  *tools.Eth
+	Form *srun.LoginForm
+	Meta *srun.LoginMeta
 }
 
 func Single(conf SingleConf) error {
@@ -135,8 +172,8 @@ func doLogin(conf SingleConf) error {
 		Logger: logger,
 		Https:  config.Settings.Basic.Https,
 		LoginInfo: srun.LoginInfo{
-			Form: *config.Form,
-			Meta: *config.Meta,
+			Form: *conf.Form,
+			Meta: *conf.Meta,
 		},
 		Client:       httpClient,
 		CustomHeader: config.Settings.CustomHeader,
