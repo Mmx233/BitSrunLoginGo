@@ -141,8 +141,8 @@ func Interfaces(conf Conf) error {
 type SingleConf struct {
 	Conf
 	Eth  *tools.Eth
-	Form *srun.LoginForm
 	Meta *srun.LoginMeta
+	Form *srun.LoginForm
 }
 
 func Single(conf SingleConf) error {
@@ -155,6 +155,10 @@ func Single(conf SingleConf) error {
 }
 
 func doLogin(conf SingleConf) error {
+	if conf.Form == nil || conf.Meta == nil {
+		panic("login: Form and Meta must not be nil")
+	}
+
 	logger := conf.Logger
 
 	// 登录配置初始化
