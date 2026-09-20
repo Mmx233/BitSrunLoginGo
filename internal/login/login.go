@@ -48,6 +48,18 @@ func resolveInterface(logger log.FieldLogger, name string) *tools.Eth {
 	return eth
 }
 
+func formForInterface(logger log.FieldLogger, eth *tools.Eth) *srun.LoginForm {
+	form := *config.Form
+	if eth == nil {
+		return &form
+	}
+	if override, ok := config.Settings.InterfaceForms[eth.Name]; ok {
+		form = override.Apply(form)
+		logger.Debugf("网卡 %s 应用登录参数覆盖", eth.Name)
+	}
+	return &form
+}
+
 func Login(conf Conf) error {
 	logger := conf.Logger
 	if config.Settings.Basic.Interfaces == "" { //单网卡
@@ -58,8 +70,8 @@ func Login(conf Conf) error {
 		err := Single(SingleConf{
 			Conf: conf,
 			Eth:  eth,
-			Form: config.Form,
 			Meta: config.Meta,
+			Form: formForInterface(logger, eth),
 		})
 		if err != nil {
 			logger.Errorln("登录出错: ", err)
@@ -98,32 +110,11 @@ func Interfaces(conf Conf) error {
 	for i, eth := range interfaces {
 		logger.Infoln("使用网卡: ", eth.Name)
 
-		formVal := *config.Form
-		form := &formVal
-
-		if ifaceConf, ok := config.Settings.InterfacesConfig[eth.Name]; ok {
-			if ifaceConf.Form != nil {
-				if ifaceConf.Form.Username != nil {
-					form.Username = *ifaceConf.Form.Username
-				}
-				if ifaceConf.Form.Password != nil {
-					form.Password = *ifaceConf.Form.Password
-				}
-				if ifaceConf.Form.UserType != nil {
-					form.UserType = *ifaceConf.Form.UserType
-				}
-				if ifaceConf.Form.Domain != nil {
-					form.Domain = *ifaceConf.Form.Domain
-				}
-				logger.Debugf("网卡 %s 使用专属账号配置", eth.Name)
-			}
-		}
-
 		if err := Single(SingleConf{
 			Conf: conf,
 			Eth:  &eth,
-			Form: form,
 			Meta: config.Meta,
+			Form: formForInterface(logger, &eth),
 		}); err != nil {
 			logger.Errorf("网卡 %s 登录出错: %v", eth.Name, err)
 			errCount++

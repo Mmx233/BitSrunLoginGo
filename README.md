@@ -90,13 +90,12 @@ settings:
     addr: http://www.baidu.com #初始地址，需要使用 http、域名
   custom_header: #这段配置是动态的，用于设置请求头，可以自由填写
     User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0
-  interfaces_config: # (可选) 网卡专属配置。在多网卡模式下，需要为不同网卡指定不同账号时配置。未指定的字段默认使用全局的 `form` 配置。
+  interface_forms: # (可选) 按网卡覆盖登录参数，未指定的字段继承全局 `form`
     eth1:
-      form:
-        domain: "192.168.18.200" # (可选) 可覆盖全局 domain
-        username: "user_for_eth1" # (可选) 可覆盖全局 username
-        password: "password123" # (可选) 可覆盖全局 password
-        user_type: "cmcc" # (可选) 可覆盖全局 user_type，留空字符串 "" 代表不带后缀
+      domain: "192.168.18.200" # (可选) 覆盖全局 domain
+      username: "user_for_eth1" # (可选) 覆盖全局 username
+      password: "password123" # (可选) 覆盖全局 password
+      user_type: "cmcc" # (可选) 覆盖全局 user_type，留空字符串 "" 代表不带后缀
 ```
 
 登录参数从原网页登陆时对 `/srun_portal` 的请求抓取，抓取时请把浏览器控制台的 `preserve log`（保留日志）启用。
@@ -113,11 +112,11 @@ settings:
 
 支持的 Provider 及其设置（将额外配置添加到配置文件 DDNS 配置内）：
 
-|  Provider  | 额外配置项                                   |
-|:----------:|-----------------------------------------|
-| cloudflare<br>(Recommended) | `zone` 区域 ID<br/>`token` API 令牌         |
-|   aliyun   | `access_key_id`<br/>`access_key_secret` |
-|   dnspod   | `secret_id`<br/>`secret_key`            |
+|          Provider           | 额外配置项                              |
+|:---------------------------:|-----------------------------------------|
+| cloudflare<br>(Recommended) | `zone` 区域 ID<br/>`token` API 令牌     |
+|           aliyun            | `access_key_id`<br/>`access_key_secret` |
+|           dnspod            | `secret_id`<br/>`secret_key`            |
 
 如果多网卡模式下使用 ddns 存在问题，可以为个别网卡创建额外的配置文件单独进行登录。此外，校园网内网通信并不是安全的，校方往往会对其施加监管
 
@@ -129,7 +128,7 @@ settings:
 
 你可以通过配置文件中的 `settings.basic.interfaces` 指定网卡，也可以在将该配置留空的情况下使用 `--interface` 指定网卡。
 
-**多网卡多账号支持**：如果你需要在多网卡拨号模式下为不同网卡分别拨不同的账号，可以在配置文件的 `settings.interfaces_config` 中为特定的网卡名称添加独立的 `form` 参数。
+如果需要让指定网卡使用不同的登录参数，可以在 `settings.interface_forms` 中按网卡名称覆盖全局 `form`。该配置对 `--interface` 指定的单张网卡和 `settings.basic.interfaces` 匹配的多张网卡均生效，但在未指定网卡的单网卡模式下不生效。
 
 ## :anchor: Docker / Kubernetes
 

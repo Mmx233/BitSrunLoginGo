@@ -127,26 +127,15 @@ type (
 		Enable bool   `json:"enable" yaml:"enable"`
 		Addr   string `json:"addr" yaml:"addr"`
 	}
-
-	InterfaceForm struct {
-		Domain   *string `json:"domain,omitempty" yaml:"domain,omitempty"`
-		Username *string `json:"username,omitempty" yaml:"username,omitempty"`
-		UserType *string `json:"user_type,omitempty" yaml:"user_type,omitempty"`
-		Password *string `json:"password,omitempty" yaml:"password,omitempty"`
-	}
-
-	InterfaceConf struct {
-		Form *InterfaceForm `json:"form,omitempty" yaml:"form,omitempty"`
-	}
 )
 
 type SettingsConf struct {
-	Basic            BasicConf                `json:"basic" yaml:"basic"`
-	Guardian         GuardianConf             `json:"guardian" yaml:"guardian"`
-	Backoff          BackoffConf              `json:"backoff" yaml:"backoff"`
-	Log              LogConf                  `json:"log" yaml:"log"`
-	DDNS             DdnsConf                 `json:"ddns" yaml:"ddns"`
-	Reality          RealityConf              `json:"reality" yaml:"reality"`
-	CustomHeader     map[string]interface{}   `json:"custom_header" yaml:"custom_header"`
-	InterfacesConfig map[string]InterfaceConf `json:"interfaces_config,omitempty" yaml:"interfaces_config,omitempty"`
+	Basic          BasicConf                         `json:"basic" yaml:"basic"`
+	Guardian       GuardianConf                      `json:"guardian" yaml:"guardian"`
+	Backoff        BackoffConf                       `json:"backoff" yaml:"backoff"`
+	Log            LogConf                           `json:"log" yaml:"log"`
+	DDNS           DdnsConf                          `json:"ddns" yaml:"ddns"`
+	Reality        RealityConf                       `json:"reality" yaml:"reality"`
+	CustomHeader   map[string]any                    `json:"custom_header" yaml:"custom_header"`
+	InterfaceForms map[string]srun.LoginFormOverride `json:"interface_forms,omitempty" yaml:"interface_forms,omitempty"`
 }
