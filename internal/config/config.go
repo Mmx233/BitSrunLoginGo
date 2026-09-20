@@ -130,11 +130,12 @@ type (
 )
 
 type SettingsConf struct {
-	Basic        BasicConf              `json:"basic" yaml:"basic"`
-	Guardian     GuardianConf           `json:"guardian" yaml:"guardian"`
-	Backoff      BackoffConf            `json:"backoff" yaml:"backoff"`
-	Log          LogConf                `json:"log" yaml:"log"`
-	DDNS         DdnsConf               `json:"ddns" yaml:"ddns"`
-	Reality      RealityConf            `json:"reality" yaml:"reality"`
-	CustomHeader map[string]interface{} `json:"custom_header" yaml:"custom_header"`
+	Basic          BasicConf                         `json:"basic" yaml:"basic"`
+	Guardian       GuardianConf                      `json:"guardian" yaml:"guardian"`
+	Backoff        BackoffConf                       `json:"backoff" yaml:"backoff"`
+	Log            LogConf                           `json:"log" yaml:"log"`
+	DDNS           DdnsConf                          `json:"ddns" yaml:"ddns"`
+	Reality        RealityConf                       `json:"reality" yaml:"reality"`
+	CustomHeader   map[string]any                    `json:"custom_header" yaml:"custom_header"`
+	InterfaceForms map[string]srun.LoginFormOverride `json:"interface_forms,omitempty" yaml:"interface_forms,omitempty"`
 }

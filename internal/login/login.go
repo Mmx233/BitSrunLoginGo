@@ -48,6 +48,18 @@ func resolveInterface(logger log.FieldLogger, name string) *tools.Eth {
 	return eth
 }
 
+func formForInterface(logger log.FieldLogger, eth *tools.Eth) *srun.LoginForm {
+	form := *config.Form
+	if eth == nil {
+		return &form
+	}
+	if override, ok := config.Settings.InterfaceForms[eth.Name]; ok {
+		form = override.Apply(form)
+		logger.Debugf("网卡 %s 应用登录参数覆盖", eth.Name)
+	}
+	return &form
+}
+
 func Login(conf Conf) error {
 	logger := conf.Logger
 	if config.Settings.Basic.Interfaces == "" { //单网卡
@@ -58,6 +70,8 @@ func Login(conf Conf) error {
 		err := Single(SingleConf{
 			Conf: conf,
 			Eth:  eth,
+			Meta: config.Meta,
+			Form: formForInterface(logger, eth),
 		})
 		if err != nil {
 			logger.Errorln("登录出错: ", err)
@@ -95,9 +109,12 @@ func Interfaces(conf Conf) error {
 	var errCount int
 	for i, eth := range interfaces {
 		logger.Infoln("使用网卡: ", eth.Name)
+
 		if err := Single(SingleConf{
 			Conf: conf,
 			Eth:  &eth,
+			Meta: config.Meta,
+			Form: formForInterface(logger, &eth),
 		}); err != nil {
 			logger.Errorf("网卡 %s 登录出错: %v", eth.Name, err)
 			errCount++
@@ -114,7 +131,9 @@ func Interfaces(conf Conf) error {
 
 type SingleConf struct {
 	Conf
-	Eth *tools.Eth
+	Eth  *tools.Eth
+	Meta *srun.LoginMeta
+	Form *srun.LoginForm
 }
 
 func Single(conf SingleConf) error {
@@ -127,6 +146,10 @@ func Single(conf SingleConf) error {
 }
 
 func doLogin(conf SingleConf) error {
+	if conf.Form == nil || conf.Meta == nil {
+		panic("login: Form and Meta must not be nil")
+	}
+
 	logger := conf.Logger
 
 	// 登录配置初始化
@@ -135,8 +158,8 @@ func doLogin(conf SingleConf) error {
 		Logger: logger,
 		Https:  config.Settings.Basic.Https,
 		LoginInfo: srun.LoginInfo{
-			Form: *config.Form,
-			Meta: *config.Meta,
+			Form: *conf.Form,
+			Meta: *conf.Meta,
 		},
 		Client:       httpClient,
 		CustomHeader: config.Settings.CustomHeader,
@@ -205,7 +228,7 @@ func doLogin(conf SingleConf) error {
 
 	var clientIp, loginIp string
 
-	isClientIpRequired := !config.Meta.DoubleStack || config.Settings.DDNS.Enable
+	isClientIpRequired := !conf.Meta.DoubleStack || config.Settings.DDNS.Enable
 	online, ip, err := srunClient.LoginStatus()
 	if err != nil {
 		if online == nil {
@@ -221,7 +244,7 @@ func doLogin(conf SingleConf) error {
 		clientIp = *ip
 	}
 
-	if config.Meta.DoubleStack {
+	if conf.Meta.DoubleStack {
 		logger.Debugln("使用双栈网络时认证 ip 为空")
 	} else {
 		loginIp = clientIp

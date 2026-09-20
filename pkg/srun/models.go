@@ -8,6 +8,29 @@ type LoginForm struct {
 	Password string `json:"password" yaml:"password"`
 }
 
+type LoginFormOverride struct {
+	Domain   *string `json:"domain,omitempty" yaml:"domain,omitempty"`
+	Username *string `json:"username,omitempty" yaml:"username,omitempty"`
+	UserType *string `json:"user_type,omitempty" yaml:"user_type,omitempty"`
+	Password *string `json:"password,omitempty" yaml:"password,omitempty"`
+}
+
+func (o LoginFormOverride) Apply(form LoginForm) LoginForm {
+	if o.Domain != nil {
+		form.Domain = *o.Domain
+	}
+	if o.Username != nil {
+		form.Username = *o.Username
+	}
+	if o.UserType != nil {
+		form.UserType = *o.UserType
+	}
+	if o.Password != nil {
+		form.Password = *o.Password
+	}
+	return form
+}
+
 type LoginMeta struct {
 	N           string `json:"n" yaml:"n"`
 	Type        string `json:"type" yaml:"type"`
